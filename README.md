@@ -31,8 +31,8 @@ Obsidian second-brain vault.
 ## Install
 
 ```bash
-git clone <this repo>
-cd <clone directory>
+git clone https://github.com/Alifaleh/claude-orchestration-framework
+cd claude-orchestration-framework
 claude
 ```
 
