@@ -61,7 +61,8 @@ smoke test, release) is codified as a workspace command (`.claude/commands/` wra
 - Global rules + root protocol: `__PROJECTS_ROOT__/CLAUDE.md`
 - Rules: `.claude/rules/` (engineering, project-docs, obsidian-vault, typescript, python)
 - Agents: `.claude/agents/` (canonical; copied into each workspace bundle)
-- Skills: `new-project`, `adopt-project`, `onboard` in `.claude/skills/`
+- Skills: `new-project`, `adopt-project`, `onboard`, `researching` in `.claude/skills/`
+  (researching: T0–T4 tiers, claims-with-sources — copied into each workspace bundle)
 - Templates: `.claude/templates/`
 - Missions: `tmp/missions/` (ledger + per-project mission/report files)
 - Settings: `~/.claude/settings.json` (model pin, attribution off, vault access)

@@ -49,7 +49,8 @@ are made; a deviation you discover to be necessary is a `NEEDS-DECISION`, not an
   first). `scout` (haiku) does recon/inventory/call chains, and pure transcription only when the
   brief spells out the exact change. `reviewer` (sonnet) checks every completed brief; launch the
   review on opus for risky diffs (money, concurrency, security, migrations). `researcher`
-  (sonnet) handles external/library research. Haiku stumbles once on anything → re-dispatch to
+  (sonnet) handles external/library research per the `researching` skill — the brief names the
+  tier and the claims-table contract. Haiku stumbles once on anything → re-dispatch to
   opus, not sonnet.
 - Parallelism: 3–5 file-disjoint briefs max, dispatched in one message; DB-writing and
   Playwright briefs serialized; workers never re-delegate.

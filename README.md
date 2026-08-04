@@ -20,6 +20,10 @@ Obsidian second-brain vault.
 - **Automation capture** — flows you repeat (deploy-after-update, migrations, smoke tests)
   get codified as workspace commands, skills, and hooks, recorded in COMMANDS.md — never left
   as chat knowledge.
+- **Research discipline** — questions not answerable from disk route T0–T4 by the cheapest
+  tier that settles them (source-on-disk → one authoritative lookup → community leads →
+  multi-source verification → deep report, the last only with your approval); results are
+  claims-with-sources tables, never vibes.
 - **Memory** — six docs + a HANDOFF file per workspace, a root HANDOFF, and the vault. Every
   session is replaceable; handoffs are kept current at all times.
 - **Verification discipline** — nothing is "done" without gate output shown; UI work is proven

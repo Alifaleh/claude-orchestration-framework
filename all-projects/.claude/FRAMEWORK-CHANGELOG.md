@@ -25,6 +25,28 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 2.3.0 — 2026-08-04
+
+- **Researching methodology shipped**: new `skills/researching` — questions not answerable
+  from disk route **T0–T4** by the cheapest tier that settles them: disk first → one
+  authoritative source (Context7 / clean-markdown fetch / `gh`) → community leads
+  (`last30days` where installed; leads are verified before they enter work) → a structured
+  `researcher` brief with a self-refutation pass → deep report only with the user's explicit
+  approval and stated cost. Output contract: claims tables (claim · verbatim quote · URL ·
+  date · source quality · confidence · what-would-refute-it); unverified = LEAD, never fact.
+  Research never runs on an orchestrator model; sensitive data never enters a web query.
+  Wired into root routing, the `researcher` agent, project-orchestrator routing, and the
+  `new-project` workspace bundle.
+
+**Upgrade steps** (from 2.2.0), on each installed machine:
+1. Copy `skills/researching/` from 2.3.0 into `<projects root>/.claude/skills/` and into
+   each existing workspace's `.claude/skills/`.
+2. Re-copy `agents/researcher.md`, `agents/project-orchestrator.md`, and
+   `skills/new-project` from 2.3.0; bundle-sync workspaces.
+3. Add the researching routing bullet to the projects-root CLAUDE.md (after the scout-recon
+   bullet — copy from 2.3.0).
+4. Write `2.3.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 2.2.0 — 2026-08-04
 
 Workspace model aligned with live production practice (verified against two real workspaces),

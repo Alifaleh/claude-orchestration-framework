@@ -37,6 +37,7 @@ All repos PRIVATE.
    - `FRAMEWORK/agents/*.md` → `WS/.claude/agents/`
    - `FRAMEWORK/rules/*.md` → `WS/.claude/rules/`
    - `FRAMEWORK/skills/onboard/` → `WS/.claude/skills/onboard/`
+   - `FRAMEWORK/skills/researching/` → `WS/.claude/skills/researching/`
    - `FRAMEWORK/templates/commands/sync.md` → `WS/.claude/commands/sync.md`; create `WS/scripts/`
      (empty — automation scripts land here as the automation-capture rule codifies flows)
 3. **Scratch:** create `WS/tmp/{screenshots,repos,briefs,research,scratch}/` (gitignored).

@@ -44,6 +44,9 @@ guess; a mid-mission requirements gap comes back as `NEEDS-DECISION`, never as a
   path); permission prompts then surface to the user in real time.
 - Broad recon and plan-mode exploration → `scout` (read-only, cheap). Root never burns its own
   tokens reading whole trees; it reads conclusions and the specific files judgment needs.
+- Questions not answerable from disk route per the `researching` skill (T0–T4, cheapest tier
+  that settles it): T1 single-source lookups are fine inline; T3+ goes to `researcher`; a T4
+  deep report needs my explicit approval with expected cost stated first.
 
 **Two-phase mission execution (you manage the modes — this is the default):**
 1. **PLAN** — launch the mission session in plan mode, cwd = the workspace (role detection
