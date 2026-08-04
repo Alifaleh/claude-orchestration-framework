@@ -150,6 +150,11 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
      PROJECTS to match).
    Commits: imperative subject, sole-author, NO Claude/Anthropic attribution of any kind.
 8. Set today's date in PROJECTS/.claude/HANDOFF.md's `*Last updated:*` footer.
+9. **Seed the auto-updater**: write the current timestamp (ISO, e.g. `2026-08-04T12:00:00`) to
+   `PROJECTS/.claude/last-update-check`. Verify `git -C <this clone> remote get-url origin`
+   succeeds — that remote is what the 6-hourly update check fetches; if there is no remote,
+   warn the user that auto-update stays off until the clone gets one. The clone must STAY at
+   its current path (it is recorded as `__DISTRIBUTION_REPO__` in PROJECTS/CLAUDE.md).
 
 ## Phase 4 — Verify (before declaring done)
 
@@ -176,5 +181,7 @@ Report, facts only:
   for JS/TS, docker) — install on demand, asking before system-level installs.
 - Have the user open the vault once in the Obsidian app (File → Open vault → VAULT) so
   `.obsidian/` gets generated.
-- To update later: `git pull` this repo, open Claude here, say "update the framework"
-  (protocol in `FRAMEWORK-CHANGELOG.md`).
+- Updates are automatic: the root session checks this clone every ~6 hours (session start and
+  between tasks) and applies newer versions per `FRAMEWORK-CHANGELOG.md`'s Update protocol —
+  keep the clone in place. Saying "update the framework" to the root session forces a check
+  anytime.

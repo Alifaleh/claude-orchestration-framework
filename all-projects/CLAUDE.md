@@ -96,6 +96,25 @@ current, and recommend the user start a fresh session (fresh root here; fresh wo
 there). Judge sub-sessions you coordinate by the same signs. A session can also be resumed
 verbatim with `claude --resume <session-id>`, but the handoff file is the primary mechanism.
 
+**Framework updates — the install keeps itself current.** The distribution repo stays cloned
+at `__DISTRIBUTION_REPO__`; the throttle file is `.claude/last-update-check` (ISO timestamp,
+gitignored). At session start, and between tasks whenever that file is older than 6 hours —
+never mid-mission:
+1. Rewrite the file with the current timestamp, then `git -C "__DISTRIBUTION_REPO__" fetch
+   --quiet` and compare `git -C "__DISTRIBUTION_REPO__" show origin/main:VERSION` against this
+   tree's `.claude/VERSION`.
+2. Same version → done until the next window.
+3. Remote NEWER → tell the user, `git -C "__DISTRIBUTION_REPO__" pull --ff-only`, then apply
+   the Update protocol at the top of the clone's `FRAMEWORK-CHANGELOG.md`: every version
+   between local and latest, in order — never blind-overwrite; the security floor still gates
+   destructive steps. Finish with the workspace bundle-sync, a HANDOFF note, and the new
+   `.claude/VERSION` from the repo. Apply before NEW mission work starts; the user can defer
+   with a word (record the deferral in HANDOFF).
+4. LOCAL newer → this machine carries unpushed framework changes — surface that instead of
+   pulling.
+5. Offline or clone missing → say so once and retry at the next window; the check never blocks
+   the user's task.
+
 ## Environment (this machine)
 
 __ENVIRONMENT_NOTES__

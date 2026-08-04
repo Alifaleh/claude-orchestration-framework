@@ -25,6 +25,27 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 2.1.0 — 2026-08-04
+
+- **Self-updating installs**: the root session now checks the distribution-repo clone for a
+  newer published VERSION roughly every 6 hours — deterministically at session start (hook)
+  and between tasks in long sessions, throttled via a gitignored
+  `.claude/last-update-check` timestamp. A newer version is announced, pulled `--ff-only`,
+  and applied per this file's Update protocol (each version's steps in order, never a blind
+  overwrite; the security floor still gates destructive steps). Local-newer and offline cases
+  are surfaced, never silent. `/setup` seeds the marker, verifies the clone's `origin`
+  remote, and pins the clone path as `__DISTRIBUTION_REPO__`.
+
+**Upgrade steps** (from 2.0.0), on each installed machine:
+1. Copy the "Framework updates" block from 2.1.0's `all-projects/CLAUDE.md` into the
+   projects-root CLAUDE.md (after the Session-rotation paragraph), replacing
+   `__DISTRIBUTION_REPO__` with this machine's clone path.
+2. Replace the SessionStart hook echo in `<projects root>/.claude/settings.json` with the
+   2.1.0 version (adds the update-check step), keeping the machine's filled vault path.
+3. Append `/.claude/last-update-check` to the projects-root `.gitignore`; write the current
+   ISO timestamp to `.claude/last-update-check`.
+4. Write `2.1.0` to `.claude/VERSION`, commit the projects root.
+
 ## 2.0.0 — 2026-08-04
 
 Public distribution release: the framework is now a cloneable repo with no personal data.

@@ -75,7 +75,11 @@ Everything else (OS, shell, home directory) is detected, not asked.
 
 ## Updating an existing install
 
-Pull this repo, open Claude here, and say "update the framework". It follows the Update
-protocol at the top of `FRAMEWORK-CHANGELOG.md`: compare versions, apply each intermediate
-version's upgrade steps in order — never a blind overwrite, so your filled-in values and
-machine state survive.
+Updates are automatic. The installed root session checks your clone of this repo roughly every
+6 hours (at session start and between tasks): it fetches, compares the published `VERSION`
+with the installed one, and when a newer version exists it pulls (`--ff-only`) and applies
+each intermediate version's upgrade steps in order per `FRAMEWORK-CHANGELOG.md` — never a
+blind overwrite, so your filled-in values and machine state survive. Keep the clone where
+`/setup` found it.
+
+You can also force a check anytime by telling the root session "update the framework".
