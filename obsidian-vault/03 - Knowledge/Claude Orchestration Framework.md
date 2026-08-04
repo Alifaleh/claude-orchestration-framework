@@ -34,13 +34,19 @@ CLAUDE.md. Workers never spawn agents. Nobody at an orchestration layer implemen
 Every project is a **workspace**: a private GitHub repo (`<name>-workspace`) holding CLAUDE.md,
 `.claude/` (docs, agent bundle, rules, `/onboard` skill), ONBOARDING.md, `workspace.yaml`
 (manifest of code repos), `example.env`/`.env`, gitignored `tmp/`. The actual code lives in
-separate **Claude-free** code repos (`<name>-<component>`) nested inside, each private on
-GitHub.
+separate **Claude-free** code repos (`<name>-<component>`) nested inside — plus vendor/
+reference trees (`kind: vendor` — cloned, read, never edited) and submodule superprojects —
+each private under the project's GitHub owner (org or user account).
 
-Team protocol via `.env` `CLAUDE_SESSION_ROLE`: members work only via feature branch + PR and
-fix rejected PRs first; the leader session reviews, merges, or rejects. A new collaborator
-clones the workspace and runs `/onboard` to get the full environment cloned, configured, and
-launched.
+Team protocol via `.env` `WORKSPACE_ROLE` (`team_leader`/`team_member`; `.env` also carries
+the machine's git identity): members work only via feature branch + PR and fix rejected PRs
+first; the leader reviews, merges, bumps submodule pins, and triggers deploys — staging
+first, always. A new collaborator clones the workspace and runs `/onboard` to get the full
+environment cloned, configured, and launched.
+
+Repetition becomes infrastructure: the second manual run of any flow (deploy, migration,
+smoke test, release) is codified as a workspace command (`.claude/commands/` wrapping
+`scripts/`), skill, or hook, and recorded in COMMANDS.md.
 
 ## Memory
 

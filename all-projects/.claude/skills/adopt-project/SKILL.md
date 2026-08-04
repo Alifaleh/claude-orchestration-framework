@@ -24,12 +24,19 @@ scouts. `FRAMEWORK` = `__PROJECTS_ROOT__/.claude`.
 4. **Strip Claude files from code repos**: `git rm` (in the code repo) CLAUDE.md, `.claude/`,
    briefs, any agent/scratch files. Their CONTENT is not lost: fold anything still true into the
    workspace docs in step 6. Commit the code repo ("Move Claude material to workspace").
+   Existing workspace METHODOLOGY is preserved, not stripped: a BOOTSTRAP.md folds into
+   ONBOARDING.md; existing `.claude/commands/` and `scripts/` stay and get registered in
+   COMMANDS.md; `vendor/` reference trees stay in place.
 5. **Scout inventory** (dispatch `scout` agents, parallel, read-only): structure + entry points;
    stack + dependencies + how it runs (docker? manage.py? package.json scripts?); existing docs/
    READMEs/commands; test setup and gates. Facts with file:line citations.
 6. **Synthesize docs** (root writes, from scout evidence + any stripped content): the six
    `.claude/docs/` files, `WS/CLAUDE.md` (real boundary + real gates), `ONBOARDING.md` (real
-   setup/launch/verify commands), `workspace.yaml` (register each code repo).
+   setup/launch/verify commands), `workspace.yaml` (register each code repo; vendor trees as
+   `kind: vendor`; submodule superprojects with `submodules: true`; the GitHub owner as
+   `github_org`). Then dispatch the `claude-automation-recommender` agent (claude-code-setup
+   plugin) over the codebase and codify accepted recommendations as workspace
+   commands/skills/hooks per the automation-capture rule.
 7. **Hygiene sweep**: stray root files → `tmp/` or propose deletion (bulk deletions need the
    user's sign-off naming targets).
 8. **Remotes**: if the code repo already has a GitHub remote, keep it. Offer to create missing

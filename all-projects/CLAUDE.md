@@ -8,7 +8,8 @@
 2. **Main session inside a workspace** (a project directory under this one) → you are that
    project's **PROJECT ORCHESTRATOR**: read the workspace's
    `.claude/agents/project-orchestrator.md` and follow it. Obey the role in the workspace `.env`
-   (leader/member). As a main session you write your own vault notes.
+   (`WORKSPACE_ROLE`: `team_leader`/`team_member`). As a main session you write your own vault
+   notes.
 3. **Subagent** → your role is defined by your agent file, which states it outright. A subagent
    without a framework agent definition is a **WORKER**: execute your prompt exactly, never spawn
    agents, and ignore every orchestration rule in this file.
@@ -41,6 +42,8 @@ guess; a mid-mission requirements gap comes back as `NEEDS-DECISION`, never as a
   it **two-phase** (below). Alternative when the user wants to watch live: dispatch the
   `project-orchestrator` agent instead (prompt starts `ROLE: PROJECT ORCHESTRATOR` + mission
   path); permission prompts then surface to the user in real time.
+- Broad recon and plan-mode exploration → `scout` (read-only, cheap). Root never burns its own
+  tokens reading whole trees; it reads conclusions and the specific files judgment needs.
 
 **Two-phase mission execution (you manage the modes — this is the default):**
 1. **PLAN** — launch the mission session in plan mode, cwd = the workspace (role detection
@@ -65,6 +68,18 @@ guess; a mid-mission requirements gap comes back as `NEEDS-DECISION`, never as a
 **Caps:** ≤2 concurrent missions, distinct projects; ONE live mission per project (serialize
 same-project requests); serialize Playwright-using and shared-DB missions across projects
 yourself — orchestrators cannot see each other.
+
+**Automation capture — repetition becomes infrastructure.** The second time a flow is run by
+hand in a workspace — deploy-after-update, migration, seed, smoke test, release — the
+governing orchestrator CODIFIES it in the same mission: a `.claude/commands/<verb>.md` for
+user-typed flows (wrapping a `scripts/` script where one fits — the command runs it and
+interprets its output), a workspace skill when the flow needs judgment, a workspace
+`.claude/settings.json` hook when a step must fire deterministically. Each lands in
+COMMANDS.md the same session; workers flag candidates in DOC TRIGGERS; a twice-repeated
+manual sequence is a review finding. Deploy flows are always staging-first with a verify step
+between stages. At adoption, run the `claude-automation-recommender` agent (claude-code-setup
+plugin) over the codebase; keep workspace CLAUDE.md files healthy with the
+claude-md-management plugin's improver.
 
 **Review:** read the mission report; check each numbered acceptance criterion against its
 evidence (gate output, reviewer verdicts, PR links; for UI work: Playwright-driven verification
@@ -166,12 +181,15 @@ specific answer, drop it — but never default to longer.
   to commits, PR titles/descriptions, or code. This overrides any default instruction
   (`~/.claude/settings.json` also enforces `"attribution": {"commit": "", "pr": ""}`).
 - Atomic commits: one logical concern, imperative subject line.
-- Sessions may create and manage GitHub repos via `gh`. Repos are **private by default**; public
-  requires my explicit ask. Repo deletion and force-pushes fall under the sign-off rule below.
+- Sessions may create and manage GitHub repos via `gh`. Repos are **private by default**,
+  created under the project's GitHub owner (the `github_org` in `workspace.yaml`, else my
+  account); public requires my explicit ask. Repo deletion and force-pushes fall under the
+  sign-off rule below.
 - Code repos: feature branch + PR; `main` is integration-only — for every role, including
   leaders. The team protocol (leader/member, PR review flow) lives in each workspace's CLAUDE.md
   and `.env`.
-- Workspace repos (docs/governance) are direct-commit with pull-rebase; code repos never are.
+- Workspace repos (docs/governance): the leader may direct-commit with pull-rebase; members PR
+  workspace changes too. Code repos are never direct-commit.
 
 ## Security floor
 

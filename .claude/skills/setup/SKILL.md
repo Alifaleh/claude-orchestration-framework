@@ -74,8 +74,9 @@ answer takes it.
    templates; mark remote creation skipped.)
 5. **Model tier** — "Which Claude models can this machine run — does your plan include Fable?
    Opus? Or Sonnet only?" → sets the MODEL TIER (mapping in Phase 3).
-6. **Machine role** — "For shared projects, is this machine's default role **leader** (reviews
-   and merges PRs) or **member** (works via PRs only)?" Default: leader for a personal machine.
+6. **Machine role** — "For shared projects, is this machine's default role **team_leader**
+   (reviews and merges PRs, triggers deploys) or **team_member** (works via PRs only)?"
+   Default: team_leader for a personal machine.
 7. **Vault remote** — "Create a PRIVATE GitHub repo for the vault so it's always backed up?
    What name?" Default: yes, `obsidian-second-brain`. Skipped → the vault stays local-only.
 8. **About Me seeds (optional)** — "Anything you want in About Me right away — role/title,
@@ -100,7 +101,7 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
    | `__USER_NAME__` | answer 3 |
    | `__OS_SUMMARY__` | e.g. "Windows 11", "macOS 15", "Ubuntu 24.04" |
    | `__DATE__` | today, YYYY-MM-DD |
-   | `__MACHINE_ROLE__` | answer 6 (`leader` or `member`) |
+   | `__MACHINE_ROLE__` | answer 6 (`team_leader` or `team_member`) |
    | `__DISTRIBUTION_REPO__` | absolute path of THIS clone |
    | `__ENVIRONMENT_NOTES__` | the environment snippet (step 3) |
    | `__MODEL__` | settings fragment only — per the tier mapping (step 4) |

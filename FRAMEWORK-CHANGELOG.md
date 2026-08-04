@@ -25,6 +25,47 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 2.2.0 — 2026-08-04
+
+Workspace model aligned with live production practice (verified against two real workspaces),
+plus automation capture.
+
+- **Roles**: the `.env` key is `WORKSPACE_ROLE` = `team_leader` | `team_member` (was
+  `CLAUDE_SESSION_ROLE` = leader/member). `.env` also carries the machine's git identity
+  (`GIT_USER_NAME`, `GIT_USER_EMAIL`, `GITHUB_USERNAME`).
+- **Repos**: created PRIVATE under a per-project GitHub owner (`github_org` in
+  `workspace.yaml`, else the user's account). `workspace.yaml` gains `github_org`,
+  `kind: code|vendor` (vendor = reference trees — cloned, read, never edited), and
+  `submodules:`. Workspace docs: leader may direct-commit; members PR them too.
+- **Session sync**: workspaces ship a `sync` command (`templates/commands/sync.md`) — fetch +
+  `--ff-only` everything in the manifest (or the project's own `scripts/sync.sh`), run FIRST
+  each session; `INFRASTRUCTURE.md` (workspace root) is the as-built handbook for ops-heavy
+  projects, read before infra work.
+- **Automation capture**: the second manual run of any flow (deploy-after-update, migration,
+  seed, smoke test, release) is codified in the same mission as a workspace command / skill /
+  hook and recorded in COMMANDS.md; workers flag candidates in DOC TRIGGERS; deploys are
+  staging-first. `new-project` scaffolds `.claude/commands/` + `scripts/`; `adopt-project`
+  preserves existing BOOTSTRAP.md/scripts/commands/vendor trees and runs the
+  `claude-automation-recommender` agent (claude-code-setup plugin); workspace CLAUDE.md health
+  via the claude-md-management plugin.
+- **Global-rule benefits ported**: brief BINDING RULES now name the binding superpowers skills
+  (`test-driven-development`, `systematic-debugging`); broad recon and plan-mode exploration
+  route to `scout`, never root.
+
+**Upgrade steps** (from 2.1.0), on each installed machine:
+1. Copy from 2.2.0: `templates/example.env`, `templates/workspace.yaml`,
+   `templates/commands/sync.md` (new), `templates/workspace-CLAUDE.md`,
+   `templates/ONBOARDING.md`, `agents/project-orchestrator.md`, `rules/project-docs.md`,
+   `skills/new-project`, `skills/onboard`, `skills/adopt-project` — then re-apply the
+   machine's filled values (paths, model tier) where those files carry them.
+2. In the projects-root CLAUDE.md: update role detection §2 to `WORKSPACE_ROLE`
+   (`team_leader`/`team_member`); add the scout-recon routing bullet, the Automation-capture
+   paragraph (after Caps), and the Git-section owner/direct-commit wording from 2.2.0.
+3. Existing workspaces, per workspace: rename the `.env` key `CLAUDE_SESSION_ROLE` →
+   `WORKSPACE_ROLE` (map leader→team_leader, member→team_member); add the git-identity keys;
+   copy `.claude/commands/sync.md` from the template; bundle-sync agents/rules.
+4. Write `2.2.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 2.1.0 — 2026-08-04
 
 - **Self-updating installs**: the root session now checks the distribution-repo clone for a

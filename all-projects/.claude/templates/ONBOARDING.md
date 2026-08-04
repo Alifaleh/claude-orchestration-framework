@@ -14,8 +14,9 @@ workspace root). `/onboard` does this automatically.
 
 ## 3. Environment files
 
-- Workspace: `cp example.env .env`, then set `CLAUDE_SESSION_ROLE` (leader = reviews/merges PRs;
-  member = works via PRs only) and any keys below.
+- Workspace: `cp example.env .env`, then set your git identity (`GIT_USER_NAME`,
+  `GIT_USER_EMAIL`, `GITHUB_USERNAME`) and `WORKSPACE_ROLE` (`team_leader` = reviews/merges
+  PRs; `team_member` = works via PRs only), plus any keys below.
 - _(Per-repo env files: which file to copy where, and which keys need real values. Refer to
   secrets by NAME only — values come from the team lead, never from this repo.)_
 

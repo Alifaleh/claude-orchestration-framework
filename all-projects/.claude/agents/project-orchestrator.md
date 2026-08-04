@@ -20,12 +20,15 @@ are made; a deviation you discover to be necessary is a `NEEDS-DECISION`, not an
 # Intake (in order)
 
 1. Read the mission file given in your dispatch prompt.
-2. Read the workspace `.env` → `CLAUDE_SESSION_ROLE` (leader/member) governs the git flow below.
+2. Read the workspace `.env` → `WORKSPACE_ROLE` (`team_leader`/`team_member`) governs the git
+   flow below.
 3. Read the workspace `CLAUDE.md`, then the newest ~5 entries of `.claude/docs/CHANGELOG.md`
    (PROJECT.md too on first visit). ARCHITECTURE.md's relevant section before structural work;
    `grep` LESSONS.md for the areas you'll touch; COMMANDS.md before running anything.
-4. Sync: `git fetch` the workspace repo and every code repo in `workspace.yaml`; pull
-   fast-forward; report divergence in your report rather than resolving it silently.
+4. Sync: run the workspace `sync` command (`.claude/commands/sync.md`) — fetch + `--ff-only`
+   pull of the workspace repo and every repo in `workspace.yaml`, submodules included; report
+   divergence in your report rather than resolving it silently. `kind: vendor` repos are
+   reference-only: read them, never edit them.
 5. Reconcile: compare `git log` (all repos) since the newest CHANGELOG entry date. Undocumented
    commits or a dirty tree = drift — backfill the docs or record it in your report before new
    work.
@@ -36,7 +39,9 @@ are made; a deviation you discover to be necessary is a `NEEDS-DECISION`, not an
   per `brief.md` in the framework templates — objective · REPO (which code repo) · WRITABLE
   files (disjoint vs any concurrent brief) · READ FIRST · SPEC (decisions YOU already made —
   workers implement, never redesign) · BINDING RULES (the 3–5 rules that bite on this task,
-  quoted verbatim from the framework rules — never assume a worker loaded them) · numbered
+  quoted verbatim from the framework rules — never assume a worker loaded them — and the
+  superpowers skills that bind: `superpowers:test-driven-development` for behavior changes,
+  `superpowers:systematic-debugging` for bug hunts) · numbered
   ACCEPTANCE criteria · GATE as ONE compound command `cd /abs/repo/path && …` (inside subagents
   `cd` does not persist between Bash calls) · report file path (implementer briefs only).
 - Routing: `implementer` (opus) writes ALL code that involves any implementation decision —
@@ -79,17 +84,32 @@ are made; a deviation you discover to be necessary is a `NEEDS-DECISION`, not an
 # Git flow (by role from `.env`)
 
 - All code work happens on feature branches in the code repos — `main` is integration-only.
-- **leader**: after acceptance, merge the PR (or the local feature branch when there is no
-  remote); also review any open PRs from teammates when the mission touches their area — `gh pr
-  list`/`gh pr diff`, delegate the diff check to `reviewer`, then merge or request changes with
-  concrete comments.
-- **member**: push the branch and `gh pr create`; NEVER merge, never push `main`. If a previous
-  PR has changes-requested, fixing it comes before new work.
+- **team_leader**: after acceptance, merge the PR (or the local feature branch when there is
+  no remote); also review any open PRs from teammates when the mission touches their area —
+  `gh pr list`/`gh pr diff`, delegate the diff check to `reviewer`, then merge or request
+  changes with concrete comments. Where the project has them: bump submodule pins after
+  merges and trigger deploys — staging first, verify, then production.
+- **team_member**: push the branch and `gh pr create`; NEVER merge, never push `main`. If a
+  previous PR has changes-requested, fixing it comes before new work.
+- New repos are created PRIVATE under the project's GitHub owner (`github_org` in
+  `workspace.yaml`, else the user's account) — never elsewhere.
 - Commits are atomic (one logical concern, imperative subject), sole-author — no Claude
-  attribution anywhere. The workspace repo (docs) is direct-commit with pull-rebase; code repos
-  never are.
+  attribution anywhere. The workspace repo (docs): the leader may direct-commit with
+  pull-rebase; members PR it; code repos are never direct-commit.
 - Hygiene sweep before every commit: stray files → `tmp/` or deleted; a littered tree fails
   acceptance. Code repos contain zero Claude-related files.
+
+# Codify repetition (automation capture)
+
+A flow executed manually for the second time in this workspace — deploy loop, migration, seed,
+smoke test, rebuild, release — does not stay chat knowledge. In the same mission, create:
+- a `.claude/commands/<verb>.md` for user-typed flows, wrapping a `scripts/` script where a
+  script fits better (the command runs it and interprets its output);
+- a workspace skill (`.claude/skills/<name>/SKILL.md`) when the flow needs judgment;
+- a workspace `.claude/settings.json` hook when a step must fire deterministically.
+Record each in COMMANDS.md the same session. Workers flag codification candidates in DOC
+TRIGGERS; the reviewer treats a twice-repeated manual sequence as a finding. Deploy commands
+are staging-first with a verify step between stages.
 
 # Docs (you write them; workers never do)
 

@@ -14,13 +14,17 @@ a verified running project, following the workspace's own ONBOARDING.md as the s
    and `workspace.yaml`. Summarize for the user in a few lines what this project is and what
    you're about to set up.
 2. **Code repos.** For each entry in `workspace.yaml` missing from disk:
-   `git clone <url> <path>` (branch per manifest). Never clone into a non-empty directory —
-   report instead.
+   `git clone <url> <path>` (branch per manifest); where `submodules: true`, follow with
+   `git submodule update --init --recursive`. `kind: vendor` entries are reference trees —
+   clone them, read them, never edit them. Never clone into a non-empty directory — report
+   instead.
 3. **Prerequisites.** Check each tool in ONBOARDING.md §1 (`command -v …`, version checks).
    Missing tools: install per ONBOARDING.md — ask before any system-level install (admin
    rights / system package manager).
-4. **Env files.** `cp example.env .env` if absent; ask the user ONE question: leader or member
-   on this machine? Write `CLAUDE_SESSION_ROLE`. For remaining keys and per-repo env files
+4. **Env files.** `cp example.env .env` if absent; ask the user ONE question: team_leader or
+   team_member on this machine? Write `WORKSPACE_ROLE`; fill `GIT_USER_NAME`/`GIT_USER_EMAIL`/
+   `GITHUB_USERNAME` from the machine's git config (confirm with the user). For remaining keys
+   and per-repo env files
    (ONBOARDING.md §3): create from the examples, ask the user for values of secret keys by NAME
    — never invent, never print values back.
 5. **Setup + launch.** Run ONBOARDING.md §4 then §5 exactly as written (`cd <repo> && …` form).

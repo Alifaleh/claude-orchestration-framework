@@ -9,8 +9,11 @@ Scaffold a workspace under `__PROJECTS_ROOT__/<name>/`. Scaffolding is governanc
 work — the root session runs this directly. Paths below: `FRAMEWORK` =
 `__PROJECTS_ROOT__/.claude`, `WS` = the new workspace.
 
-Ask for anything missing (name; components; stack per component) — ONE question at a time.
-Names: workspace repo `<name>-workspace`; code repos `<name>-<component>`. All repos PRIVATE.
+Ask for anything missing (name; components; stack per component; GitHub owner — an org or the
+user's account) — ONE question at a time.
+Names: workspace repo `<name>-workspace`; code repos `<name>-<component>`; created under the
+chosen owner (`gh repo create <owner>/<repo>`), recorded as `github_org` in `workspace.yaml`.
+All repos PRIVATE.
 
 ## Steps
 
@@ -23,7 +26,8 @@ Names: workspace repo `<name>-workspace`; code repos `<name>-<component>`. All r
      for the stack as far as known)
    - `FRAMEWORK/templates/workspace.yaml` → `WS/workspace.yaml`
    - `FRAMEWORK/templates/example.env` → `WS/example.env`; also write `WS/.env` with
-     `CLAUDE_SESSION_ROLE=__MACHINE_ROLE__` (this machine's default role, set at install)
+     `WORKSPACE_ROLE=__MACHINE_ROLE__` (this machine's default role, set at install) and the
+     machine's `GIT_USER_NAME`/`GIT_USER_EMAIL`/`GITHUB_USERNAME`
    - `FRAMEWORK/templates/workspace.gitignore` → `WS/.gitignore`
    - `FRAMEWORK/templates/docs/*` → `WS/.claude/docs/` (+ empty `archive/`)
    - `FRAMEWORK/templates/HANDOFF.md` → `WS/.claude/HANDOFF.md` ("Nothing in progress")
@@ -33,12 +37,14 @@ Names: workspace repo `<name>-workspace`; code repos `<name>-<component>`. All r
    - `FRAMEWORK/agents/*.md` → `WS/.claude/agents/`
    - `FRAMEWORK/rules/*.md` → `WS/.claude/rules/`
    - `FRAMEWORK/skills/onboard/` → `WS/.claude/skills/onboard/`
+   - `FRAMEWORK/templates/commands/sync.md` → `WS/.claude/commands/sync.md`; create `WS/scripts/`
+     (empty — automation scripts land here as the automation-capture rule codifies flows)
 3. **Scratch:** create `WS/tmp/{screenshots,repos,briefs,research,scratch}/` (gitignored).
 4. **Workspace repo:** `cd WS && git init && git add -A && git commit` ("Bootstrap <name>
    workspace"). Unless `--no-remote`:
-   `gh repo create <name>-workspace --private --source . --push`.
+   `gh repo create <owner>/<name>-workspace --private --source . --push`.
 5. **Code repos** — for each component:
-   - Unless `--no-remote`: `gh repo create <name>-<component> --private --clone` into
+   - Unless `--no-remote`: `gh repo create <owner>/<name>-<component> --private --clone` into
      `WS/<component>/`; with `--no-remote`: `git init WS/<component>`.
    - Stack-appropriate `.gitignore` (NO Claude entries needed — Claude files never exist there).
    - Append `/<component>/` to `WS/.gitignore`; register the repo (name/path/url/branch) in

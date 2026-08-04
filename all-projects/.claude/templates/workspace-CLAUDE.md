@@ -11,12 +11,14 @@ the code repos listed in `workspace.yaml` — those repos contain ZERO Claude-re
    replacement. Keep it current as you work (every mission/pause/state change) and bring it
    fully up to date before recommending a fresh session when this one degrades (compacted
    context, forgotten constraints, repeated questions).
-1. Read `.env` → `CLAUDE_SESSION_ROLE` (leader/member) — it governs your git flow.
-2. `git fetch` this repo and every code repo in `workspace.yaml`; pull fast-forward; surface
-   divergence instead of resolving it silently.
+1. Read `.env` → `WORKSPACE_ROLE` (`team_leader`/`team_member`) — it governs your git flow.
+2. Run the `sync` command (`.claude/commands/sync.md`): fetch + fast-forward this repo and
+   every repo in `workspace.yaml` (submodules included); surface divergence instead of
+   resolving it silently.
 3. Read the newest ~5 entries of `.claude/docs/CHANGELOG.md` (PROJECT.md on first visit).
-4. **member**: check `gh pr status` — changes-requested PRs get fixed before new work.
-   **leader**: check `gh pr list` across the code repos — review, then merge or request changes.
+4. **team_member**: check `gh pr status` — changes-requested PRs get fixed before new work.
+   **team_leader**: check `gh pr list` across the code repos — review, then merge or request
+   changes.
 5. Fresh clone / broken environment → run `/onboard`.
 
 ## Requirements & verification
@@ -31,10 +33,12 @@ the code repos listed in `workspace.yaml` — those repos contain ZERO Claude-re
 ## Team git flow
 
 - All code work on feature branches; `main` is integration-only for every role.
-- **member**: push the branch, `gh pr create`; never merge, never push `main`.
-- **leader**: reviews PRs (delegate diff checks to the `reviewer` agent), merges or requests
-  changes with concrete comments; self-merges own PRs only after review.
-- This workspace repo is direct-commit with pull-rebase (docs are memory, not product).
+- **team_member**: push the branch, `gh pr create`; never merge, never push `main`.
+- **team_leader**: reviews PRs (delegate diff checks to the `reviewer` agent), merges or
+  requests changes with concrete comments; self-merges own PRs only after review; bumps
+  submodule pins and triggers deploys where the project has them — staging first, always.
+- This workspace repo: the leader may direct-commit with pull-rebase (docs are memory, not
+  product); members PR workspace changes too.
 
 ## Module boundary
 
@@ -59,6 +63,11 @@ overflow detail to `.claude/docs/ARCHITECTURE.md` / `LESSONS.md`.)_
 
 - Docs: `.claude/docs/` (PROJECT, ARCHITECTURE, COMMANDS, CHANGELOG, LESSONS, BACKLOG)
 - Environment & launch: `ONBOARDING.md` · Repo manifest: `workspace.yaml`
+- Automation: `.claude/commands/` (user-typed verbs) wrapping `scripts/` where scripts fit;
+  workspace `.claude/skills/` for judgment-bearing flows — a flow run manually twice gets
+  codified here and recorded in COMMANDS.md, never left as chat knowledge.
+- Ops-heavy project? The as-built infra handbook is `INFRASTRUCTURE.md` (root) — read it
+  before touching deployment or production.
 - Scratch: `tmp/` (gitignored) — screenshots/, repos/, briefs/, research/, scratch/
 
 *Last updated: {{DATE}}*

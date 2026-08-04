@@ -14,8 +14,12 @@ Obsidian second-brain vault.
   two-phase: a plan-mode session writes the plan, you sign off on anything destructive, then
   the same session executes it.
 - **Workspaces** — every project is a private workspace repo (Claude material + team memory)
-  wrapping Claude-free code repos. Team roles (`leader` / `member`) drive the PR flow; a new
-  teammate clones the workspace and runs `/onboard`.
+  wrapping Claude-free code repos, vendor/reference trees, and submodule superprojects, under
+  a per-project GitHub org or your account. Team roles (`team_leader` / `team_member`) drive
+  the PR flow; a new teammate clones the workspace and runs `/onboard`.
+- **Automation capture** — flows you repeat (deploy-after-update, migrations, smoke tests)
+  get codified as workspace commands, skills, and hooks, recorded in COMMANDS.md — never left
+  as chat knowledge.
 - **Memory** — six docs + a HANDOFF file per workspace, a root HANDOFF, and the vault. Every
   session is replaceable; handoffs are kept current at all times.
 - **Verification discipline** — nothing is "done" without gate output shown; UI work is proven
@@ -55,8 +59,8 @@ talk to that session.
 4. Your GitHub username — confirmed from `gh auth status`; used for remote URLs.
 5. Which Claude models can this machine run — Fable, Opus, or Sonnet only? (sets the
    model-routing tier)
-6. Is this machine's default role for shared projects **leader** (reviews and merges PRs) or
-   **member** (works via PRs only)?
+6. Is this machine's default role for shared projects **team_leader** (reviews and merges
+   PRs, triggers deploys) or **team_member** (works via PRs only)?
 7. Create a private GitHub repo for the vault so it's always backed up? (default name
    `obsidian-second-brain`; skippable — the vault then stays local-only)
 8. Optional About Me seeds — role/title, employer, email, work context (e.g. regulated data

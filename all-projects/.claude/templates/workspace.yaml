@@ -1,6 +1,7 @@
-# Workspace manifest — the map /onboard and orchestrators navigate by.
-# Every code repo of this project is registered here and gitignored by the workspace repo.
+# Workspace manifest — the map /onboard, the sync command, and orchestrators navigate by.
+# Every repo of this project is registered here and gitignored by the workspace repo.
 name: {{PROJECT_NAME}}
+github_org:                              # repos live under this GitHub org; empty = the user's account
 workspace_repo: {{WORKSPACE_REPO_URL}}   # e.g. https://github.com/__GITHUB_USER__/{{PROJECT_NAME}}-workspace
 
 repos: []
@@ -9,9 +10,12 @@ repos: []
 #     path: backend                       # directory inside the workspace
 #     url: https://github.com/__GITHUB_USER__/{{PROJECT_NAME}}-backend
 #     branch: main
-#   - name: frontend
-#     path: frontend
-#     url: https://github.com/__GITHUB_USER__/{{PROJECT_NAME}}-frontend
-#     branch: main
+#     kind: code                          # code = the team edits it: feature branch + PR
+#     submodules: false                   # true = run `git submodule update --init --recursive` after clone/pull
+#   - name: odoo-vendor
+#     path: vendor/odoo
+#     url: https://github.com/odoo/odoo
+#     branch: "18.0"
+#     kind: vendor                        # vendor = third-party/reference tree — cloned, read, NEVER edited
 
 launch: see ONBOARDING.md

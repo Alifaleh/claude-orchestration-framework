@@ -8,7 +8,9 @@ root session on a fast-path task.
 **Session start in a workspace:** read the newest ~5 CHANGELOG entries; PROJECT.md on first
 visit. As needed: ARCHITECTURE.md's relevant section before structural work; LESSONS.md via grep
 when touching a related area — never read it whole; COMMANDS.md before running anything (a
-written-down command is never guessed); BACKLOG.md when planning.
+written-down command is never guessed); BACKLOG.md when planning; INFRASTRUCTURE.md (workspace
+root, when present) before touching deployment or production infrastructure — it is the
+as-built handbook.
 
 **Update in the same session as the change** (the leader writes; workers never edit shared docs —
 their reports carry DOC TRIGGERS instead):
@@ -16,6 +18,10 @@ their reports carry DOC TRIGGERS instead):
 - shipped or decided → dated CHANGELOG.md entry (newest first)
 - non-obvious gotcha or subtle bug → LESSONS.md (newest first)
 - new frequent command → COMMANDS.md
+- a flow run manually for the SECOND time → codify it as a workspace command/skill/hook
+  (automation-capture rule) and record it in COMMANDS.md
+- infra/deploy topology change → INFRASTRUCTURE.md (workspace root; create it when the project
+  runs real infrastructure)
 - scope change → PROJECT.md
 - backlog item started or thought of → BACKLOG.md
 - a correction, gate change, or boundary decision that should bind future sessions → the
