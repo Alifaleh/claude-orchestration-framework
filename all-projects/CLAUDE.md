@@ -125,9 +125,14 @@ never mid-mission:
 3. Remote NEWER → tell the user, `git -C "__DISTRIBUTION_REPO__" pull --ff-only`, then apply
    the Update protocol at the top of the clone's `FRAMEWORK-CHANGELOG.md`: every version
    between local and latest, in order — never blind-overwrite; the security floor still gates
-   destructive steps. Finish with the workspace bundle-sync, a HANDOFF note, and the new
-   `.claude/VERSION` from the repo. Apply before NEW mission work starts; the user can defer
-   with a word (record the deferral in HANDOFF).
+   destructive steps. Framework-tree steps you apply yourself (governance work). Steps that
+   MIGRATE existing workspaces (bundle re-syncs, key renames, new commands/skills) are
+   DISPATCHED, never done inline: one brief per workspace — haiku when the upgrade step
+   spells out the exact surgery, opus when it needs judgment — 3–5 in parallel (workspace
+   trees are disjoint), each result reviewed before declaring the version applied; then root
+   writes a one-line CHANGELOG entry in each migrated workspace. Finish with a HANDOFF note
+   and the new `.claude/VERSION` from the repo. Apply before NEW mission work starts; the
+   user can defer with a word (record the deferral in HANDOFF).
 4. LOCAL newer → this machine carries unpushed framework changes — surface that instead of
    pulling.
 5. Offline or clone missing → say so once and retry at the next window; the check never blocks

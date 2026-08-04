@@ -12,7 +12,10 @@ the ordered **Upgrade steps** a session must apply to move an existing install t
    the user (local changes were never pushed).
 3. Apply the **Upgrade steps of every version between local and latest, in order, one version
    at a time** — never blind-overwrite the whole tree (local machine state like
-   `.claude/HANDOFF.md` and per-machine settings must survive).
+   `.claude/HANDOFF.md` and per-machine settings must survive). Steps touching EXISTING
+   workspaces are dispatched to workers as per-workspace briefs (haiku for spelled-out
+   surgery, opus for judgment-bearing steps; parallel — workspace trees are disjoint), each
+   result reviewed before the version is declared applied.
 4. After the last step: write the new version to `.claude/VERSION`, re-sync every existing
    workspace's `.claude` bundle (agents/rules/onboard skill), commit the All Projects repo,
    and — if this machine maintains the distribution repo — commit and push the change there.
@@ -24,6 +27,22 @@ Any framework change (CLAUDE.md, rules, agents, skills, templates, hooks) = bump
 and push the distribution repo. No unversioned framework edits.
 
 ---
+
+## 2.4.0 — 2026-08-04
+
+- **Update migrations are dispatched, not inlined**: when a framework update's upgrade steps
+  touch existing workspaces (bundle re-syncs, key renames, new commands/skills), the root
+  session fans them out as per-workspace worker briefs — haiku for spelled-out surgery, opus
+  for judgment-bearing steps, 3–5 in parallel across disjoint workspace trees — reviews each
+  result before declaring the version applied, and writes a one-line CHANGELOG entry in each
+  migrated workspace. Framework-tree steps remain root's own governance work. (Root
+  CLAUDE.md's Framework-updates block and this file's Update protocol amended.)
+
+**Upgrade steps** (from 2.3.0), on each installed machine:
+1. Replace the "Framework updates" block in the projects-root CLAUDE.md with the 2.4.0
+   version, keeping the machine's filled distribution-repo path.
+2. Copy this FRAMEWORK-CHANGELOG.md over `<projects root>/.claude/FRAMEWORK-CHANGELOG.md`.
+3. Write `2.4.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
 
 ## 2.3.0 — 2026-08-04
 
