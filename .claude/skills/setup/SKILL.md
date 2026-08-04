@@ -135,7 +135,12 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
      PROJECTS/CLAUDE.md routing: "Single-model install: review independence is reduced —
      risky diffs deserve the user's own eyes."
 5. **About Me** — fill `VAULT/00 - Brain/About Me.md` from answers 3, 4, and 8 (plus OS and
-   paths). Anything not given stays as its _(fill in)_ marker.
+   paths). Fresh install: anything not given stays as its _(fill in)_ marker. Re-interview of
+   an EXISTING install: any Identity / Work / Machine value the user's answers did not
+   confirm is STALE — it may describe a previous owner or another machine — so replace it
+   with the answer or reset it to the _(fill in)_ marker. Never leave an unconfirmed name,
+   email, or account in place; read the note back after writing and confirm no value remains
+   that the user didn't give.
 6. **Settings merge** — read `~/.claude/settings.json` (create `{}` if absent) and MERGE the
    keys from `settings/settings-fragment.json` after filling its tokens: never overwrite the
    file, append/union into existing arrays and objects. Validate the JSON afterwards
