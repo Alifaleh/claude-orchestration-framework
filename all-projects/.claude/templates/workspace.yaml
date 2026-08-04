@@ -1,0 +1,17 @@
+# Workspace manifest — the map /onboard and orchestrators navigate by.
+# Every code repo of this project is registered here and gitignored by the workspace repo.
+name: {{PROJECT_NAME}}
+workspace_repo: {{WORKSPACE_REPO_URL}}   # e.g. https://github.com/__GITHUB_USER__/{{PROJECT_NAME}}-workspace
+
+repos: []
+# repos:
+#   - name: backend
+#     path: backend                       # directory inside the workspace
+#     url: https://github.com/__GITHUB_USER__/{{PROJECT_NAME}}-backend
+#     branch: main
+#   - name: frontend
+#     path: frontend
+#     url: https://github.com/__GITHUB_USER__/{{PROJECT_NAME}}-frontend
+#     branch: main
+
+launch: see ONBOARDING.md

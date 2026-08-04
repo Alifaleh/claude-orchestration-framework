@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'NEW SESSION in this workspace — self-onboard BEFORE working the first task: read .claude/HANDOFF.md, .env role, and the newest ~5 CHANGELOG entries per CLAUDE.md. Do this without being asked.'"
+          }
+        ]
+      }
+    ]
+  }
+}

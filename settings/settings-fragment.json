@@ -1,0 +1,64 @@
+{
+  "_comment": "MERGE these keys into ~/.claude/settings.json on the target machine — never overwrite the whole file. __VAULT_PATH__ and __MODEL__ are filled by /setup per the interview; on the Sonnet tier the model key is deleted instead of filled.",
+  "model": "__MODEL__",
+  "attribution": {
+    "commit": "",
+    "pr": ""
+  },
+  "permissions": {
+    "additionalDirectories": [
+      "__VAULT_PATH__"
+    ],
+    "allow": [
+      "Edit(__VAULT_PATH__/**)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git fetch*)",
+      "Bash(gh auth status*)",
+      "Bash(gh api user*)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr status*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr diff*)",
+      "Bash(uv run ruff *)",
+      "Bash(uv run mypy *)",
+      "Bash(uv run pytest*)",
+      "Bash(npx tsc --noEmit*)",
+      "Bash(cd * && uv run ruff *)",
+      "Bash(cd * && uv run mypy *)",
+      "Bash(cd * && uv run pytest*)",
+      "Bash(cd * && npx tsc --noEmit*)"
+    ]
+  },
+  "enabledPlugins": {
+    "mcp-server-dev@claude-plugins-official": true,
+    "playwright@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true,
+    "claude-md-management@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "frontend-design@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "security-guidance@claude-plugins-official": true,
+    "claude-code-setup@claude-plugins-official": true,
+    "postman@claude-plugins-official": true,
+    "data-engineering@claude-plugins-official": true,
+    "obsidian@obsidian-skills": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
+      }
+    }
+  }
+}

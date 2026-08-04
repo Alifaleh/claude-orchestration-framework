@@ -1,0 +1,9 @@
+# Workspace repo — commits Claude material and team memory (CLAUDE.md, .claude/**, ONBOARDING.md,
+# workspace.yaml, example.env). Everything below is machine-local or lives in its own repo.
+.env
+tmp/
+.claude/settings.local.json
+
+# Code repos (each its own git repo — registered in workspace.yaml; one line per repo path):
+# /backend/
+# /frontend/

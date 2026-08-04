@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'NEW SESSION — self-onboard BEFORE working the first task: (1) read .claude/HANDOFF.md; (2) read the vault note in __VAULT_PATH__/01 - Projects/ and the workspace HANDOFF/CHANGELOG for whichever project the task concerns; (3) only then start. Do this without being asked.'"
+          }
+        ]
+      }
+    ]
+  }
+}
