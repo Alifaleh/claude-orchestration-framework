@@ -8,7 +8,10 @@ Obsidian second-brain vault.
 ## What you get after install
 
 - **One interface** — a root orchestrator session at your projects root. It never writes
-  project code itself: it decomposes, dispatches workers, and reviews their evidence.
+  project code itself: it decomposes, dispatches workers, and reviews their evidence. Root
+  commands: `/orient` (re-ground the session), `/status` (cross-project progress report with
+  evidence-based estimates), `/handoff` (bring the handoff current — "safe to close?"),
+  `/update` (force the framework update check).
 - **Layered execution** — a project-orchestrator per workspace; implementer / reviewer /
   researcher / scout workers on the cheapest model that does the job well. Full missions run
   two-phase: a plan-mode session writes the plan, you sign off on anything destructive, then

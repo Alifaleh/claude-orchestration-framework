@@ -28,6 +28,28 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 2.5.0 — 2026-08-04
+
+- **Root commands** in `<projects root>/.claude/commands/`:
+  - `orient` — re-ground a session on demand: role, HANDOFF, mission ledger,
+    update status, drift check, recommended next action (session start already self-onboards
+    via the hook; this repeats it anytime).
+  - `status` — cross-project progress report: per project, state / in-flight / blockers /
+    an estimate stated WITH its basis (backlog volume vs recent CHANGELOG cadence — "no
+    basis to estimate" when there is none; never an invented date). More than ~3 active
+    projects → one scout per project, root synthesizes.
+  - `handoff` — rewrite the root HANDOFF fully current, sweep for uncaptured state, commit,
+    and give a "safe to close" verdict or the exact list of what would be lost.
+  - `update` — force the framework update check now, ignoring the 6-hour marker.
+- SessionStart hook now mentions `/orient` and `/status` for discoverability.
+
+**Upgrade steps** (from 2.4.0), on each installed machine:
+1. Copy `.claude/commands/` (orient, status, handoff, update — 4 files) from 2.5.0 into
+   `<projects root>/.claude/commands/`.
+2. Replace the SessionStart hook echo in `<projects root>/.claude/settings.json` with the
+   2.5.0 version (keeps the machine's filled vault path).
+3. Write `2.5.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 2.4.0 — 2026-08-04
 
 - **Update migrations are dispatched, not inlined**: when a framework update's upgrade steps

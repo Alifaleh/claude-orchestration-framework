@@ -63,6 +63,8 @@ smoke test, release) is codified as a workspace command (`.claude/commands/` wra
 - Agents: `.claude/agents/` (canonical; copied into each workspace bundle)
 - Skills: `new-project`, `adopt-project`, `onboard`, `researching` in `.claude/skills/`
   (researching: T0–T4 tiers, claims-with-sources — copied into each workspace bundle)
+- Root commands: `.claude/commands/` — `orient` (re-ground), `status` (cross-project progress
+  + estimates), `handoff` (safe-to-close), `update` (force the update check)
 - Templates: `.claude/templates/`
 - Missions: `tmp/missions/` (ledger + per-project mission/report files)
 - Settings: `~/.claude/settings.json` (model pin, attribution off, vault access)
