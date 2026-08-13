@@ -15,7 +15,10 @@ the ordered **Upgrade steps** a session must apply to move an existing install t
    `.claude/HANDOFF.md` and per-machine settings must survive). Steps touching EXISTING
    workspaces are dispatched to workers as per-workspace briefs (haiku for spelled-out
    surgery, opus for judgment-bearing steps; parallel — workspace trees are disjoint), each
-   result reviewed before the version is declared applied.
+   result reviewed before the version is declared applied. A version whose steps introduce a
+   new tool, plugin, or CLI dependency → OFFER the install to the user first (one question;
+   always ask before system-level installs); declined or failed → record it in HANDOFF and
+   continue — the framework must degrade gracefully without it.
 4. After the last step: write the new version to `.claude/VERSION`, re-sync every existing
    workspace's `.claude` bundle (agents/rules/onboard skill), commit the All Projects repo,
    and — if this machine maintains the distribution repo — commit and push the change there.
@@ -27,6 +30,17 @@ Any framework change (CLAUDE.md, rules, agents, skills, templates, hooks) = bump
 and push the distribution repo. No unversioned framework edits.
 
 ---
+
+## 3.0.1 — 2026-08-13
+
+- **Update protocol: new tool dependencies are offered, never silent.** When a version's
+  upgrade steps introduce a tool/plugin/CLI dependency, the updating session asks the user
+  before installing (system-level installs always ask); declined or failed installs are
+  recorded in HANDOFF and the framework degrades gracefully. The 3.0.0 graphify step is now
+  worded as an explicit offer.
+
+**Upgrade steps** (from 3.0.0): none — protocol wording only; the updated changelog copies
+itself to `.claude/FRAMEWORK-CHANGELOG.md` as part of any update pass.
 
 ## 3.0.0 — 2026-08-13
 
@@ -84,8 +98,9 @@ DISPATCHED per the Update protocol:
    `.claude/docs/CONTEXT_PACK.md` from the template, filled from the workspace's existing
    docs; create `tmp/gates/` + `tmp/team/`; append `graphify-out/` to the workspace
    `.gitignore`; one-line CHANGELOG entry.
-5. Optional: `pip install graphifyy`; per workspace `graphify <code dirs>` (code pass only,
-   vendor excluded) + `graphify hook install`; record the pack's graph-build line.
+5. Optional — OFFER to the user first: `pip install graphifyy`; if accepted, per workspace
+   `graphify <code dirs>` (code pass only, vendor excluded) + `graphify hook install`;
+   record the pack's graph-build line. Declined → everything still works (pack → Grep).
 6. Write `3.0.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
 
 ## 2.5.0 — 2026-08-04
