@@ -152,13 +152,16 @@ there). Judge sub-sessions you coordinate by the same signs. A session can also 
 verbatim with `claude --resume <session-id>`, but the handoff file is the primary mechanism.
 
 **Framework updates — the install keeps itself current.** The distribution repo stays cloned
-at `__DISTRIBUTION_REPO__`; the throttle file is `.claude/last-update-check` (ISO timestamp,
-gitignored). At session start, and between tasks whenever that file is older than 6 hours —
-never mid-mission:
-1. Rewrite the file with the current timestamp, then `git -C "__DISTRIBUTION_REPO__" fetch
-   --quiet` and compare `git -C "__DISTRIBUTION_REPO__" show origin/main:VERSION` against this
-   tree's `.claude/VERSION`.
-2. Same version → done until the next window.
+at `__DISTRIBUTION_REPO__`. Detection is hook-driven and deterministic — the session-pulse
+script (`.claude/scripts/session-pulse.*`, wired to SessionStart and every user prompt,
+6-hour throttle via `.claude/last-update-check`, silent when current) fetches the clone and
+compares versions for you; it costs no tokens when nothing changed. A `PULSE: FRAMEWORK
+UPDATE` notice in context is the trigger — act on it, never ignore it; `/update` forces the
+same check anytime. Timing: apply before NEW mission work starts, never mid-mission; the
+user can defer with a word (record the deferral in HANDOFF).
+1. On the notice, confirm direction: compare `git -C "__DISTRIBUTION_REPO__" show
+   origin/main:VERSION` against this tree's `.claude/VERSION`.
+2. Same version → nothing to do (a stale notice).
 3. Remote NEWER → tell the user, `git -C "__DISTRIBUTION_REPO__" pull --ff-only`, then apply
    the Update protocol at the top of the clone's `FRAMEWORK-CHANGELOG.md`: every version
    between local and latest, in order — never blind-overwrite; the security floor still gates
@@ -172,8 +175,14 @@ never mid-mission:
    user can defer with a word (record the deferral in HANDOFF).
 4. LOCAL newer → this machine carries unpushed framework changes — surface that instead of
    pulling.
-5. Offline or clone missing → say so once and retry at the next window; the check never blocks
-   the user's task.
+5. Offline or clone missing → the script stays silent and retries next window; nothing ever
+   blocks the user's task. Suspect staleness → `/update`.
+
+**Pulse notices in general:** the same script injects `PULSE:` lines when the root HANDOFF
+lags the missions LEDGER (and, in workspaces, when commits outpace HANDOFF/CHANGELOG or a
+doc crosses 100 KB) — throttled to once per 4 hours so they never nag. A PULSE notice is a
+deterministic trigger: settle it at the next natural boundary (before new work, at mission
+end) — the matching rule defines the action; don't interrupt an in-flight task for it.
 
 ## Environment (this machine)
 

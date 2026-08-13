@@ -31,6 +31,44 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.1.0 — 2026-08-13
+
+Deterministic session pulse — checks become code, not model discipline; near-zero cost.
+
+- **New `.claude/scripts/session-pulse.sh` + `.ps1`**, wired via hooks to SessionStart
+  (matcher now includes `resume` — resumed sessions were previously unchecked) AND
+  UserPromptSubmit (every prompt). The script is silent when healthy (no output = zero
+  context tokens), local-only except one throttled `git fetch` per 6 hours, and injects
+  `PULSE:` notices for: a newer published framework VERSION (root); root HANDOFF lagging the
+  missions LEDGER; workspace HANDOFF/CHANGELOG lagging commits by >1h; any doc over 100 KB.
+  Freshness/size notices are additionally throttled to once per 4-hour window
+  (`.claude/last-pulse-nudge`, gitignored) so a known-stale doc never nags per prompt.
+- **The update check no longer depends on the model remembering an instruction** — the hook
+  runs it; CLAUDE.md's Framework-updates block now acts on the injected notice (apply before
+  new mission work, never mid-task, deferrable). `/update` still forces a check. There is
+  deliberately NO OS cron: when Claude is closed nothing can apply updates anyway, and the
+  first session after any restart is checked by the hook.
+- Workspace hooks ship in the workspace-settings template + `new-project` bundle; `/onboard`
+  writes OS-correct hook commands into `.claude/settings.local.json` when a teammate's OS
+  differs from the leader's. New fill-map token `__PULSE_COMMAND__` (per-OS).
+
+**Upgrade steps** (from 3.0.2), on each installed machine:
+1. Copy `.claude/scripts/session-pulse.ps1` + `.sh` from 3.1.0 into
+   `<projects root>/.claude/scripts/`, filling `__DISTRIBUTION_REPO__` with this machine's
+   clone path.
+2. Replace the hooks in `<projects root>/.claude/settings.json` with the 3.1.0 shape
+   (matcher `startup|resume|clear`; pulse command per this machine's OS; keep the filled
+   vault path in the echo). Approve the hooks prompt at the next session start.
+3. In the projects-root CLAUDE.md: replace the Framework-updates block with the 3.1.0
+   version and add the "Pulse notices in general" paragraph (keep filled values).
+4. Add `/.claude/last-pulse-nudge` to the projects-root `.gitignore`.
+5. Per existing workspace (dispatched, one beat each): copy the two scripts into
+   `WS/.claude/scripts/`; replace the `WS/.claude/settings.json` hooks with the 3.1.0
+   workspace shape (this machine's OS command; teammates on another OS get theirs via
+   `/onboard` → `.claude/settings.local.json`); append `.claude/last-pulse-nudge` to the
+   workspace `.gitignore`; one-line CHANGELOG entry.
+6. Write `3.1.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 3.0.2 — 2026-08-13
 
 - **Workspace migrations copy from the tier-swapped projects root, never the raw clone** —

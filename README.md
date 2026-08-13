@@ -97,9 +97,10 @@ Everything else (OS, shell, home directory) is detected, not asked.
 
 ## Updating an existing install
 
-Updates are automatic. The installed root session checks your clone of this repo roughly every
-6 hours (at session start and between tasks): it fetches, compares the published `VERSION`
-with the installed one, and when a newer version exists it pulls (`--ff-only`) and applies
+Updates are automatic and effectively free: a deterministic session hook (SessionStart +
+every prompt, throttled to one network check per 6 hours, silent when current — zero tokens)
+fetches your clone of this repo and compares the published `VERSION` with the installed one.
+When a newer version exists the root session announces it, pulls (`--ff-only`), and applies
 each intermediate version's upgrade steps in order per `FRAMEWORK-CHANGELOG.md` — never a
 blind overwrite, so your filled-in values and machine state survive. Keep the clone where
 `/setup` found it.

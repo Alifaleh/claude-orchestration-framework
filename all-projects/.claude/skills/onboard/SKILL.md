@@ -25,8 +25,11 @@ a verified running project, following the workspace's own ONBOARDING.md as the s
    rights / system package manager).
 4. **Env files.** `cp example.env .env` if absent; ask the user ONE question: team_leader or
    team_member on this machine? Write `WORKSPACE_ROLE`; fill `GIT_USER_NAME`/`GIT_USER_EMAIL`/
-   `GITHUB_USERNAME` from the machine's git config (confirm with the user). For remaining keys
-   and per-repo env files
+   `GITHUB_USERNAME` from the machine's git config (confirm with the user). If the pulse-hook
+   command in `.claude/settings.json` doesn't match this machine's OS (a `.ps1` command on
+   macOS/Linux, or `sh` on Windows without it), write the OS-correct hooks into
+   `.claude/settings.local.json` (gitignored) — hooks must run on every teammate's OS. For
+   remaining keys and per-repo env files
    (ONBOARDING.md §3): create from the examples, ask the user for values of secret keys by NAME
    — never invent, never print values back.
 5. **Setup + launch.** Run ONBOARDING.md §4 then §5 exactly as written (`cd <repo> && …` form).

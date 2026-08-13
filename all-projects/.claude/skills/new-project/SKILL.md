@@ -42,6 +42,8 @@ All repos PRIVATE.
      `WS/.claude/skills/finish/` (the orchestrator's execution + closeout machinery)
    - `FRAMEWORK/templates/commands/sync.md` → `WS/.claude/commands/sync.md`; create `WS/scripts/`
      (empty — automation scripts land here as the automation-capture rule codifies flows)
+   - `FRAMEWORK/scripts/session-pulse.ps1` + `session-pulse.sh` → `WS/.claude/scripts/`
+     (the workspace settings hook runs them — deterministic staleness/size notices)
 3. **Scratch:** create `WS/tmp/{screenshots,repos,briefs,research,scratch,gates,team}/`
    (gitignored). Fill `WS/.claude/docs/CONTEXT_PACK.md` with everything already known
    (stack, commands, gates, boundary) — it is the employees' onboarding pack.

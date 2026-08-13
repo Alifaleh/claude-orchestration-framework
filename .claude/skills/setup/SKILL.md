@@ -114,6 +114,7 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
    | `__ENVIRONMENT_NOTES__` | the environment snippet (step 3) |
    | `__MODEL__` | settings fragment only — per the tier mapping (step 4) |
    | `__VAULT_CAPTURE__` | the vault-capture bullet per answer 9 — one of the two texts below |
+   | `__PULSE_COMMAND__` | the session-pulse hook command for THIS OS — Windows: `powershell -NoProfile -ExecutionPolicy Bypass -File .claude/scripts/session-pulse.ps1` · macOS/Linux: `sh .claude/scripts/session-pulse.sh` (fills the root settings AND the workspace-settings template) |
 
    `__VAULT_CAPTURE__` texts (fill VERBATIM into `rules/obsidian-vault.md`):
    - Proactive (default): `- **Personal and work facts: capture proactively.** When I share a

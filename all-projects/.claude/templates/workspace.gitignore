@@ -4,6 +4,7 @@
 tmp/
 graphify-out/
 .claude/settings.local.json
+.claude/last-pulse-nudge
 
 # Code repos (each its own git repo — registered in workspace.yaml; one line per repo path):
 # /backend/

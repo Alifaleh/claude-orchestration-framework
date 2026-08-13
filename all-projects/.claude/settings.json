@@ -2,11 +2,25 @@
   "hooks": {
     "SessionStart": [
       {
-        "matcher": "startup|clear",
+        "matcher": "startup|resume|clear",
         "hooks": [
           {
             "type": "command",
-            "command": "echo 'NEW SESSION — self-onboard BEFORE working the first task: (1) read .claude/HANDOFF.md; (2) read the vault note in __VAULT_PATH__/01 - Projects/ and the workspace HANDOFF/CHANGELOG for whichever project the task concerns; (3) if .claude/last-update-check is missing or older than 6 hours, run the framework-update check (CLAUDE.md, Framework updates); (4) only then start. Do this without being asked. Typing /orient re-runs this orientation anytime; /status gives the cross-project progress report.'"
+            "command": "echo 'NEW SESSION — self-onboard BEFORE working the first task: (1) read .claude/HANDOFF.md; (2) read the vault note in __VAULT_PATH__/01 - Projects/ and the workspace HANDOFF/CHANGELOG for whichever project the task concerns; (3) act on any PULSE notice injected alongside this message (framework update, stale handoff); (4) only then start. Do this without being asked. Typing /orient re-runs this orientation anytime; /status gives the cross-project progress report.'"
+          },
+          {
+            "type": "command",
+            "command": "__PULSE_COMMAND__"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__PULSE_COMMAND__"
           }
         ]
       }

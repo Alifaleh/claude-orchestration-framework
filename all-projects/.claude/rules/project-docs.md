@@ -35,7 +35,10 @@ the newest ~30 LESSONS / ~15 CHANGELOG entries; leave one tail line pointing the
 `find .claude/docs -name '*.md' -size +100k` (sh) or
 `Get-ChildItem .claude/docs/*.md | Where-Object Length -gt 100KB` (PowerShell). If
 `graphify-out/graph.json` is more than ~20 commits behind HEAD, refresh it
-(`graphify hook status` should show hooks installed; else rebuild).
+(`graphify hook status` should show hooks installed; else rebuild). The session-pulse hook
+injects a deterministic `PULSE:` notice when a doc crosses the size limit, when commits
+outpace CHANGELOG, or when the workspace HANDOFF lags — the notice is the trigger; this rule
+is the action.
 
 **Update in the same session as the change** (the leader writes; employees never touch shared
 docs — their reports carry DOC TRIGGERS + PACK flags instead):
