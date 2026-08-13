@@ -31,6 +31,18 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.0.2 — 2026-08-13
+
+- **Workspace migrations copy from the tier-swapped projects root, never the raw clone** —
+  and the agents-bundle swap now names project-orchestrator.md and the rules re-sync
+  explicitly. Prevents a non-Fable install's workspace orchestrators from being reset to
+  `model: fable` during the 3.0.0 migration. (3.0.0 upgrade step 4 reworded.)
+
+**Upgrade steps** (from 3.0.1): none — wording only. Machines that already applied 3.0.0's
+workspace migration from the raw clone: verify each workspace's
+`.claude/agents/project-orchestrator.md` frontmatter matches the install's tier; fix by
+re-copying from the projects root.
+
 ## 3.0.1 — 2026-08-13
 
 - **Update protocol: new tool dependencies are offered, never silent.** When a version's
@@ -92,8 +104,10 @@ DISPATCHED per the Update protocol:
 3. `rules/obsidian-vault.md`: the personal-capture bullet is now chosen at install; existing
    installs KEEP their current behavior (replace `__VAULT_CAPTURE__` with the proactive text
    from the setup skill unless the user asks for ask-first).
-4. Per existing workspace (dispatched, one beat each): swap the `.claude/agents/` bundle
-   (delete implementer.md, add engineer/verifier, replace the rest); copy
+4. Per existing workspace (dispatched, one beat each): swap the `.claude/agents/` bundle —
+   delete implementer.md, add engineer/verifier, replace the rest INCLUDING
+   project-orchestrator.md — copying from the projects-root `.claude/` (already tier-swapped
+   in step 1), never from the distribution clone directly; re-sync `.claude/rules/`; copy
    `skills/team/` + `skills/finish/` + the new `templates`-derived files; create
    `.claude/docs/CONTEXT_PACK.md` from the template, filled from the workspace's existing
    docs; create `tmp/gates/` + `tmp/team/`; append `graphify-out/` to the workspace
