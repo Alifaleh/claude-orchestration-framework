@@ -24,6 +24,8 @@ _(Decisions the orchestrator must NOT reopen; risky areas; what's out of scope.)
 
 Two-phase run: the PLAN-phase output is saved at `{{MISSION_DIR}}/{{ID}}-plan.md`; execution
 follows only after root reviewed it (and the user signed off on any security-floor operation).
+The plan decomposes into beats (WRITABLE · routing tier per the quality gate · GATE_SCOPED ·
+GATE_FULL each); execution runs them through the `team` skill's persistent employees.
 
 ## Report
 

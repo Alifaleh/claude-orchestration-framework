@@ -30,13 +30,19 @@ scouts. `FRAMEWORK` = `__PROJECTS_ROOT__/.claude`.
 5. **Scout inventory** (dispatch `scout` agents, parallel, read-only): structure + entry points;
    stack + dependencies + how it runs (docker? manage.py? package.json scripts?); existing docs/
    READMEs/commands; test setup and gates. Facts with file:line citations.
-6. **Synthesize docs** (root writes, from scout evidence + any stripped content): the six
-   `.claude/docs/` files, `WS/CLAUDE.md` (real boundary + real gates), `ONBOARDING.md` (real
-   setup/launch/verify commands), `workspace.yaml` (register each code repo; vendor trees as
-   `kind: vendor`; submodule superprojects with `submodules: true`; the GitHub owner as
-   `github_org`). Then dispatch the `claude-automation-recommender` agent (claude-code-setup
-   plugin) over the codebase and codify accepted recommendations as workspace
-   commands/skills/hooks per the automation-capture rule.
+6. **Synthesize docs** (root writes, from scout evidence + any stripped content): the seven
+   `.claude/docs/` files — CONTEXT_PACK.md first (module map, verbatim commands,
+   GATE_SCOPED/GATE_FULL recipes, binding rules, current focus) — then PROJECT, ARCHITECTURE,
+   COMMANDS, CHANGELOG, LESSONS, BACKLOG; `WS/CLAUDE.md` (real boundary + real gates);
+   `ONBOARDING.md` (real setup/launch/verify commands); `workspace.yaml` (register each code
+   repo; vendor trees as `kind: vendor`; submodule superprojects with `submodules: true`; the
+   GitHub owner as `github_org`). Any adopted log doc over 100 KB gets the size-hygiene
+   archival pass (project-docs rule). If the `graphify` CLI is installed: build the code-pass
+   graph (`graphify <code dirs>`, vendor excluded — never the LLM semantic extraction without
+   explicit approval) and `graphify hook install`. Then dispatch the
+   `claude-automation-recommender` agent (claude-code-setup plugin) over the codebase and
+   codify accepted recommendations as workspace commands/skills/hooks per the
+   automation-capture rule.
 7. **Hygiene sweep**: stray root files → `tmp/` or propose deletion (bulk deletions need the
    user's sign-off naming targets).
 8. **Remotes**: if the code repo already has a GitHub remote, keep it. Offer to create missing

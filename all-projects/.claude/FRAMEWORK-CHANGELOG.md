@@ -28,6 +28,66 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.0.0 — 2026-08-13
+
+Persistent-team orchestration and the token diet — the execution model changes (MAJOR).
+
+- **Persistent employees replace spawn-per-task**: new `team` skill (+ HANDOVER/ROSTER
+  templates) — engineer/verifier/reviewer are hired ONCE per project, onboard from
+  CONTEXT_PACK + HANDOVER, and serve many beats via short messages; handover→rehire swaps the
+  model without losing project knowledge; roster + ledger-before-dispatch make usage-limit
+  kills recoverable. New agents: `engineer` (sonnet default, opus per gate, haiku for
+  transcription) and `verifier` (haiku; owns `tmp/gates/`, serializes DB/Playwright runs).
+  `implementer` is RETIRED. `reviewer`/`scout`/`researcher` rewritten (beat-oriented,
+  gate-log evidence, claims-table contract).
+- **Routing gate**: transcription-shaped beats → haiku regardless of size; a six-point
+  quality-equivalence gate decides sonnet vs the top tier (ANY NO → stronger); a higher model
+  always reviews the tier below; `exceeds-ability` is a rewarded status; every dispatch
+  carries an explicit `model:` alias.
+- **Evidence diet**: beats carry GATE_SCOPED (engineer inner loop) and GATE_FULL (verifier,
+  once); ALL gate output piped to `tmp/gates/*.log`; context sees exit code + ≤40-line
+  excerpt + ≤20-line tail; reviewers re-run gates only for money/security/migrations/
+  concurrency or doubt. Engineering rule gains: log-file output discipline,
+  process-supervision-is-code, the one-authoritative-number rule, and the defensive
+  security-register section.
+- **CONTEXT_PACK.md** becomes the seventh workspace doc (employees' 1-page onboarding pack;
+  template shipped) with a query-first read protocol: `graphify query "<q>" --budget 1500`
+  (optional CLI, `pip install graphifyy` — tree-sitter code pass, free; LLM semantic
+  extraction approval-gated) → pack → targeted Grep → whole-file Read. Size hygiene: docs
+  >100 KB archived by a haiku beat; graph refreshed via `graphify hook install`.
+- **No silent waits**: >15-minute dispatches get bounded watchdogs; >30-minute stalls are
+  stopped, inspected, resumed or re-scoped; interruptions surface immediately.
+- **`finish` skill**: pre-merge go/no-go closeout (stale-number scan, live GATE_FULL re-run,
+  register scan, open-item sweep, attribution + hygiene); missions end with its GO verdict.
+- **Setup**: interview gains Q9 vault privacy (fills `__VAULT_CAPTURE__` — proactive vs
+  ask-first) and Q10 optional graphify install; tier mapping updated to the new roster.
+
+**Upgrade steps** (from 2.5.0), on each installed machine — per-workspace steps are
+DISPATCHED per the Update protocol:
+1. Framework tree (root session applies): copy from 3.0.0 — `agents/` (engineer, verifier,
+   reviewer, scout, researcher, project-orchestrator; DELETE `implementer.md`),
+   `skills/team/`, `skills/finish/`, `skills/new-project`, `skills/adopt-project`,
+   `skills/onboard`, `rules/engineering.md`, `rules/project-docs.md`, `templates/brief.md`,
+   `templates/docs/CONTEXT_PACK.md`, `templates/workspace-CLAUDE.md`,
+   `templates/workspace.gitignore`, `templates/mission.md`. Re-apply the machine's model-tier
+   swaps (project-orchestrator frontmatter, role-detection model name).
+2. Projects-root CLAUDE.md: apply the 3.0.0 routing block (routing gate, review ladder,
+   evidence diet, no-silent-waits, team-mode sentences, updated fast-path/don't-over-delegate
+   wording, session-start pack reference) — copy the sections from 3.0.0's file, keeping
+   filled machine values.
+3. `rules/obsidian-vault.md`: the personal-capture bullet is now chosen at install; existing
+   installs KEEP their current behavior (replace `__VAULT_CAPTURE__` with the proactive text
+   from the setup skill unless the user asks for ask-first).
+4. Per existing workspace (dispatched, one beat each): swap the `.claude/agents/` bundle
+   (delete implementer.md, add engineer/verifier, replace the rest); copy
+   `skills/team/` + `skills/finish/` + the new `templates`-derived files; create
+   `.claude/docs/CONTEXT_PACK.md` from the template, filled from the workspace's existing
+   docs; create `tmp/gates/` + `tmp/team/`; append `graphify-out/` to the workspace
+   `.gitignore`; one-line CHANGELOG entry.
+5. Optional: `pip install graphifyy`; per workspace `graphify <code dirs>` (code pass only,
+   vendor excluded) + `graphify hook install`; record the pack's graph-build line.
+6. Write `3.0.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 2.5.0 — 2026-08-04
 
 - **Root commands** in `<projects root>/.claude/commands/`:

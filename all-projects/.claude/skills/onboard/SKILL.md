@@ -10,9 +10,11 @@ a verified running project, following the workspace's own ONBOARDING.md as the s
 
 ## Steps
 
-1. **Understand the project.** Read `ONBOARDING.md`, `CLAUDE.md`, `.claude/docs/PROJECT.md`,
-   and `workspace.yaml`. Summarize for the user in a few lines what this project is and what
-   you're about to set up.
+1. **Understand the project.** Read `.claude/docs/CONTEXT_PACK.md` first, then
+   `ONBOARDING.md`, `CLAUDE.md`, `.claude/docs/PROJECT.md`, and `workspace.yaml`. Summarize
+   for the user in a few lines what this project is and what you're about to set up. If the
+   workspace uses a graph (`graphify-out/` exists) but the `graphify` CLI is missing, offer
+   `pip install graphifyy` (PyPI, MIT) and `graphify hook install`.
 2. **Code repos.** For each entry in `workspace.yaml` missing from disk:
    `git clone <url> <path>` (branch per manifest); where `submodules: true`, follow with
    `git submodule update --init --recursive`. `kind: vendor` entries are reference trees —

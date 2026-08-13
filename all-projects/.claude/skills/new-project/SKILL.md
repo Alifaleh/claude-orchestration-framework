@@ -38,9 +38,16 @@ All repos PRIVATE.
    - `FRAMEWORK/rules/*.md` → `WS/.claude/rules/`
    - `FRAMEWORK/skills/onboard/` → `WS/.claude/skills/onboard/`
    - `FRAMEWORK/skills/researching/` → `WS/.claude/skills/researching/`
+   - `FRAMEWORK/skills/team/` → `WS/.claude/skills/team/` and `FRAMEWORK/skills/finish/` →
+     `WS/.claude/skills/finish/` (the orchestrator's execution + closeout machinery)
    - `FRAMEWORK/templates/commands/sync.md` → `WS/.claude/commands/sync.md`; create `WS/scripts/`
      (empty — automation scripts land here as the automation-capture rule codifies flows)
-3. **Scratch:** create `WS/tmp/{screenshots,repos,briefs,research,scratch}/` (gitignored).
+3. **Scratch:** create `WS/tmp/{screenshots,repos,briefs,research,scratch,gates,team}/`
+   (gitignored). Fill `WS/.claude/docs/CONTEXT_PACK.md` with everything already known
+   (stack, commands, gates, boundary) — it is the employees' onboarding pack.
+3b. **Graph (optional):** if the `graphify` CLI is installed, build the code-pass graph once
+   real code exists (`graphify <code dirs>` — vendor trees excluded, never the LLM semantic
+   extraction) and run `graphify hook install` in each code repo so it refreshes per commit.
 4. **Workspace repo:** `cd WS && git init && git add -A && git commit` ("Bootstrap <name>
    workspace"). Unless `--no-remote`:
    `gh repo create <owner>/<name>-workspace --private --source . --push`.

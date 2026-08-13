@@ -14,7 +14,8 @@ How all projects run. Installed at `__PROJECTS_ROOT__` by the framework distribu
 I talk only to the **root session** (launched in `__PROJECTS_ROOT__`). It routes:
 
 - **Inline**: conversation, design, read-only questions, vault writes, tiny edits.
-- **Fast path** (single-brief tasks): root writes the brief and dispatches a worker directly.
+- **Fast path** (single-beat tasks): root writes the beat brief and dispatches one disposable
+  worker on the tier the routing gate picks.
 - **Full mission** (2+ briefs / cross-repo / architecture / risky): root writes a mission file
   and runs it **two-phase**: a plan-mode session in the workspace produces the execution plan
   (`claude -p --permission-mode plan --output-format json`, plan saved, session_id kept); root
@@ -24,10 +25,14 @@ I talk only to the **root session** (launched in `__PROJECTS_ROOT__`). It routes
   reach me in real time. Either way the orchestrator decomposes, dispatches workers, reviews
   everything, updates docs, and reports back.
 
-Workers: `implementer` (all decision-bearing code), `scout` (recon, read-only), `reviewer`
-(gates + Playwright UI checks; stronger-model override for risky diffs), `researcher`
-(external/library research). Exact model routing is set at install — see the projects-root
-CLAUDE.md. Workers never spawn agents. Nobody at an orchestration layer implements.
+Execution runs a **persistent employee team** (the `team` skill): `engineer` (decision-bearing
+code — sonnet by default, opus per the routing gate, haiku for pure transcription),
+`verifier` (full gates + Playwright UI drives; owns `tmp/gates/` logs), `reviewer` (a higher
+model than the writer, always), plus `scout` (recon) and `researcher` (claims-with-sources).
+Employees are hired once, onboard from CONTEXT_PACK + HANDOVER, and serve many beats — never
+spawn-per-task (each avoided re-onboarding saves ~10–40k tokens). Exact model routing is set
+at install — see the projects-root CLAUDE.md. Workers never spawn agents. Nobody at an
+orchestration layer implements.
 
 ## Workspaces
 
@@ -50,9 +55,13 @@ smoke test, release) is codified as a workspace command (`.claude/commands/` wra
 
 ## Memory
 
-- Workspace `.claude/docs/`: PROJECT, ARCHITECTURE, COMMANDS, CHANGELOG, LESSONS, BACKLOG —
-  operational memory, committed and shared with the team. The leader-of-the-moment updates them
-  (and CLAUDE.md/ONBOARDING.md) in the same session as the change.
+- Workspace `.claude/docs/`: CONTEXT_PACK (the employees' onboarding pack), PROJECT,
+  ARCHITECTURE, COMMANDS, CHANGELOG, LESSONS, BACKLOG — operational memory, committed and
+  shared with the team. The leader-of-the-moment updates them (and CLAUDE.md/ONBOARDING.md)
+  in the same session as the change.
+- Reading is query-first: graph query (`graphify`, where installed) → CONTEXT_PACK → targeted
+  Grep → whole-file Read; gate output lives in `tmp/gates/*.log` — context sees exit codes
+  and short excerpts, never full logs.
 - This vault: durable cross-project + personal memory. Main sessions write; subagents emit
   VAULT TRIGGERS. One note per project in `01 - Projects`.
 
@@ -61,8 +70,9 @@ smoke test, release) is codified as a workspace command (`.claude/commands/` wra
 - Global rules + root protocol: `__PROJECTS_ROOT__/CLAUDE.md`
 - Rules: `.claude/rules/` (engineering, project-docs, obsidian-vault, typescript, python)
 - Agents: `.claude/agents/` (canonical; copied into each workspace bundle)
-- Skills: `new-project`, `adopt-project`, `onboard`, `researching` in `.claude/skills/`
-  (researching: T0–T4 tiers, claims-with-sources — copied into each workspace bundle)
+- Skills: `new-project`, `adopt-project`, `onboard`, `researching`, `team` (persistent
+  employees, beats, handovers, roster), `finish` (go/no-go closeout) in `.claude/skills/` —
+  researching/team/finish are copied into each workspace bundle
 - Root commands: `.claude/commands/` — `orient` (re-ground), `status` (cross-project progress
   + estimates), `handoff` (safe-to-close), `update` (force the update check)
 - Templates: `.claude/templates/`

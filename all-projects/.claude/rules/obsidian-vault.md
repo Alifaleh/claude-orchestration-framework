@@ -27,10 +27,7 @@ Vault: `__VAULT_PATH__` — `00 - Brain` (personal) | `01 - Projects` (one note 
   security-relevant changes, lessons. Durable summaries, not session play-by-play; update the
   existing note rather than spawning a new one. The workspace `.claude/docs/` files hold
   operational detail; the vault note holds the durable cross-project summary.
-- **Personal and work facts: capture proactively.** When I share a durable fact about my life,
-  work, or contacts, save it to the right note (`00 - Brain/About Me`, `00 - Brain/Contacts/`,
-  `02 - Work`) in the same session — I want the root session to know everything about me.
-  Never store secrets, credentials, or real customer/bank data.
+__VAULT_CAPTURE__
 - NEVER delete or overwrite vault content without asking first. Unsure whether something
   belongs → ask.
 - Conventions: `[[wikilinks]]`, YAML frontmatter on new notes, end every created/updated note

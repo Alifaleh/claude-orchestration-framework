@@ -82,6 +82,14 @@ answer takes it.
 8. **About Me seeds (optional)** — "Anything you want in About Me right away — role/title,
    employer, email, work context (e.g. regulated data like banking or medical)? Or skip — I
    capture these over time."
+9. **Vault privacy** — "Should Claude proactively save durable personal/work facts you
+   mention into the vault (About Me, Contacts, Work notes) — or only write those when you
+   explicitly ask?" Default: proactive capture. → fills `__VAULT_CAPTURE__` (texts in
+   Phase 3).
+10. **graphify (optional)** — "Install the graphify CLI (`pip install graphifyy` — PyPI, MIT)
+    so projects get a free tree-sitter code graph and the query-first read protocol?
+    Skippable — reading then degrades to CONTEXT_PACK → Grep." Requires Python; if missing,
+    note it and skip.
 
 ## Phase 3 — Install the trees
 
@@ -105,6 +113,18 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
    | `__DISTRIBUTION_REPO__` | absolute path of THIS clone |
    | `__ENVIRONMENT_NOTES__` | the environment snippet (step 3) |
    | `__MODEL__` | settings fragment only — per the tier mapping (step 4) |
+   | `__VAULT_CAPTURE__` | the vault-capture bullet per answer 9 — one of the two texts below |
+
+   `__VAULT_CAPTURE__` texts (fill VERBATIM into `rules/obsidian-vault.md`):
+   - Proactive (default): `- **Personal and work facts: capture proactively.** When I share a
+     durable fact about my life, work, or contacts, save it to the right note
+     (`00 - Brain/About Me`, `00 - Brain/Contacts/`, `02 - Work`) in the same session — I
+     want the root session to know everything about me. Never store secrets, credentials, or
+     real customer data.`
+   - Ask-first: `- **Personal and work notes are ask-first.** NEVER write to `00 - Brain` or
+     `02 - Work` unless I explicitly ask. Mentioning a person or personal detail in
+     conversation is NOT a request to save it. Project/technical notes still auto-document.
+     Never store secrets, credentials, or real customer data.`
 
    When filling JSON files (e.g. `.claude/settings.json` hooks), JSON-escape the value —
    Windows backslashes must become `\\`.
@@ -123,17 +143,24 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
    keep, drop, or invert that line accordingly in PROJECTS/CLAUDE.md and in
    PROJECTS/.claude/agents/*.md where it repeats.
 4. **Model tier mapping** — edit the COPIES under PROJECTS:
-   - **Fable tier**: defaults are already right (root + project-orchestrator `fable`,
-     implementer `opus`, reviewer/researcher `sonnet`, scout `haiku`).
+   - **Fable tier**: defaults are already right (root + project-orchestrator `fable`;
+     engineer `sonnet`, hired up to `opus` when the routing gate says so; verifier `haiku`;
+     reviewer one tier above the writer; researcher `sonnet`; scout `haiku`).
      `__MODEL__` → `"claude-fable-5[1m]"`.
    - **Opus tier** (no Fable): in PROJECTS/CLAUDE.md role detection §1, `Fable` → `Opus`;
      `agents/project-orchestrator.md` `model: fable` → `model: opus`; drop fable from the
      cost line. `__MODEL__` → `"opus"`.
-   - **Sonnet tier**: root, project-orchestrator, implementer, and reviewer all become
-     `sonnet`; scout stays `haiku`; rewrite the cost line to the models in play; DELETE the
-     `"model"` key from the merged settings instead of filling `__MODEL__`; add one line to
-     PROJECTS/CLAUDE.md routing: "Single-model install: review independence is reduced —
-     risky diffs deserve the user's own eyes."
+   - **Sonnet tier**: root + project-orchestrator become `sonnet` (role detection §1 and the
+     agent frontmatter); the engineer stays `sonnet` (the routing gate still drops
+     transcription beats to `haiku`); verifier `haiku`; reviewer `sonnet` + the leader's own
+     criteria tick on every beat (the higher-model ladder tops out here); rewrite the cost
+     line to the models in play; DELETE the `"model"` key from the merged settings instead of
+     filling `__MODEL__`; add one line to PROJECTS/CLAUDE.md routing: "Single-model install:
+     review independence is reduced — risky diffs deserve the user's own eyes."
+4b. **Optional tooling** — if answer 10 was yes: `pip install graphifyy`, then verify the CLI
+   answers `graphify --help`. Failure → note it and continue; the framework degrades
+   gracefully (CONTEXT_PACK → Grep). Graphs get built per-project later by
+   `new-project`/`adopt-project`, never here.
 5. **About Me** — fill `VAULT/00 - Brain/About Me.md` from answers 3, 4, and 8 (plus OS and
    paths). Fresh install: anything not given stays as its _(fill in)_ marker. Re-interview of
    an EXISTING install: any Identity / Work / Machine value the user's answers did not

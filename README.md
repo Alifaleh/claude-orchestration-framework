@@ -12,10 +12,16 @@ Obsidian second-brain vault.
   commands: `/orient` (re-ground the session), `/status` (cross-project progress report with
   evidence-based estimates), `/handoff` (bring the handoff current — "safe to close?"),
   `/update` (force the framework update check).
-- **Layered execution** — a project-orchestrator per workspace; implementer / reviewer /
-  researcher / scout workers on the cheapest model that does the job well. Full missions run
-  two-phase: a plan-mode session writes the plan, you sign off on anything destructive, then
-  the same session executes it.
+- **Layered execution** — a project-orchestrator per workspace running a persistent employee
+  team (engineer / verifier / reviewer, plus scout and researcher) on the cheapest model that
+  does the job well: a six-point routing gate decides the tier, a higher model always reviews
+  the tier below, and employees onboard ONCE from a per-project context pack instead of
+  re-reading the project every task. Full missions run two-phase: a plan-mode session writes
+  the plan, you sign off on anything destructive, then the same session executes it.
+- **Token diet** — gate output goes to log files (context sees exit codes + short excerpts,
+  never full logs); the full suite runs once per beat by a haiku verifier; and with the
+  optional graphify CLI (`pip install graphifyy`) code questions are answered from a free
+  tree-sitter knowledge graph within a token budget before any file crawling.
 - **Workspaces** — every project is a private workspace repo (Claude material + team memory)
   wrapping Claude-free code repos, vendor/reference trees, and submodule superprojects, under
   a per-project GitHub org or your account. Team roles (`team_leader` / `team_member`) drive
@@ -27,8 +33,9 @@ Obsidian second-brain vault.
   tier that settles them (source-on-disk → one authoritative lookup → community leads →
   multi-source verification → deep report, the last only with your approval); results are
   claims-with-sources tables, never vibes.
-- **Memory** — six docs + a HANDOFF file per workspace, a root HANDOFF, and the vault. Every
-  session is replaceable; handoffs are kept current at all times.
+- **Memory** — seven docs (including the CONTEXT_PACK onboarding pack) + a HANDOFF file per
+  workspace, a root HANDOFF, and the vault. Every session is replaceable — and so is every
+  employee: knowledge handovers survive model swaps.
 - **Verification discipline** — nothing is "done" without gate output shown; UI work is proven
   through the real screen (Playwright) with screenshots as evidence.
 
@@ -72,6 +79,10 @@ talk to that session.
    `obsidian-second-brain`; skippable — the vault then stays local-only)
 8. Optional About Me seeds — role/title, employer, email, work context (e.g. regulated data
    such as banking or medical) — or skip and let Claude capture them over time.
+9. Vault privacy — should Claude proactively save durable personal/work facts you mention,
+   or only write personal notes when you explicitly ask?
+10. Install the optional graphify CLI (`pip install graphifyy`) for the code knowledge graph
+    and query-first reading? (skippable — reading degrades gracefully)
 
 Everything else (OS, shell, home directory) is detected, not asked.
 

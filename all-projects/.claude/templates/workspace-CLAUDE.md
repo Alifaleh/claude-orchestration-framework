@@ -15,7 +15,9 @@ the code repos listed in `workspace.yaml` — those repos contain ZERO Claude-re
 2. Run the `sync` command (`.claude/commands/sync.md`): fetch + fast-forward this repo and
    every repo in `workspace.yaml` (submodules included); surface divergence instead of
    resolving it silently.
-3. Read the newest ~5 entries of `.claude/docs/CHANGELOG.md` (PROJECT.md on first visit).
+3. Read `.claude/docs/CONTEXT_PACK.md` FIRST, then the newest ~5 entries of
+   `.claude/docs/CHANGELOG.md` (PROJECT.md on first visit). Follow the pack's read protocol:
+   graph query where the workspace has one → pack → targeted Grep → whole-file Read last.
 4. **team_member**: check `gh pr status` — changes-requested PRs get fixed before new work.
    **team_leader**: check `gh pr list` across the code repos — review, then merge or request
    changes.
@@ -61,13 +63,15 @@ overflow detail to `.claude/docs/ARCHITECTURE.md` / `LESSONS.md`.)_
 
 ## Pointers
 
-- Docs: `.claude/docs/` (PROJECT, ARCHITECTURE, COMMANDS, CHANGELOG, LESSONS, BACKLOG)
+- Docs: `.claude/docs/` (CONTEXT_PACK, PROJECT, ARCHITECTURE, COMMANDS, CHANGELOG, LESSONS,
+  BACKLOG)
 - Environment & launch: `ONBOARDING.md` · Repo manifest: `workspace.yaml`
 - Automation: `.claude/commands/` (user-typed verbs) wrapping `scripts/` where scripts fit;
   workspace `.claude/skills/` for judgment-bearing flows — a flow run manually twice gets
   codified here and recorded in COMMANDS.md, never left as chat knowledge.
 - Ops-heavy project? The as-built infra handbook is `INFRASTRUCTURE.md` (root) — read it
   before touching deployment or production.
-- Scratch: `tmp/` (gitignored) — screenshots/, repos/, briefs/, research/, scratch/
+- Scratch: `tmp/` (gitignored) — screenshots/, repos/, briefs/, research/, scratch/, gates/
+  (all gate logs), team/ (employee worklogs, handovers, roster)
 
 *Last updated: {{DATE}}*

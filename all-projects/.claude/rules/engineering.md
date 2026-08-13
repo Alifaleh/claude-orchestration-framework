@@ -10,6 +10,9 @@
 - Fix the root cause, not the symptom: no silent fallbacks, no broad `except`/`catch` that swallows errors, no retries that mask the bug, no hardcoded values to force green.
 - Never weaken, skip, delete, or mock-out a failing test to make it pass. Fix the code, or state why the test is wrong and ask first.
 - Circuit breaker: after 2 failed attempts at the same fix, stop — report what was tried, what was observed, current theory. Read the full error before changing anything; never re-run an unchanged command hoping for a different result.
+- All test/gate/build output goes to a log file, never into context: `command > tmp/gates/<name>.log 2>&1` (sh) or `command *> tmp\gates\<name>.log` (PowerShell); read back the exit code, and on failure only the failing excerpt (≤40 lines) and tail (≤20 lines).
+- Process supervision is code, not conversation: long-lived waiters/pollers/keep-alive loops never live in Claude turns or Claude's background tasks (session environments reap them) — they run as OS-level scripts (Task Scheduler/cron) with a lockfile check-then-arm, and Claude handles only the queued work itself. An expected kill of such a process is a normal event to log, never an error to fix, and never a trigger for a blind re-arm.
+- A recorded number (test count, gate total, baseline) lives in ONE authoritative place per project; every other doc and every commit body references the command that produces it, never a copied value — and before merge, the recorded number is re-verified against a live run.
 
 ## Clean architecture & reuse
 
@@ -26,9 +29,28 @@
 - The repo tree stays clean. Every throwaway artifact — scratch scripts, debug output,
   screenshots, cloned reference repos, briefs, research dumps, one-off test files — goes in the
   workspace's gitignored `tmp/` (`tmp/screenshots/`, `tmp/repos/`, `tmp/briefs/`,
-  `tmp/research/`, `tmp/scratch/`), never the repo root. Always explicit paths.
+  `tmp/research/`, `tmp/scratch/`, `tmp/gates/` for gate logs, `tmp/team/` for employee
+  worklogs/handovers/roster), never the repo root. Always explicit paths.
 - Delete dead code; never leave it commented out.
 - The leader sweeps stray files into `tmp/` or deletes them before every commit; reviewers flag
   stray files as an acceptance failure.
 - Code repos contain ZERO Claude-related files (no CLAUDE.md, no `.claude/`, no briefs) — all
   Claude material lives in the workspace repo.
+
+## Writing about security & access control
+
+Describe security and access-control work on our own systems in plain defensive engineering
+terms — name the mechanism and the property enforced (the access path, the permission gate,
+the enforcement gap, where the fix goes), never an attacker's move. This binds EVERY artifact,
+not just chat: beat briefs and reviewer prompts, reports you relay, commit messages, PR
+bodies, changelog/lessons entries, code comments, log strings, and test names
+(`test_<property>_is_enforced`, never `test_attacker_can_…`). Precision is never traded away —
+severity, `file:line`, the concrete failure state, and the regression test stay exactly as
+sharp; a finding is NEVER softened, downgraded, or omitted to satisfy this rule. When a
+worker's report comes back in attacker register, re-frame it before relaying or committing it.
+Same for secrets: a credential finding is a GATE finding — name the field, the gate that fails
+to cover it, and the fix — never a sighting; never copy, quote, screenshot, or paste a VALUE,
+even redacted, and report evidence as a verified negative ("the capture shows the field
+masked; the value is in no committed artefact"). Two reasons: it keeps broad model safeguards
+from misreading authorized defensive work, and the defensive sentence names the gate, so it
+names the fix.

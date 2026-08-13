@@ -2,6 +2,7 @@
 # workspace.yaml, example.env). Everything below is machine-local or lives in its own repo.
 .env
 tmp/
+graphify-out/
 .claude/settings.local.json
 
 # Code repos (each its own git repo — registered in workspace.yaml; one line per repo path):
