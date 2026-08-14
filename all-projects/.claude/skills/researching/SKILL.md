@@ -49,7 +49,9 @@ never runs on an orchestrator model: collection and reading go to workers (`scou
 
 Every T2+ result is a claims table: claim · verbatim quote · URL · pub date · source quality
 (primary/secondary/blog/forum) · confidence · what-would-refute-it. Unverified = LEAD, never
-fact. Persistence: scratch → `tmp/research/<date>-<topic>.md`; durable → distill into
+fact. The full table always lives in a FILE; a researcher's final message is ≤40 lines —
+distilled findings + the file path, never the table inline (leader-context hygiene).
+Persistence: scratch → `tmp/research/<date>-<topic>.md`; durable → distill into
 `.claude/docs/` (decision → CHANGELOG, design-shaping → ARCHITECTURE, gotcha → LESSONS) —
 never a new root file.
 

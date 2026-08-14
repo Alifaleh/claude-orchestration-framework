@@ -145,16 +145,18 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
    PROJECTS/.claude/agents/*.md where it repeats.
 4. **Model tier mapping** — edit the COPIES under PROJECTS:
    - **Fable tier**: defaults are already right (root + project-orchestrator `fable`;
-     engineer `sonnet`, hired up to `opus` when the routing gate says so; verifier `haiku`;
-     reviewer one tier above the writer; researcher `sonnet`; scout `haiku`).
+     engineer `sonnet`, hired up to `opus` per the routing table; verifier `haiku`; reviewer
+     `opus` — always a tier above the writer; researcher `sonnet`; scout `haiku`).
      `__MODEL__` → `"claude-fable-5[1m]"`.
    - **Opus tier** (no Fable): in PROJECTS/CLAUDE.md role detection §1, `Fable` → `Opus`;
      `agents/project-orchestrator.md` `model: fable` → `model: opus`; drop fable from the
      cost line. `__MODEL__` → `"opus"`.
    - **Sonnet tier**: root + project-orchestrator become `sonnet` (role detection §1 and the
-     agent frontmatter); the engineer stays `sonnet` (the routing gate still drops
-     transcription beats to `haiku`); verifier `haiku`; reviewer `sonnet` + the leader's own
-     criteria tick on every beat (the higher-model ladder tops out here); rewrite the cost
+     agent frontmatter); the engineer stays `sonnet` (the routing table still drops
+     transcription beats to `haiku`); verifier `haiku`; `agents/reviewer.md` `model: opus` →
+     `model: sonnet` + the leader's own criteria tick on every beat (the higher-model ladder
+     tops out here); in the routing table, opus references collapse to sonnet (hard-trigger
+     beats then mean: leader's own tick + extra care, never skipped review); rewrite the cost
      line to the models in play; DELETE the `"model"` key from the merged settings instead of
      filling `__MODEL__`; add one line to PROJECTS/CLAUDE.md routing: "Single-model install:
      review independence is reduced — risky diffs deserve the user's own eyes."

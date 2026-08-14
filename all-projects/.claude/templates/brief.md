@@ -33,6 +33,9 @@ superpowers skills that bind: TDD for behavior changes, systematic-debugging for
 
 ## ACCEPTANCE
 
+_(Copied VERBATIM from the leader's mission/plan — never authored by whoever implements or
+manages the wave.)_
+
 1. _(numbered, independently checkable)_
 2. …
 

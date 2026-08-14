@@ -31,6 +31,64 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.2.0 — 2026-08-14
+
+Routing v2 and the session-economics doctrine — ported from the live orchestrator's latest
+revision.
+
+- **Routing table v2** (replaces the six-point quality gate), per beat in order:
+  (1) transcription → haiku, regardless of file count; (2) hard opus triggers —
+  security-critical surface as a TASK property in ANY system (authn/authz/session handling,
+  crypto, secrets paths, PII/data integrity, money movement, destructive migrations,
+  concurrency) · un-decomposable cross-module refactor · novel design with no in-repo
+  precedent · codebase ambiguity → opus engineer + opus review; (3) caught-by-a-check gate —
+  sonnet iff ALL FOUR: callers exercised by GATE_FULL · no trigger-2 surface · failing tests
+  exist BEFORE the beat · precedent cited by path (advisor consults ≤2/beat; a wanted 3rd =
+  promotion trigger); (4) neither → re-shape, don't route up: test-first prep-beat by a FRESH
+  sonnet test-writer with no implementation context (top tier contributes only assertion
+  lists for hard-trigger/cross-module invariants); escalating requirement-ambiguity to opus
+  is a protocol violation.
+- **Debugging is two-phase, always**: a read-only diagnosis beat (written cause +
+  reproducing failing test) routes the fix beat through the table — never on a guess.
+- **Session lifecycle + effort doctrine**: the leader session is a phase, not a residence —
+  design sessions may grow at the highest effort; execution runs fresh, reading plan +
+  ROSTER + pack; /clear is always safe (state lives on disk); leader carriage target <~250k
+  average context/message. Employees carry `effort:` in their defs for ONE life
+  (engineer/reviewer/researcher: high); an effort flip invalidates their prompt cache.
+- **Escalation ladder v2**: advisor consults → fix rounds 1–3 (same engineer) → round 4
+  promote the SAME employee → cap 5 adjudicate; failure diagnostic — wrong from not-knowing
+  → bigger model, wrong from not-trying → the correction names the miss, same engineer;
+  kill-switch — sonnet first-review rejection >1-in-3 over a week tightens the gate, never
+  loosens the checks.
+- **Conservation mode** at cap pressure: implementation 100% sonnet/haiku; remaining opus
+  reserved for reviews + hard-trigger beats; a beat whose review cannot run on opus is
+  PARKED, never down-reviewed.
+- **Agents**: reviewer defaults to `opus` (sonnet only for reviewing haiku transcription) and
+  judges test adequacy as criterion #1 on test-first beats; engineer BLOCKED now names its
+  kind (REQUIREMENT vs CODEBASE ambiguity) and records advisor-consult counts;
+  researcher/researching skill — the full claims table ALWAYS lives in a file, final message
+  ≤40 lines. Acceptance criteria are authored by the leader/plan and copied VERBATIM into
+  briefs. Model aliases only, never pinned versions; the session-close audit flags any agent
+  that inherited the leader's model. Team skill additions: wave-scoped lead note, test-first
+  prep-beat, ~50k employee-context handover trigger, ledger event vocabulary
+  (consults/PARKED), leader carriage hygiene.
+
+**Upgrade steps** (from 3.1.0), on each installed machine:
+1. Framework tree (root session applies): copy from 3.2.0 — `agents/engineer.md`,
+   `agents/reviewer.md`, `agents/researcher.md`, `agents/project-orchestrator.md`,
+   `skills/team/SKILL.md`, `skills/researching/SKILL.md`, `templates/brief.md`. Re-apply the
+   machine's tier swaps (Sonnet tier: `agents/reviewer.md` `model: opus` → `sonnet`; routing
+   opus references collapse per the setup skill's tier mapping).
+2. Projects-root CLAUDE.md: replace the routing block with 3.2.0's "Routing (per beat, in
+   order)" + "Debugging is two-phase" + the updated "A higher model validates" paragraph; add
+   the "Session lifecycle" and "Effort" paragraphs after the Do-inline block and the
+   "Conservation mode" paragraph after No-silent-waits; extend the model-alias sentence.
+   Keep filled machine values.
+3. Per existing workspace (dispatched, one beat each): re-sync `.claude/agents/`,
+   `skills/team/`, `skills/researching/`, and `templates`-derived brief format from the
+   tier-swapped projects root; one-line CHANGELOG entry.
+4. Write `3.2.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 3.1.0 — 2026-08-13
 
 Deterministic session pulse — checks become code, not model discipline; near-zero cost.

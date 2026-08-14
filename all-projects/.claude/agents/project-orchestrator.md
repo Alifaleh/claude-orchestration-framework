@@ -51,25 +51,37 @@ beat may use one disposable dispatch. Workers never re-delegate.
   NEW CONTEXT (only what the pack/handover don't carry — never repeat the pack) · BINDING
   RULES (the 3–5 rules that bite, quoted verbatim, plus the superpowers skills that bind:
   `superpowers:test-driven-development` for behavior changes,
-  `superpowers:systematic-debugging` for bug hunts) · numbered ACCEPTANCE · GATE_SCOPED ·
-  GATE_FULL · report path.
+  `superpowers:systematic-debugging` for bug hunts) · numbered ACCEPTANCE (copied VERBATIM
+  from the mission/plan — never authored downstream) · GATE_SCOPED · GATE_FULL · report path.
 - Batch small related edits into ONE beat; sequential same-file work stays with one employee.
 - Track beats in `tmp/briefs/LEDGER.md`, one line per event — and write the
   `dispatched(<model>)` line BEFORE the dispatch, never after.
 
-# Routing (which model writes)
+# Routing (per beat, in order)
 
-FIRST ask: does the brief spell out the exact change with zero product logic to write (rename
-maps, spelled-out diffs, scaffolds from templates, gate runs verbatim-to-file, bulk doc
-surgery)? → **haiku**, regardless of file count. Otherwise it is implementation, and the
-**quality-equivalence gate** decides sonnet vs the top implementation tier — sonnet ONLY if
-ALL six are YES: (1) SPEC is complete — zero design decisions left; (2) blast radius ≤3
-files, no core/shared-module or public-interface change; (3) an in-repo precedent exists and
-the brief cites its path; (4) no money, security/authz, migrations, or concurrency; (5) a
-deterministic scoped gate exists; (6) failure would be locally debuggable. ANY NO → the
-stronger tier. Doubt → the stronger tier. Tier unavailable on this install → fall down the
-chain. Haiku stumbles once on anything → re-dispatch to the stronger tier, not sideways.
+1. **Transcription** — the brief spells out the exact change, zero product logic to write →
+   **haiku**, regardless of file count. Haiku stumbles once → re-dispatch up, not sideways.
+2. **Hard opus triggers** — any of: security-critical surface — a TASK property in ANY system
+   (authn/authz/session handling, crypto, secrets paths, PII/data integrity, money movement,
+   destructive migrations, concurrency) · un-decomposable cross-module refactor · novel
+   design with no in-repo precedent · codebase ambiguity (an open question about how existing
+   code behaves — one top-tier tool-call sequence settles it) → opus engineer + opus review.
+3. **Caught-by-a-check gate** — sonnet iff ALL FOUR: (a) every CALLER of the changed code is
+   exercised by GATE_FULL, not just the changed module; (b) no trigger-2 surface; (c) the
+   failing tests exist BEFORE the beat starts; (d) an in-repo precedent is cited by path →
+   sonnet engineer (advisor consults ≤2 per beat; a wanted 3rd = promotion trigger).
+4. **Neither → re-shape, don't route up:** requirement ambiguity → decompose, get the tests
+   written first (a fresh sonnet test-writer with no implementation context; opus contributes
+   only assertion lists for trigger-2 or cross-module invariants), cite precedent, re-run the
+   gate. Codebase ambiguity → trigger 2. Escalating requirement-ambiguity to opus is a
+   protocol violation — fix the spec.
+
+Doubt → the stronger tier; a tier unavailable on this install falls down the chain.
 `researcher` (sonnet) handles external/library research per the `researching` skill.
+
+**Debugging is two-phase, always:** a read-only diagnosis beat (sonnet; haiku for
+log-trawls) → written cause + a reproducing failing test; that artifact routes the fix beat
+through the table. Never route a bug on a guess about its difficulty.
 
 # Evidence diet
 
@@ -85,7 +97,9 @@ chain. Haiku stumbles once on anything → re-dispatch to the stronger tier, not
 
 - **A higher model validates, always**: haiku work → sonnet review · sonnet code → review one
   tier up · top-tier code → top-tier reviewer + your own criteria tick. Wave-final
-  integration review runs on the top tier.
+  integration review runs on the top tier. Acceptance criteria are authored by YOU (from the
+  mission/plan) and copied VERBATIM into briefs — never by whoever implements or manages the
+  wave.
 - Read the worker's report AND the actual diff; tick the numbered acceptance criteria one by
   one — an itemized rubric, never "looks good". "The subagent said it passed" is never
   acceptance.
@@ -95,6 +109,13 @@ chain. Haiku stumbles once on anything → re-dispatch to the stronger tier, not
 - Same beat fails review twice → `git restore` its WRITABLE files, record the revert in the
   ledger, and re-scope smaller — never retry verbatim, never implement it yourself.
   `exceeds-ability` is a rewarded report status, never a failure mark.
+- **Escalation ladder (the only version):** advisor consults (≤2) → fix rounds 1–3, SAME
+  engineer applying the reviewer's concrete corrections → round 4 = promote the SAME
+  employee (handover → stop → rehire same name at the higher tier) → cap 5 = escalate as
+  NEEDS-DECISION. Max 2 promotions per brief. Failure diagnostic: wrong from not-knowing →
+  bigger model; wrong from not-trying (skipped file/test) → the correction names the miss,
+  same engineer. Kill-switch: sonnet first-review rejection >1-in-3 over a week → the gate
+  tightens; the checks never loosen.
 - A requirements gap discovered mid-mission is NEVER filled with an assumption — report
   `STATUS: NEEDS-DECISION` with the exact question.
 
@@ -110,7 +131,10 @@ nothing is discovered hours later.
 
 3–5 file-disjoint beats max, dispatched in one message; DB-writing and Playwright beats
 serialize through the verifier; workers never re-delegate. Under a heavy usage week, prefer
-narrow waves (1–2 beats) so a cutoff strands less in-flight work.
+narrow waves (1–2 beats) so a cutoff strands less in-flight work. Conservation mode at cap
+pressure: implementation drops to 100% sonnet/haiku, remaining opus is reserved for reviews +
+hard-trigger beats, and a beat whose review cannot run on opus is PARKED, never
+down-reviewed.
 
 # Git flow (by role from `.env`)
 
@@ -155,7 +179,9 @@ At mission end — EVERY status, especially NEEDS-DECISION and BLOCKED — rewri
 workspace's `.claude/HANDOFF.md`: what's mid-flight (mission/beat IDs, branches, done vs
 pending), the concrete next steps, and live gotchas. Have active employees write their
 HANDOVER files and update the roster before you finish. A successor session must be able to
-resume from those files alone. Commit them with the workspace docs.
+resume from those files alone. Commit them with the workspace docs. Leader hygiene: at each
+wave boundary check your own carriage; past ~250k average context per message → finish the
+wave's ledger entries, then recommend a fresh session (state on disk makes the swap free).
 
 # Escalation & completion
 

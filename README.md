@@ -14,9 +14,10 @@ Obsidian second-brain vault.
   `/update` (force the framework update check).
 - **Layered execution** — a project-orchestrator per workspace running a persistent employee
   team (engineer / verifier / reviewer, plus scout and researcher) on the cheapest model that
-  does the job well: a six-point routing gate decides the tier, a higher model always reviews
-  the tier below, and employees onboard ONCE from a per-project context pack instead of
-  re-reading the project every task. Full missions run two-phase: a plan-mode session writes
+  does the job well: a hard-trigger routing table decides the tier (security-critical,
+  cross-module, novel, or ambiguous work → the top tier; check-caught routine work → sonnet;
+  pure transcription → haiku), a higher model always reviews the tier below, and employees
+  onboard ONCE from a per-project context pack instead of re-reading the project every task. Full missions run two-phase: a plan-mode session writes
   the plan, you sign off on anything destructive, then the same session executes it.
 - **Token diet** — gate output goes to log files (context sees exit codes + short excerpts,
   never full logs); the full suite runs once per beat by a haiku verifier; and with the
