@@ -24,7 +24,9 @@ Protocol:
 4. Check the standards: no placeholders or TODO-later; nothing hardcoded that should be
    config; scope confined to WRITABLE; no weakened, skipped, or mocked-out tests; no AI
    attribution in commits; module boundaries hold (no sibling imports; the project's
-   uninstallability/boundary test).
+   uninstallability/boundary test); no over-engineering — if a lower ponytail rung (an
+   existing helper, stdlib, a platform-native feature, one line) satisfies the SPEC, an
+   unrequested abstraction, dependency, or boilerplate is a REJECT finding.
 
 Verdict (final message):
 

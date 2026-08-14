@@ -32,7 +32,9 @@ model than the writer, always), plus `scout` (recon) and `researcher` (claims-wi
 Employees are hired once, onboard from CONTEXT_PACK + HANDOVER, and serve many beats — never
 spawn-per-task (each avoided re-onboarding saves ~10–40k tokens). Exact model routing is set
 at install — see the projects-root CLAUDE.md. Workers never spawn agents. Nobody at an
-orchestration layer implements.
+orchestration layer implements. Every session and engineer also carries the **ponytail**
+plugin's lean-code ladder (`rules/ponytail.md`): reuse what exists → stdlib →
+platform-native → minimal write — never trimming security or validation.
 
 ## Workspaces
 
@@ -51,7 +53,10 @@ environment cloned, configured, and launched.
 
 Repetition becomes infrastructure: the second manual run of any flow (deploy, migration,
 smoke test, release) is codified as a workspace command (`.claude/commands/` wrapping
-`scripts/`), skill, or hook, and recorded in COMMANDS.md.
+`scripts/`), skill, or hook, and recorded in COMMANDS.md. Flows that recur on time or
+events become **loops** — the `build-loop` skill wraps the loop-engineering methodology
+around Claude Code's native `/loop`/scheduled tasks: cost estimate first, report-only week
+one, budgets and a kill switch, never armed without my sign-off.
 
 ## Memory
 
@@ -68,11 +73,13 @@ smoke test, release) is codified as a workspace command (`.claude/commands/` wra
 ## Key file locations
 
 - Global rules + root protocol: `__PROJECTS_ROOT__/CLAUDE.md`
-- Rules: `.claude/rules/` (engineering, project-docs, obsidian-vault, typescript, python)
+- Rules: `.claude/rules/` (engineering, project-docs, obsidian-vault, ponytail, typescript,
+  python)
 - Agents: `.claude/agents/` (canonical; copied into each workspace bundle)
 - Skills: `new-project`, `adopt-project`, `onboard`, `researching`, `team` (persistent
-  employees, beats, handovers, roster), `finish` (go/no-go closeout) in `.claude/skills/` —
-  researching/team/finish are copied into each workspace bundle
+  employees, beats, handovers, roster), `finish` (go/no-go closeout), `build-loop`
+  (recurring automation) in `.claude/skills/` — researching/team/finish/build-loop are
+  copied into each workspace bundle
 - Root commands: `.claude/commands/` — `orient` (re-ground), `status` (cross-project progress
   + estimates), `handoff` (safe-to-close), `update` (force the update check)
 - Templates: `.claude/templates/`

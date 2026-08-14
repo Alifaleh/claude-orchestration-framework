@@ -40,6 +40,8 @@ All repos PRIVATE.
    - `FRAMEWORK/skills/researching/` → `WS/.claude/skills/researching/`
    - `FRAMEWORK/skills/team/` → `WS/.claude/skills/team/` and `FRAMEWORK/skills/finish/` →
      `WS/.claude/skills/finish/` (the orchestrator's execution + closeout machinery)
+   - `FRAMEWORK/skills/build-loop/` → `WS/.claude/skills/build-loop/` (recurring-automation
+     scaffolding — loops are proposed, never armed without sign-off)
    - `FRAMEWORK/templates/commands/sync.md` → `WS/.claude/commands/sync.md`; create `WS/scripts/`
      (empty — automation scripts land here as the automation-capture rule codifies flows)
    - `FRAMEWORK/scripts/session-pulse.ps1` + `session-pulse.sh` → `WS/.claude/scripts/`

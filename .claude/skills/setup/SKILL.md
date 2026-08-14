@@ -31,7 +31,12 @@ Rules for the whole flow:
    install (Windows: `winget install GitHub.cli`; macOS: `brew install gh`; Linux: distro
    package), then `gh auth login --web`. The user may skip `gh` entirely — then every
    remote-creation step below is skipped and noted in the final report.
-4. Detect the OS, shell, and absolute home directory yourself. Used for interview defaults,
+4. `node --version` → **≥18 wanted** (powers the ponytail plugin's lifecycle hooks and the
+   loop-engineering CLI). Missing → offer the install (Windows:
+   `winget install OpenJS.NodeJS.LTS`; macOS: `brew install node`; Linux: nvm/distro) or
+   continue without: ponytail's skills still work (its hooks just stay quiet), and the
+   `build-loop` skill re-checks before any scaffold.
+5. Detect the OS, shell, and absolute home directory yourself. Used for interview defaults,
    the Environment fill, and `__OS_SUMMARY__`.
 
 ## Phase 1 — Plugins
@@ -43,6 +48,7 @@ are load-bearing for the framework's rules; flag those three loudly if missing.
 ```bash
 claude plugin marketplace add anthropics/claude-plugins-official
 claude plugin marketplace add kepano/obsidian-skills
+claude plugin marketplace add DietrichGebert/ponytail
 
 claude plugin install mcp-server-dev@claude-plugins-official
 claude plugin install playwright@claude-plugins-official
@@ -57,7 +63,11 @@ claude plugin install claude-code-setup@claude-plugins-official
 claude plugin install postman@claude-plugins-official
 claude plugin install data-engineering@claude-plugins-official
 claude plugin install obsidian@obsidian-skills
+claude plugin install ponytail@ponytail
 ```
+
+`ponytail` (the lean-code ladder, `rules/ponytail.md`) runs two tiny Node.js lifecycle
+hooks — without node on PATH its skills still work and the hooks stay quiet.
 
 ## Phase 2 — Interview
 
@@ -163,7 +173,10 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
 4b. **Optional tooling** — if answer 10 was yes: `pip install graphifyy`, then verify the CLI
    answers `graphify --help`. Failure → note it and continue; the framework degrades
    gracefully (CONTEXT_PACK → Grep). Graphs get built per-project later by
-   `new-project`/`adopt-project`, never here.
+   `new-project`/`adopt-project`, never here. If node is present, also pre-warm the
+   loop-engineering CLI: `npx -y @cobusgreyling/loop cost -p daily-triage -l L1 -c 1d`
+   (read-only; caches the package for the `build-loop` skill — any failure → note and
+   continue).
 5. **About Me** — fill `VAULT/00 - Brain/About Me.md` from answers 3, 4, and 8 (plus OS and
    paths). Fresh install: anything not given stays as its _(fill in)_ marker. Re-interview of
    an EXISTING install: any Identity / Work / Machine value the user's answers did not
@@ -215,6 +228,9 @@ Report, facts only:
   `/new-project <name> <components…>` — or `/adopt-project` for an existing codebase."
 - Prerequisites still missing for real work (per project type: `uv` for Python, node via nvm
   for JS/TS, docker) — install on demand, asking before system-level installs.
+- Ponytail is active at `full` in every session (levels + features: `rules/ponytail.md`; it
+  will offer its statusline badge once). Recurring automations are built on request or
+  proposal via the `build-loop` skill — never armed without the user's sign-off.
 - Have the user open the vault once in the Obsidian app (File → Open vault → VAULT) so
   `.obsidian/` gets generated.
 - Updates are automatic: the root session checks this clone every ~6 hours (session start and

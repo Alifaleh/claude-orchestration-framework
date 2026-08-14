@@ -42,7 +42,9 @@ scouts. `FRAMEWORK` = `__PROJECTS_ROOT__/.claude`.
    explicit approval) and `graphify hook install`. Then dispatch the
    `claude-automation-recommender` agent (claude-code-setup plugin) over the codebase and
    codify accepted recommendations as workspace commands/skills/hooks per the
-   automation-capture rule.
+   automation-capture rule. Offer a `/ponytail-audit` over the adopted code: the ranked
+   cut-list lands in BACKLOG.md as candidates, report-only — cuts route as normal beats
+   later, never applied from the audit (run `/ponytail full` after to restore the ladder).
 7. **Hygiene sweep**: stray root files → `tmp/` or propose deletion (bulk deletions need the
    user's sign-off naming targets).
 8. **Remotes**: if the code repo already has a GitHub remote, keep it. Offer to create missing

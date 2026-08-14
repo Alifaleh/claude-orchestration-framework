@@ -14,6 +14,15 @@ notices=""
 add() { notices="${notices}${1}
 "; }
 
+# Armed loops (build-loop skill) escalate into STATE.md "## High Priority" — surface them.
+state_hp() {
+  [ -f STATE.md ] || return 0
+  hp=$(awk '/^## High Priority/{f=1;next} /^## /{f=0} f && NF' STATE.md | grep -civ '^[-* ]*none')
+  if [ "${hp:-0}" -gt 0 ] 2>/dev/null; then
+    add "PULSE: STATE.md carries ${hp} high-priority loop item(s) — read them before new work."
+  fi
+}
+
 if [ -f workspace.yaml ]; then
   # ---------- workspace checks (all local) ----------
   head_t=$(git log -1 --format=%ct 2>/dev/null)
@@ -30,6 +39,7 @@ if [ -f workspace.yaml ]; then
       add "PULSE: $f exceeds 100 KB — run the size-hygiene archival beat (project-docs rule)."
     fi
   done
+  state_hp
 else
   # ---------- projects-root checks ----------
   marker=.claude/last-update-check
@@ -48,6 +58,7 @@ else
   if [ -f tmp/missions/LEDGER.md ] && [ -f .claude/HANDOFF.md ] && [ tmp/missions/LEDGER.md -nt .claude/HANDOFF.md ]; then
     add "PULSE: the missions LEDGER is newer than the root HANDOFF — bring the handoff current."
   fi
+  state_hp
 fi
 
 # Freshness/size notices: at most once per 4h window.

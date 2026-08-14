@@ -17,6 +17,23 @@ function MTimeUtc($p) {
 $nowUtc = (Get-Date).ToUniversalTime()
 $notices = @()
 
+# Armed loops (build-loop skill) escalate into STATE.md "## High Priority" - surface them.
+function Add-StateNotice {
+  if (-not (Test-Path 'STATE.md')) { return }
+  $inHp = $false; $hp = 0
+  foreach ($line in (Get-Content 'STATE.md')) {
+    if ($line -match '^## High Priority') { $inHp = $true; continue }
+    if ($line -match '^## ') { $inHp = $false; continue }
+    if ($inHp) {
+      $t = $line.Trim()
+      if ($t -and ($t -notmatch '^[-*\s]*none')) { $hp++ }
+    }
+  }
+  if ($hp -gt 0) {
+    $script:notices += ('PULSE: STATE.md carries ' + $hp + ' high-priority loop item(s) - read them before new work.')
+  }
+}
+
 if (Test-Path 'workspace.yaml') {
   # ---------- workspace checks (all local) ----------
   $head = $null
@@ -33,6 +50,7 @@ if (Test-Path 'workspace.yaml') {
   Get-ChildItem '.claude/docs/*.md' | Where-Object { $_.Length -gt 102400 } | ForEach-Object {
     $notices += ('PULSE: .claude/docs/' + $_.Name + ' exceeds 100 KB - run the size-hygiene archival beat (project-docs rule).')
   }
+  Add-StateNotice
 } else {
   # ---------- projects-root checks ----------
   $marker = '.claude/last-update-check'
@@ -61,6 +79,7 @@ if (Test-Path 'workspace.yaml') {
   if ($l -and $h -and ($l -gt $h)) {
     $notices += 'PULSE: the missions LEDGER is newer than the root HANDOFF - bring the handoff current.'
   }
+  Add-StateNotice
 }
 
 # Freshness/size notices: at most once per 4h window.

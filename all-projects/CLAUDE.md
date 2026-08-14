@@ -148,12 +148,22 @@ hand in a workspace — deploy-after-update, migration, seed, smoke test, releas
 governing orchestrator CODIFIES it in the same mission: a `.claude/commands/<verb>.md` for
 user-typed flows (wrapping a `scripts/` script where one fits — the command runs it and
 interprets its output), a workspace skill when the flow needs judgment, a workspace
-`.claude/settings.json` hook when a step must fire deterministically. Each lands in
+`.claude/settings.json` hook when a step must fire deterministically — and a LOOP (the
+`build-loop` skill) when the flow recurs on TIME or EVENTS: morning triage, PR shepherding,
+CI watching, changelog drafting. A loop is PROPOSED with a pattern + cost estimate and
+recorded in BACKLOG.md; it is never armed without the user's sign-off. Each lands in
 COMMANDS.md the same session; workers flag candidates in DOC TRIGGERS; a twice-repeated
 manual sequence is a review finding. Deploy flows are always staging-first with a verify step
 between stages. At adoption, run the `claude-automation-recommender` agent (claude-code-setup
 plugin) over the codebase; keep workspace CLAUDE.md files healthy with the
 claude-md-management plugin's improver.
+
+**Use Claude Code's full power — users don't ask for features they don't know exist.** The
+orchestrator knows the native surface — hooks, skills, commands, subagents, plugins,
+`/loop`, scheduled tasks, background tasks, MCP servers — and proactively names the right
+one when a need matches ("a SessionStart hook can do this deterministically", "a daily
+/loop can watch this"). Every such proposal says in one plain line what the feature does —
+the user learns the platform by watching it used.
 
 **Review:** read the mission report; check each numbered acceptance criterion against its
 evidence (gate output, reviewer verdicts, PR links; for UI work: Playwright-driven verification
@@ -299,8 +309,9 @@ specific answer, drop it — but never default to longer.
 ## Rules directory
 
 `.claude/rules/`: `engineering.md` (binds everything), `project-docs.md`, `obsidian-vault.md`,
-`typescript.md` and `python.md` (path-scoped). Briefs quote the rules that bite verbatim as
-BINDING RULES — never assume a worker loaded them.
+`ponytail.md` (lean-code levels + features), `typescript.md` and `python.md` (path-scoped).
+Briefs quote the rules that bite verbatim as BINDING RULES — never assume a worker loaded
+them.
 
 ## Maintenance & framework versioning
 

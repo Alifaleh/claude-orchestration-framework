@@ -31,6 +31,64 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.3.0 — 2026-08-14
+
+Two tools join the framework, both serving one principle now written into the root protocol:
+Claude Code should USE its own native features — hooks, skills, commands, subagents,
+`/loop`, scheduled tasks — on the user's behalf; users don't ask for features they don't
+know exist, so the orchestrator names the right one when a need matches.
+
+- **ponytail** (plugin, `DietrichGebert/ponytail`, MIT) — the anti-over-engineering "lazy
+  senior dev" ladder, installed via the plugin marketplace and ON at `full` everywhere. NEW
+  `rules/ponytail.md` (levels and when; `ponytail:` ceiling markers as the sanctioned
+  deliberate-debt convention; the `/ponytail-review` mode-reset gotcha; marketplace update
+  flow). Subagent injection is scoped to the engineer via
+  `PONYTAIL_SUBAGENT_MATCHER=engineer` in the settings `env` block. The reviewer gains an
+  over-engineering REJECT criterion; `finish` runs `/ponytail-debt` in its open-item sweep;
+  `adopt-project` offers `/ponytail-audit` on adopted code (findings → BACKLOG.md,
+  report-only).
+- **loop-engineering** (`cobusgreyling/loop-engineering`, MIT — npx CLI, nothing installs
+  globally) — NEW leader-only `build-loop` skill: pattern pick (7 patterns) → cost estimate
+  (`npx @cobusgreyling/loop cost`) → explicit user sign-off (hard gate) → scaffold in the
+  workspace (`npx @cobusgreyling/loop init . --pattern <p> --tool claude`) → framework
+  hardening (the scaffolded `loop-verifier.md` ships `model: inherit` and is ALWAYS
+  rewritten to an explicit alias; the scaffold ships no `gate.yaml`, so one is created with
+  the security floor as denylist; constraints/budget/COMMANDS/CHANGELOG wiring; the
+  scaffolded AGENTS.md folds into the workspace CLAUDE.md) → native-first scheduling ladder
+  (`/loop` attended · scheduled tasks are session-scoped cron, gone with the session ·
+  OS scheduler + `claude -p --model sonnet` when it must survive restarts) → L1 report-only
+  week one; graduation is user-owned, never score-owned.
+- Automation-capture taxonomy completes to **command / skill / hook / loop** (root
+  CLAUDE.md + project-orchestrator), plus the full-power principle paragraph in the root
+  protocol. `/status` reports loop health where `LOOP.md` exists; the session pulse
+  (both scripts) surfaces STATE.md `## High Priority` loop escalations, root and workspace.
+- README: full-power + lean-code bullets, Node ≥18 recommended. Setup: node preflight (new
+  Phase 0 step 4), ponytail marketplace + install in Phase 1, loop-CLI pre-warm in Phase 3
+  step 4b, handoff line in Phase 5. Vault knowledge note updated.
+
+**Upgrade steps** (from 3.2.0), on each installed machine:
+1. NEW TOOL OFFERS (ask first, per the Update protocol): (a) the ponytail plugin —
+   `claude plugin marketplace add DietrichGebert/ponytail` then
+   `claude plugin install ponytail@ponytail` (its two lifecycle hooks need `node` on PATH;
+   without node the skills still work and the hooks stay quiet); (b) Node.js ≥18 where
+   missing (also powers the loop-engineering CLI). Declined or failed → record in HANDOFF
+   and continue — everything degrades gracefully.
+2. Root session applies to the projects root, copying from 3.3.0: NEW `rules/ponytail.md`
+   and NEW `skills/build-loop/`; replace `agents/reviewer.md`,
+   `agents/project-orchestrator.md`, `skills/finish/SKILL.md`,
+   `skills/adopt-project/SKILL.md`, `skills/new-project/SKILL.md`, `commands/status.md`,
+   `scripts/session-pulse.sh` + `session-pulse.ps1`; re-apply the CLAUDE.md block edits
+   (automation-capture paragraph, the new full-power paragraph after it, the
+   rules-directory line). Re-apply the machine's tier swaps (Sonnet tier:
+   `agents/reviewer.md` `model: opus` → `model: sonnet`).
+3. Merge into `~/.claude/settings.json`: `env.PONYTAIL_SUBAGENT_MATCHER = "engineer"`,
+   `enabledPlugins["ponytail@ponytail"] = true`, and the `ponytail` entry in
+   `extraKnownMarketplaces` (skip the plugin keys if the step-1 offer was declined).
+4. DISPATCH the standard per-workspace bundle re-sync (agents/rules/skills including the
+   new `build-loop`, plus both pulse scripts) — one haiku brief per workspace, parallel,
+   each result reviewed. Loops are opt-in per project; no workspace is required to arm one.
+5. Write `3.3.0` to `.claude/VERSION`; note the offers' outcomes in HANDOFF.
+
 ## 3.2.0 — 2026-08-14
 
 Routing v2 and the session-economics doctrine — ported from the live orchestrator's latest

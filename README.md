@@ -30,6 +30,16 @@ Obsidian second-brain vault.
 - **Automation capture** — flows you repeat (deploy-after-update, migrations, smoke tests)
   get codified as workspace commands, skills, and hooks, recorded in COMMANDS.md — never left
   as chat knowledge.
+- **Claude Code running its own features for you** — most users never touch `/loop`,
+  scheduled tasks, or hooks; the orchestrator proposes and wields them by name. Recurring
+  flows (morning triage, PR shepherding, CI watching, changelog drafting) become engineered
+  loops via the bundled `build-loop` skill (the loop-engineering methodology: pattern +
+  cost estimate first, report-only week one, budgets and kill switch — never armed without
+  your sign-off).
+- **Lean code by default** — the ponytail plugin (installed for you) injects a
+  "lazy senior dev" ladder into every session and engineer: reuse what exists → stdlib →
+  platform-native → minimal write, never trimming security or validation; its
+  review/audit/debt commands are wired into the framework's closeout and adoption flows.
 - **Research discipline** — questions not answerable from disk route T0–T4 by the cheapest
   tier that settles them (source-on-disk → one authoritative lookup → community leads →
   multi-source verification → deep report, the last only with your approval); results are
@@ -45,6 +55,8 @@ Obsidian second-brain vault.
 - Claude Code **v2.1.219 or newer** (subagent nesting), on a plan that includes at least
   Sonnet. Best with Fable or Opus — `/setup` adapts the routing to what you have.
 - `git`. The GitHub CLI (`gh`) if you want private remotes created for you (recommended).
+- Node.js **≥18** (optional but recommended) — powers the ponytail plugin's hooks and the
+  loop-engineering CLI; everything degrades gracefully without it.
 - [Obsidian](https://obsidian.md) (free) for the vault — opened once after install.
 
 ## Install

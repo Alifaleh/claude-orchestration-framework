@@ -37,10 +37,14 @@ at install time, into the installed copies — never into this repo.
 ### PII gate — run before EVERY commit; all three must return nothing
 
 ```bash
-grep -rniE '/home/[a-z]|/Users/[a-z]|C:\\Users' --include='*.md' --include='*.json' --include='*.yaml' .
-grep -rniE '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}' --include='*.md' --include='*.json' --include='*.yaml' .
-grep -rn 'github.com/' . | grep -vE '__GITHUB_USER__|anthropics/|kepano/'
+grep -rniE '/home/[a-z]|/Users/[a-z]|C:\\Users' --include='*.md' --include='*.json' --include='*.yaml' --exclude-dir=tmp .
+grep -rniE '[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}' --include='*.md' --include='*.json' --include='*.yaml' --exclude-dir=tmp .
+grep -rn 'github.com/' --exclude-dir=.git --exclude-dir=tmp . | grep -vE '__GITHUB_USER__|anthropics/|kepano/|[Dd]ietrich[Gg]ebert/|cobusgreyling/|odoo/|Alifaleh/'
 ```
+
+(`tmp/` is the gitignored scratch tree — never committed, so never gated. `Alifaleh/` is the
+repo's own distribution URL; the tool authors and `odoo/` are upstream dependencies and the
+vendor-tree example in the workspace.yaml template.)
 
 Plus a judgment pass: any name, account, project name, or path you know belongs to a real
 person or employer is a failure even if the patterns miss it.

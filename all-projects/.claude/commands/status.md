@@ -13,6 +13,8 @@ When the user types `status` (or asks for a progress report):
    - `BACKLOG.md` Now/Next (what remains)
    - open PRs (`gh pr list`) where the project has remotes
    - this project's lines in `tmp/missions/LEDGER.md`
+   - where `LOOP.md` exists: loop health — last-run age from the `loop-run-log.md` tail,
+     open `## High Priority` escalations in `STATE.md`
 3. Report ONE block per project:
    - **State** — one sentence: live/building/paused, and what changed lately.
    - **In flight** — missions, briefs, branches right now, or "nothing".

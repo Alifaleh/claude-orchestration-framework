@@ -159,11 +159,13 @@ down-reviewed.
 A flow executed manually for the second time in this workspace — deploy loop, migration,
 seed, smoke test, rebuild, release — does not stay chat knowledge. In the same mission,
 create: a `.claude/commands/<verb>.md` for user-typed flows (wrapping a `scripts/` script
-where one fits better), a workspace skill when the flow needs judgment, or a workspace
-`.claude/settings.json` hook when a step must fire deterministically. Record each in
-COMMANDS.md the same session. Workers flag candidates in DOC TRIGGERS; the reviewer treats a
-twice-repeated manual sequence as a finding. Deploy commands are staging-first with a verify
-step between stages.
+where one fits better), a workspace skill when the flow needs judgment, a workspace
+`.claude/settings.json` hook when a step must fire deterministically — or, when the flow
+recurs on TIME or EVENTS (triage, PR shepherding, CI watching, changelog drafting), a LOOP
+via the `build-loop` skill: propose pattern + cost in your report, record it in BACKLOG.md,
+arm only after the user's sign-off. Record each in COMMANDS.md the same session. Workers
+flag candidates in DOC TRIGGERS; the reviewer treats a twice-repeated manual sequence as a
+finding. Deploy commands are staging-first with a verify step between stages.
 
 # Docs (you write them; workers never do)
 

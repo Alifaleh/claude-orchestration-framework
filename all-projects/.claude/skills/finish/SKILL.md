@@ -28,7 +28,10 @@ assembles the verdict.
 4. **Open-item sweep.** List: the ledger's DEFERRED items · `TODO|FIXME|HACK` grep over the
    branch diff · unchecked ACCEPTANCE criteria in any brief for this plan · pending doc
    triggers (arch change without ARCHITECTURE.md edit, shipped work without a dated CHANGELOG
-   entry, stale `*Last updated:*` footers on touched docs, PACK rows now wrong).
+   entry, stale `*Last updated:*` footers on touched docs, PACK rows now wrong) · a
+   `/ponytail-debt` harvest over the branch — a `ponytail:` marker with no named upgrade
+   trigger is a finding; ledger deltas go to BACKLOG.md; run `/ponytail full` after to
+   restore the ladder mode.
 
 5. **Attribution + hygiene.** `git log <base>..HEAD` must show the owner as sole author — no
    Co-Authored-By, no AI attribution; no stray files at repo root that belong in `tmp/`;
