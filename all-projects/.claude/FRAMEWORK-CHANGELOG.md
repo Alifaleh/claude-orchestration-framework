@@ -31,6 +31,20 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.5.0 — 2026-08-15
+
+- **1-hour prompt-cache TTL pinned:** `env.ENABLE_PROMPT_CACHING_1H = "1"` joins the settings
+  fragment. Subscription sessions default to the 1-hour cache TTL but silently drop to 5
+  minutes whenever usage credits draw; the pin keeps the long TTL. Orchestrator sessions are
+  exactly the shape that loses on the short TTL — long-lived leaders with multi-minute waits
+  between turns (subagents working) re-read a large stable prefix every turn; a cache miss
+  re-bills that prefix at full input weight, a hit at 0.1×.
+
+**Upgrade steps** (from 3.4.0), on each installed machine:
+1. Merge into `~/.claude/settings.json`: `env.ENABLE_PROMPT_CACHING_1H = "1"` (preserve
+   existing env keys; verify the file still parses). Takes effect on NEW sessions.
+2. Write `3.5.0` to `.claude/VERSION`.
+
 ## 3.4.0 — 2026-08-15
 
 Context-window settings hardening. Current top models carry the 1M window natively and
