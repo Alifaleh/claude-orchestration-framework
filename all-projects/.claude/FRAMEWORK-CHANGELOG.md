@@ -31,6 +31,34 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.4.0 — 2026-08-15
+
+Restores three standards released on the maintaining machine as 2.6.0–2.7.1 but lost when the
+3.x line was built from 2.5.0 (the 3.0.0 entry CLAIMED the security-register section without
+shipping it — changelog prose is not evidence).
+
+- **The security-register standard (was 2.6.0):** "How we write about security work" section +
+  substitution table in the projects-root CLAUDE.md; "Writing about security work" section in
+  `rules/engineering.md`; the one-line defensive-context opener in `templates/brief.md`.
+  Register only, never content — findings are never softened.
+- **Durable authorization for routine forward progress (was 2.7.0):** the "Working with me"
+  bullet — reviewed, gate-green merges/pushes/PRs proceed without asking; only security-floor
+  items and genuine NEEDS-DECISION stop for sign-off; hard blocks reported once.
+- **The headless bg-wait ceiling (was 2.7.1):** `CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0` is
+  mandatory on print-mode EXECUTE resumes, with the synchronous-workers instruction — without
+  it the harness kills the session and its workers mid-write after 600s.
+
+**Upgrade steps** (from 3.3.0), on each installed machine:
+1. Root session applies to the projects root, copying from 3.4.0: the "How we write about
+   security work" section + table into CLAUDE.md (before "Security floor"); the
+   durable-authorization bullet into "Working with me"; the EXECUTE-step env var + synchronous-
+   workers sentences in the two-phase mission block; the "Writing about security work" section
+   into `.claude/rules/engineering.md`; the register line into `.claude/templates/brief.md`.
+   Machines that ran 2.6.0–2.7.1 before 3.0.0 already carry all of it — verify, then no-op.
+2. Per existing workspace (dispatched): re-sync `.claude/rules/engineering.md` from the
+   projects root; one-line CHANGELOG entry.
+3. Write `3.4.0` to `.claude/VERSION`, commit; push the distribution repo if maintained here.
+
 ## 3.3.0 — 2026-08-14
 
 Two tools join the framework, both serving one principle now written into the root protocol:

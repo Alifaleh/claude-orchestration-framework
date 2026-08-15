@@ -129,8 +129,12 @@ review cannot run on opus is PARKED, never reviewed by a weaker model.
    plan-mode resume, never execute a plan you wouldn't sign.
 3. **EXECUTE** — resume the SAME session (its research context carries over) with full powers
    so nothing stalls on prompts:
-   `claude -p --resume <session_id> --permission-mode bypassPermissions "Plan approved —
-   execute it exactly, then write the mission report."`
+   `CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0 claude -p --resume <session_id> --permission-mode
+   bypassPermissions "Plan approved — execute it exactly, then write the mission report."`
+   The env var is mandatory: without it the print-mode harness kills the session (and its
+   running workers, mid-write) after 600s of waiting on background tasks. Also tell the session
+   to dispatch workers synchronously and never end a turn while workers are still running — a
+   headless session that ends its turn "waiting" is terminated, not resumed.
    Bypass is earned by the reviewed plan; it never widens the mission's scope, and the
    security floor still binds the executing session as rules.
 - IDs are `YYYYMMDD-HHMM-slug`. Mission ledger: `tmp/missions/LEDGER.md`, one line per event.
@@ -243,6 +247,16 @@ __ENVIRONMENT_NOTES__
   time. For low-stakes ambiguity, state your assumption and proceed.
 - If the request implies something exists (a file, branch, table, endpoint, flag), confirm it
   exists before building on it.
+- **Routine forward progress is DURABLY AUTHORIZED — never ask permission for it, just do it and
+  report.** This covers: merging a PR that passed its review with a green gate, pushing feature
+  branches, opening PRs, committing docs/vault, bumping submodule pins, running the
+  build→review→fix→merge loop to completion, staging deploys with the verify step. "Merge is your
+  call", "shall I open the PR?", "ready to merge?" are exactly the questions not to ask. The review
+  is the gate, not me. The ONLY things that still require an explicit sign-off naming the target are
+  the security-floor items below (destructive DB ops, bulk deletions, repo deletion, force-push) and
+  a genuine `NEEDS-DECISION` where proceeding any way would be unsafe or waste the work if wrong. A
+  hard technical block (a 403, a missing credential) is reported once as a fact and not re-raised
+  every turn.
 
 ## How to write your replies to me
 
@@ -292,6 +306,40 @@ specific answer, drop it — but never default to longer.
 - Workspace repos (docs/governance): the leader may direct-commit with pull-rebase; members PR
   workspace changes too. Code repos are never direct-commit.
 
+## How we write about security work
+
+Much of what we build is defensive: rate limiting, tenant isolation, authentication, audit
+trails. Describe it in **precise mechanical terms, not dramatic ones.** Two reasons, both real —
+mechanical language is more accurate, and adversarial-sounding prose in dispatch prompts has
+repeatedly stalled sessions on safety checks, which costs hours and helps nobody.
+
+- **Name the mechanism, not a story about combat.** A fixture that opens 24 connections and
+  submits wrong passwords is **a load generator**; the account it targets belongs to **the
+  legitimate holder**. Say what the code does.
+- **Standard technique names are fine** — threat model, mutation testing, rate limiting,
+  penetration test, credential stuffing. **Escalation layered on top is not**: no "kill power",
+  "battery", "hunt", "weapon", "radioactive", "attack it".
+- **A threat-model section may name an adversary plainly, once** — that is what a threat model is
+  for. Everywhere else, name the mechanism.
+- **Every dispatch that asks a worker to write or run security-verification code opens with one
+  line of context**: whose system this is, and that the goal is defence. One sentence, first
+  line, always.
+- **This is a register change, never a content change.** Never soften a finding, drop a
+  measurement, or blur a risk to sound calmer. The security floor below and the engineering
+  standards are unchanged and bind exactly as written.
+
+| Instead of | Write |
+|---|---|
+| the attacker, the attack | the load generator, sustained failed-login load |
+| the victim | the account holder, the legitimate user, the other clinic |
+| brute-force protection | login rate limiting, credential-guessing protection |
+| mutation battery, kill power | the mutation set, detection power |
+| this mutation kills the test | this mutation makes the test fail |
+| attack it independently, hunt harder | verify it independently, test the succeeding direction first |
+| weaponise | misuse |
+| destroy, destroyed | drop, removed |
+| radioactive | regulated PII — handle accordingly |
+
 ## Security floor
 
 - Secrets live only in gitignored `.env` files; refer to them by NAME (e.g., `ORACLE_DSN`) —
@@ -303,8 +351,8 @@ specific answer, drop it — but never default to longer.
 - Destructive DB operations (DROP, TRUNCATE, migrate-down, bulk DELETE, wipe/rebuild), bulk file
   deletions, GitHub repo deletion, and force-pushes require my explicit sign-off naming the
   exact target — ask first, every time.
-- Customer and production data is radioactive: never copy real PII into code, tests, fixtures,
-  logs, or examples. Synthesize fake data instead.
+- Customer and production data is regulated PII: never copy real patient, customer, or banking
+  data into code, tests, fixtures, logs, or examples. Synthesize fake data instead.
 
 ## Rules directory
 

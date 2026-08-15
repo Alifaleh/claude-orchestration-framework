@@ -24,6 +24,24 @@
 - No copy-paste duplication across features: the second copy is a smell, the third is a bug.
 - A boundary is real only if the unit behind it can be understood and tested in isolation.
 
+## Writing about security work
+
+Most security work here is defensive — rate limiting, tenant isolation, authentication. Write
+about it in precise mechanical terms, not dramatic ones: it is more accurate, and dramatic phrasing
+in prompts has repeatedly stalled sessions on safety checks.
+
+- Name the mechanism, not a story about combat. A fixture that opens connections and submits wrong
+  passwords is **a load generator**; the account it targets belongs to **the legitimate holder**.
+- Standard technique names are fine (threat model, mutation testing, rate limiting, credential
+  stuffing). Escalation on top of them is not: no "kill power", "battery", "hunt", "weapon",
+  "radioactive", "attack it".
+- Prefer: load generator / sustained failed-login load (not attacker, attack) · the account holder
+  (not the victim) · login rate limiting (not brute-force protection) · the mutation set, detection
+  power (not battery, kill power) · "makes the test fail" (not "kills the test") · misuse (not
+  weaponise) · drop, removed (not destroy) · regulated PII (not radioactive).
+- **Register only, never content.** Never soften a finding, drop a measurement, or blur a risk to
+  sound calmer. Report severity exactly as measured.
+
 ## Project hygiene
 
 - The repo tree stays clean. Every throwaway artifact — scratch scripts, debug output,

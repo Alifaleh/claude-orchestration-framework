@@ -7,6 +7,12 @@
 
 _(One sentence.)_
 
+_(Security-verification work — anything that writes or runs code exercising authentication,
+rate limiting, isolation, or access control — OPENS with one line naming whose system this is and
+that the goal is defence. Then describe mechanisms in mechanical terms: "a load generator", "the
+legitimate holder", "sustained failed-login load". See `.claude/rules/engineering.md`, "Writing
+about security work".)_
+
 ## REPO
 
 `{{ABS_PATH_TO_CODE_REPO}}` — branch: `{{FEATURE_BRANCH}}`
