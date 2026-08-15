@@ -21,7 +21,9 @@ haiku 1×. Fable tokens go to decomposition, design, review, governance docs, an
 never implementation. Never dispatch or hire any subagent without an explicit `model:` alias
 (`haiku`/`sonnet`/`opus` — aliases, never pinned versions): omission resolves to the LEADER's
 model — a top-tier-cost accident — and the session-close audit flags any agent that ran on
-the leader's model as an inherit defect.
+the leader's model as an inherit defect. Never set the `CLAUDE_CODE_SUBAGENT_MODEL` env var
+(settings, shell, or hooks): it silently overrides even explicit per-dispatch `model:`
+aliases and defeats the routing table.
 
 **Do inline:** conversation; design and plan-mode work; read-only questions answerable in 1–3
 tool calls; vault and framework doc writes; tiny edits (hard cap: ONE file, ≤10 changed lines,
@@ -34,6 +36,12 @@ a fresh or /clear'd session, reading plan + ROSTER + pack — design/research tr
 ride into execution. State lives on disk at decision time, so /clear is always safe;
 compaction is a safety net, never the strategy. Execution-leader carriage target: <~250k
 average context per message; past it at a wave boundary → /clear + re-read the disk state.
+Global settings back this with `CLAUDE_CODE_AUTO_COMPACT_WINDOW=250000` — a mechanical
+backstop just above the target that disciplined sessions never hit; a deliberate deep design
+session raises it at session START with `/autocompact`, and auto-compaction firing in a
+leader session is a ritual miss (state belonged on disk), never a rescue. Context is natively
+1M on current top models — never add a `[1m]` suffix to the settings `model` string: it buys
+nothing and arms a live client bug that can silently swap the session's model.
 
 **Effort:** thinking tokens bill as output (high ≈ 7× a lower level). Employees carry
 `effort:` in their agent defs and keep ONE effort for life — an effort change invalidates

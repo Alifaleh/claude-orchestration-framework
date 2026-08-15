@@ -6,7 +6,8 @@
     "pr": ""
   },
   "env": {
-    "PONYTAIL_SUBAGENT_MATCHER": "engineer"
+    "PONYTAIL_SUBAGENT_MATCHER": "engineer",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "250000"
   },
   "permissions": {
     "additionalDirectories": [

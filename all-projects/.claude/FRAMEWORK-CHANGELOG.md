@@ -31,6 +31,50 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.4.0 — 2026-08-15
+
+Context-window settings hardening. Current top models carry the 1M window natively and
+included — since March 2026 there is no >200k pricing premium and no 200k variant left to
+choose — so the real levers are removing a live bug surface and braking runaway session
+carriage:
+
+- **`[1m]` model suffixes are banned.** On natively-1M models the suffix buys no context and
+  arms a live client bug (anthropics/claude-code#79337, open through 2.1.233): on Max-plan
+  installs a suffixed model either blocks the session behind a bogus "requires usage
+  credits" prompt or SILENTLY swaps the running session onto a different 1M model. The
+  Fable-tier setup mapping now fills `__MODEL__` with plain `"claude-fable-5"`; the root
+  protocol's Session lifecycle paragraph records the ban.
+- **Global auto-compact backstop:** `env.CLAUDE_CODE_AUTO_COMPACT_WINDOW = "250000"` joins
+  the settings fragment, sitting just above the leader ritual's ~250k carriage target —
+  disciplined sessions never hit it; runaway marathons get mechanically braked (measured on
+  the maintainer's machine: sessions averaging ~500k context per message were 44% of a
+  month's weighted token spend). A deliberate deep design session raises it per-session with
+  `/autocompact`. Auto-compaction firing in a leader session is a ritual miss (state
+  belonged on disk + /clear), never a rescue.
+- **`CLAUDE_CODE_SUBAGENT_MODEL` is banned** (root protocol alias paragraph +
+  project-orchestrator): the env var silently overrides even explicit per-dispatch `model:`
+  aliases, defeating the routing table and the alias mandate.
+
+**Upgrade steps** (from 3.3.0), on each installed machine:
+1. Edit `~/.claude/settings.json`: strip any `[1m]` suffix from the `model` value
+   (`"claude-fable-5[1m]"` → `"claude-fable-5"` — same window either way; skip if the key is
+   absent); merge `env.CLAUDE_CODE_AUTO_COMPACT_WINDOW = "250000"` preserving existing env
+   keys; verify the file still parses before moving on. If `CLAUDE_CODE_SUBAGENT_MODEL` is
+   set anywhere (settings env, shell profile, hooks) → remove it.
+2. Re-apply the 3.4.0 block edits to PROJECTS/CLAUDE.md, copying from the distribution tree:
+   the `CLAUDE_CODE_SUBAGENT_MODEL` sentence at the end of the alias paragraph; the
+   auto-compact-backstop + suffix-ban sentences at the end of the Session lifecycle
+   paragraph. Re-apply the machine's tier swaps where those paragraphs carry them.
+3. DISPATCH the standard per-workspace bundle re-sync for the updated
+   `agents/project-orchestrator.md` — one haiku brief per workspace, parallel, each result
+   reviewed.
+4. Fable-tier installs — relay a one-minute user check: open `/model` and look at the Fable
+   row; if it shows "Requires usage credits", headless `claude -p` runs on that model bill
+   credits SILENTLY (no consent prompt exists there) — pin `--model opus` (or another
+   included model) on headless and scheduled runs. Record the outcome in HANDOFF.
+5. Write `3.4.0` to `.claude/VERSION`; note in HANDOFF that the settings changes take effect
+   on NEW sessions.
+
 ## 3.3.0 — 2026-08-14
 
 Two tools join the framework, both serving one principle now written into the root protocol:

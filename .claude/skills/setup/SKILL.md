@@ -157,7 +157,8 @@ With PROJECTS = answer 1 and VAULT = answer 2 (both absolute):
    - **Fable tier**: defaults are already right (root + project-orchestrator `fable`;
      engineer `sonnet`, hired up to `opus` per the routing table; verifier `haiku`; reviewer
      `opus` — always a tier above the writer; researcher `sonnet`; scout `haiku`).
-     `__MODEL__` → `"claude-fable-5[1m]"`.
+     `__MODEL__` → `"claude-fable-5"` (plain ID — never a `[1m]` suffix: natively 1M, and
+     the suffix arms a live silent-model-swap client bug).
    - **Opus tier** (no Fable): in PROJECTS/CLAUDE.md role detection §1, `Fable` → `Opus`;
      `agents/project-orchestrator.md` `model: fable` → `model: opus`; drop fable from the
      cost line. `__MODEL__` → `"opus"`.
