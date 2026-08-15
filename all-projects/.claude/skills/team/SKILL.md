@@ -32,7 +32,8 @@ OBJECTIVE · WRITABLE · SPEC · NEW CONTEXT · numbered ACCEPTANCE (copied VERB
 leader's plan — never authored downstream) · GATE_SCOPED · GATE_FULL · report path). Send via
 SendMessage to the employee's name: ~4 lines pointing at the brief plus anything newer than
 its last beat — never repeat what the pack or handover already carries. Reports land in
-files; replies stay ≤10 lines. Cycle per beat: engineer works → verifier runs GATE_FULL (one
+files; replies stay ≤10 lines; a report flags any manual flow it ran ≥2× with
+`AUTOMATION:` — the leader captures via the claude-code-map skill. Cycle per beat: engineer works → verifier runs GATE_FULL (one
 SendMessage) → reviewer verdict (a HIGHER tier than the writer) → leader ticks the numbered
 criteria → next beat.
 

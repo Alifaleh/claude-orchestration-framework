@@ -164,7 +164,10 @@ COMMANDS.md the same session; workers flag candidates in DOC TRIGGERS; a twice-r
 manual sequence is a review finding. Deploy flows are always staging-first with a verify step
 between stages. At adoption, run the `claude-automation-recommender` agent (claude-code-setup
 plugin) over the codebase; keep workspace CLAUDE.md files healthy with the
-claude-md-management plugin's improver.
+claude-md-management plugin's improver. A skill gap routes through the `skill-finder`
+skill (vetted, transcribed, workspace-local); the full need→feature table and the
+periodic audit live in the `claude-code-map` skill — the session pulse nudges when a
+workspace's `.claude/automation-audit` marker is missing or >30 days old.
 
 **Use Claude Code's full power — users don't ask for features they don't know exist.** The
 orchestrator knows the native surface — hooks, skills, commands, subagents, plugins,

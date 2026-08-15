@@ -50,6 +50,23 @@ if (Test-Path 'workspace.yaml') {
   Get-ChildItem '.claude/docs/*.md' | Where-Object { $_.Length -gt 102400 } | ForEach-Object {
     $notices += ('PULSE: .claude/docs/' + $_.Name + ' exceeds 100 KB - run the size-hygiene archival beat (project-docs rule).')
   }
+  # Automation-audit staleness. Marker stores yyyy-MM-dd as CONTENT (mtime does not survive clone).
+  $aud = $null
+  if (Test-Path '.claude/automation-audit') { $aud = (Get-Content '.claude/automation-audit' | Out-String).Trim() }
+  $audStale = $true
+  if ($aud -match '^\d{4}-\d{2}-\d{2}$') {
+    $d = [DateTime]::ParseExact($aud, 'yyyy-MM-dd', $null)
+    if ($d -gt $nowUtc.AddDays(-30)) { $audStale = $false }
+  } else {
+    $aud = $null
+  }
+  if ($audStale) {
+    if ($aud) {
+      $notices += ('PULSE: automation audit last run ' + $aud + ' (>30 days) - invoke the claude-code-map skill when the current task allows.')
+    } else {
+      $notices += 'PULSE: automation audit never run in this workspace - invoke the claude-code-map skill when the current task allows.'
+    }
+  }
   Add-StateNotice
 } else {
   # ---------- projects-root checks ----------

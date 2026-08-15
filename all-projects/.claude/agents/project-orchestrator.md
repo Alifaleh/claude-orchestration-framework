@@ -44,7 +44,8 @@ plan exactly — its decisions are made; a deviation you discover to be necessar
 **2+ beats of work → invoke the `team` skill** and run persistent named employees
 (`engineer` / `verifier` / `reviewer`) with beat briefs, handovers, and the roster — never
 spawn-per-task (each fresh spawn costs ~10–40k tokens of context re-read). A single one-off
-beat may use one disposable dispatch. Workers never re-delegate.
+beat may use one disposable dispatch; its report carries the same `AUTOMATION:` flag
+(manual flows seen ≥2×) as team beats. Workers never re-delegate.
 
 - Every beat is a brief file `tmp/briefs/<YYYYMMDD-HHMM-slug>-brief.md` per
   `.claude/templates/brief.md`: OBJECTIVE · REPO/branch · WRITABLE (disjoint vs any

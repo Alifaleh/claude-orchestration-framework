@@ -31,6 +31,69 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.6.0 — 2026-08-15
+
+Automation-adoption layer: sessions notice a capability gap or a repeated manual flow and
+build the right Claude Code artifact for it — plus a mechanical enforcement floor under the
+sign-off rules.
+
+- **Security-floor gate (PreToolUse deny hook):** new `scripts/security-floor.py` (python
+  stdlib only, single process, ~55ms), wired in `settings.json` `hooks.PreToolUse` with
+  matcher `Bash|PowerShell`. It enforces the sign-off rule mechanically for the unambiguous
+  shapes: force-pushes, `DROP TABLE|DATABASE|SCHEMA`, `TRUNCATE`, `DELETE FROM` without
+  `WHERE`, `gh repo delete`, recursive deletes targeting paths outside tmp/scratchpad, and
+  commands that print `.env` values. A denied command exits 2 with a one-line reason naming
+  the sign-off rule; after the user's explicit sign-off the session re-runs the IDENTICAL
+  command prefixed `CLAUDE_SIGNED_OFF=1` — a transcript-visible two-step, never a rephrase.
+  The gate fails open on malformed hook input by design: it is a backstop under the rules,
+  and availability outranks a backstop. Rules stay the primary control; the hook makes the
+  floor deterministic under permission auto-mode.
+- **`skill-finder` skill — vetted community-skill adoption:** registry search with a
+  mandatory vetting pipeline: provenance gate (`rawFileUrl` host must be
+  `raw.githubusercontent.com` AND its owner/repo must match the claimed namespace),
+  full-content review checklist (purpose match; no fetch-and-execute, no credential access,
+  no prompt-injection shapes, no obfuscated payloads; `scripts/` excluded by default), then
+  **transcribe-don't-adopt**: the installed skill is authored by us from the reviewed
+  content, with our own ≤25-word description — a poisoned description is persistent
+  injection that survives a one-time review. Workspace-local installs only, provenance line
+  in the workspace CHANGELOG, and no registry CLI execution ever.
+- **`claude-code-map` skill — need→feature routing:** the decision table mapping observed
+  repetition/friction to the native feature (command, skill, hook, agent, MCP, loop,
+  permission tuning, statusline, settings edit), the creation policy (create-then-report
+  for workspace-scoped commands/skills/agents; user sign-off for hooks running new code,
+  anything global, MCP servers, armed loops), the audit procedure, and the currency rule
+  (no local feature inventory — stale by construction; fetch official docs or dispatch the
+  guide agent on demand).
+- **Automation-audit anchors:** the audit has deterministic firing points instead of a
+  repetition detector (repetition is semantic; hooks never call an LLM). `adopt-project`
+  step 6 and the `finish` skill's closeout sweep run it and write the marker; `team` beat
+  reports and one-off dispatch reports flag manual flows run ≥2× with `AUTOMATION:`; the
+  automation-capture rule in `CLAUDE.md` routes skill gaps through `skill-finder` and
+  everything else through the `claude-code-map` table. The session pulse (`.sh` + `.ps1`
+  workspace branch) nudges when `.claude/automation-audit` is absent or older than 30 days
+  — the marker stores the date as file CONTENT (`YYYY-MM-DD`; mtime does not survive
+  clone), and the nudge rides the existing 4-hour cooldown.
+
+**Upgrade steps** (from 3.5.0), on each installed machine:
+1. Copy the two new skill directories from the distribution tree into the install's
+   `.claude/skills/`: `skill-finder/` and `claude-code-map/`.
+2. Dependency check for the gate: it needs python ≥3.8 on PATH (stdlib only). Machines where
+   only `python3` resolves use `python3` in the hook command. No python at all → OFFER the
+   install to the user first (per the update protocol); declined → skip step 3, record in
+   HANDOFF — the sign-off rules remain the control and the framework degrades gracefully.
+3. Copy `scripts/security-floor.py` into `.claude/scripts/`; merge the `hooks.PreToolUse`
+   block from the distribution `settings.json` into the install's `.claude/settings.json`,
+   preserving existing hook groups; verify the file still parses before moving on.
+4. Replace `.claude/scripts/session-pulse.sh` and `session-pulse.ps1` with the 3.6.0 copies
+   (same wiring; the workspace branch adds the automation-audit staleness check). Workspace
+   bundles carrying their own pulse copies are re-synced as per-workspace briefs per the
+   update protocol.
+5. Marker semantics — no pre-seeding: `.claude/automation-audit` is written by the first
+   audit (adopt-project step 6 or the finish sweep). Until then the pulse nudges "never run"
+   at most once per 4-hour window per workspace; that nudge is the intended adoption path,
+   not an error.
+6. Write `3.6.0` to `.claude/VERSION`.
+
 ## 3.5.0 — 2026-08-15
 
 - **1-hour prompt-cache TTL pinned:** `env.ENABLE_PROMPT_CACHING_1H = "1"` joins the settings

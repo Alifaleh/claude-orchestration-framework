@@ -39,6 +39,21 @@ if [ -f workspace.yaml ]; then
       add "PULSE: $f exceeds 100 KB — run the size-hygiene archival beat (project-docs rule)."
     fi
   done
+  # Automation-audit staleness. Marker stores YYYY-MM-DD as CONTENT (mtime does not
+  # survive clone); dates compare numerically once dashes are stripped.
+  aud=$(cat .claude/automation-audit 2>/dev/null | tr -d '[:space:]')
+  case "$aud" in
+    [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) aud_n=$(printf '%s' "$aud" | tr -d '-') ;;
+    *) aud_n="" ;;
+  esac
+  cutoff=$(date -d '30 days ago' +%Y%m%d 2>/dev/null || date -v-30d +%Y%m%d 2>/dev/null)
+  if [ -n "$cutoff" ]; then
+    if [ -z "$aud_n" ]; then
+      add "PULSE: automation audit never run in this workspace — invoke the claude-code-map skill when the current task allows."
+    elif [ "$aud_n" -lt "$cutoff" ] 2>/dev/null; then
+      add "PULSE: automation audit last run $aud (>30 days) — invoke the claude-code-map skill when the current task allows."
+    fi
+  fi
   state_hp
 else
   # ---------- projects-root checks ----------
