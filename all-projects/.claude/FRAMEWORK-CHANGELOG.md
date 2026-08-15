@@ -31,6 +31,81 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.7.0 — 2026-08-15
+
+Calibration layer: same output quality, less waiting and fewer tokens. A wave-scoped foreman
+takes the per-beat management load off the orchestrator, employees keep their context across
+beats instead of re-onboarding, a routing-floor hook makes the model-alias mandate mechanical,
+and verification is right-sized to what each beat actually risks.
+
+- **Foreman (new `agents/foreman.md`):** a wave-scoped execution lead — orchestrator(0) →
+  foreman(1) → employees(2), inside the documented nesting limit. The orchestrator writes the
+  plan with per-beat acceptance criteria, dispatches ONE foreman per wave (sonnet; top tier
+  when the wave carries a hard-trigger beat) with the plan section verbatim, then goes
+  dormant. The foreman briefs roster employees (criteria copied verbatim — it authors none),
+  pipelines beats and reviews, runs fix rounds 1–3 against the same live engineer, and
+  escalates round-4 promotions and any requirement ambiguity instead of guessing. Its wave
+  report carries per-beat reviewer verdicts VERBATIM, gate exit codes + `tmp/gates/` log
+  paths, files touched, `AUTOMATION:` flags, escalations, and the wave's duration + dispatch
+  count — paraphrased quality claims are invalid. Waves of ≥2 beats route through a foreman;
+  a single-beat wave dispatches the employee directly. Waiting discipline (dry-run finding):
+  a nested agent is NOT re-invoked when its children complete — the foreman dispatches
+  foreground when the next action depends on one child, and collects overlapping background
+  children with blocking `TaskOutput`; it never stops its turn mid-wave to "wait". The
+  leader-side backstop: a foreman notification without its wave report = stalled wave →
+  one SendMessage resumes it.
+- **Employee continuity (hire once, continue by message):** employees are LIVE background
+  agents, not spawn-per-beat. Hired ONCE at first need; every later beat and every fix round
+  is a SendMessage continuation of the same living agent — project understanding is read
+  exactly once. A fresh Agent dispatch for an already-hired name is a protocol violation.
+  Rosters record each employee's live agent ID. Approaching the ~150-message checkpoint an
+  employee writes its HANDOVER checkpoint, retires, and a successor is rehired FROM the
+  checkpoint — continuity by disk when context is full, by SendMessage until then.
+- **Routing-floor gate (PreToolUse deny hook on Agent):** new `scripts/routing-floor.py`
+  (python stdlib, fail-open on malformed input, test battery beside it) denies any Agent
+  dispatch that names NO `model` and whose `subagent_type` is not in the pinned-model set
+  (scout, verifier, reviewer, researcher, engineer, foreman, and the built-in pinned types).
+  An unset model silently inherits the root session's model — on top-tier sessions a 10×-cost
+  accident, measured live at 184 such dispatches in one session. The deny message names the
+  routing floor and the fix (re-dispatch with an explicit `model:` alias).
+- **Verification right-sizing (same properties, fewer invocations):** GATE_FULL runs once
+  per WAVE (verifier-run, gates wave acceptance; GATE_SCOPED per beat unchanged). Light
+  beats — ≤~50 changed lines, single module, no hard-trigger surface, scoped gate green —
+  share ONE combined review pass per wave, criteria still ticked per beat; standard and
+  hard-trigger beats keep per-beat review. Debugging with certain reproduction in a single
+  module is ONE dispatch (diagnose → written cause + failing test → fix; the cause artifact
+  precedes the fix in the report); the separate diagnosis beat stays for uncertain
+  reproduction or cross-module bugs. A fresh test-writer is dispatched only for
+  hard-trigger/cross-module invariants — routine beats write their tests FIRST in-beat,
+  order visible in the report. UI drives (Playwright) are required when UI BEHAVIOR changed,
+  not for any UI-adjacent diff.
+- **Carriage discipline:** COMMANDS.md records gate commands WITH redirection baked in
+  (`cmd > tmp/gates/<name>.log 2>&1`) so the evidence diet travels by copy-paste; the brief
+  template and engineer def carry the ~150-message CHECKPOINT clause; the orchestrator gains
+  a read budget (bulk reading >3 files or >500 lines of raw material is collection —
+  delegate to a scout/researcher).
+
+**Upgrade steps** (from 3.6.0), on each installed machine:
+1. Copy `agents/foreman.md` from the distribution tree into the install's `.claude/agents/`.
+   Agent definitions load at session start — the `foreman` type is dispatchable from the
+   NEXT session onward, not the one applying this upgrade.
+2. Copy `scripts/routing-floor.py` and `scripts/test-routing-floor.py` into
+   `.claude/scripts/`; run the battery once (`python .claude/scripts/test-routing-floor.py`)
+   and expect all green. Same python dependency note as 3.6.0 step 2 (already satisfied on
+   machines that applied it).
+3. Merge the second `hooks.PreToolUse` group (matcher `Agent` → routing-floor.py) from the
+   distribution `settings.json` into the install's `.claude/settings.json`, preserving the
+   existing `Bash|PowerShell` security-floor group; verify the file still parses.
+4. Replace with the 3.7.0 copies: `agents/project-orchestrator.md`, `agents/engineer.md`,
+   `rules/engineering.md`, `skills/team/SKILL.md`, `skills/team/templates/ROSTER.md`,
+   `templates/brief.md`, `templates/docs/COMMANDS.md`.
+5. Update the root protocol `CLAUDE.md` to the 3.7.0 copy — three changed paragraphs: the
+   model-alias paragraph (routing-floor hook sentence), the debugging paragraph
+   (one-dispatch form), and the evidence-diet paragraph (GATE_FULL per WAVE).
+6. Existing workspace ROSTER.md files gain the `agent id` column on their next team session
+   (the template now carries it; no retroactive edit needed — `—` marks not-yet-hired).
+7. Write `3.7.0` to `.claude/VERSION`.
+
 ## 3.6.0 — 2026-08-15
 
 Automation-adoption layer: sessions notice a capability gap or a repeated manual flow and

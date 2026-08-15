@@ -7,7 +7,9 @@ All commands run from the workspace root unless stated; always `cd <repo> && …
 
 ## Gates (define "done")
 
-_(Per repo. Example: `cd backend && uv run ruff check . && uv run mypy . && uv run pytest`)_
+_(Per repo, recorded WITH redirection baked in — `cmd > tmp/gates/<name>.log 2>&1` (sh) /
+`cmd *> tmp\gates\<name>.log` (PowerShell) — so every runner inherits the evidence diet by
+copy-paste. Example: `cd backend && uv run ruff check . && uv run mypy . && uv run pytest > tmp/gates/full.log 2>&1`)_
 
 ## Run / develop
 

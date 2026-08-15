@@ -51,7 +51,13 @@ The engineer's inner loop — run as often as needed, always piped to the log.
 ```bash
 cd {{ABS_PATH_TO_CODE_REPO}} && {{FULL_GATE_COMMAND}} > tmp/gates/{{ID}}-full.log 2>&1
 ```
-The VERIFIER runs this ONCE at beat end — never the engineer.
+The VERIFIER runs this ONCE at WAVE end (= beat end only for a single-beat wave) — never the
+engineer.
+
+## CHECKPOINT
+
+Past ~150 messages or on context pressure: write your HANDOVER checkpoint, report
+`exceeds-ability` + the checkpoint path, and stop — a successor is rehired from it.
 
 ## REPORT
 

@@ -34,6 +34,15 @@
             "command": "python .claude/scripts/security-floor.py"
           }
         ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python .claude/scripts/routing-floor.py"
+          }
+        ]
       }
     ]
   }

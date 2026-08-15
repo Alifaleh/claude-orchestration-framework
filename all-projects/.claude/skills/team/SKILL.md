@@ -5,53 +5,87 @@ description: Use when an orchestrator session has 2+ beats of work in a project 
 
 # The team — persistent employees
 
-Topology per project: leader (this session, the system architect) + `eng-a` (+ `eng-b`/`eng-c`
-only for file-disjoint beats) + `verifier` + `reviewer`. Employees are **named background
-agents reused across beats** — never spawn-per-task. Workers never re-delegate. DB-writing and
-Playwright beats serialize through the verifier. No standing lead layer; a wave-scoped
-top-tier lead exists ONLY when decomposition requires reading code the leader hasn't read —
-its criteria still come from the leader verbatim, its beats still go to the standing
-reviewer.
+Topology per project: leader (this session, the system architect) + wave-scoped `foreman` +
+`eng-a` (+ `eng-b`/`eng-c` only for file-disjoint beats) + `verifier` + `reviewer`. Employees
+are **live background agents continued across beats** — hired once, never spawn-per-task; a
+fresh Agent dispatch for an already-hired name is a protocol violation (it re-reads the whole
+project and orphans the live context). Workers never re-delegate; the foreman is the sole
+exception. DB-writing and Playwright beats serialize through the verifier. No STANDING lead
+layer — the foreman exists per wave and dissolves with its report.
 
 ## Hire
 
-Spawn via the Agent tool: agent type per role def (`engineer`/`verifier`/`reviewer`),
+Spawn via the Agent tool: agent type per role def (`engineer`/`verifier`/`reviewer`/`foreman`),
 `run_in_background: true`, explicit `model:` alias per the routing table in the projects-root
 CLAUDE.md (omission = the inherit footgun: the agent silently runs on the leader's model at
-leader cost). Employee effort comes from the def's `effort:` frontmatter and never changes
-during its life (an effort flip invalidates its prompt cache). Hire prompt ≈6 lines: "You are
-<name>, persistent <role> on <project>. Read `.claude/docs/CONTEXT_PACK.md` fully, then
-`tmp/team/<name>/HANDOVER.md` if it exists. Reply with your onboarding receipt." Check the
-receipt against the pack — a wrong test command or missed inherited WIP = defective
-onboarding → rehire; never patch onboarding by chat.
+leader cost; the routing-floor hook denies it). Employee effort comes from the def's `effort:`
+frontmatter and never changes during its life (an effort flip invalidates its prompt cache).
+Hire prompt ≈6 lines: "You are <name>, persistent <role> on <project>. Read
+`.claude/docs/CONTEXT_PACK.md` fully, then `tmp/team/<name>/HANDOVER.md` if it exists. Reply
+with your onboarding receipt." Check the receipt against the pack — a wrong test command or
+missed inherited WIP = defective onboarding → rehire; never patch onboarding by chat. Record
+the spawn's agent ID in the roster: every later beat and fix round is a SendMessage
+continuation of that live agent (idle background employees cost nothing; each wake rides the
+prompt cache). Hire lazily — each employee at its first needed beat, never the whole bench
+upfront.
 
 ## Beats
 
 One beat = one brief file `tmp/briefs/<id>-brief.md` (format: `.claude/templates/brief.md` —
 OBJECTIVE · WRITABLE · SPEC · NEW CONTEXT · numbered ACCEPTANCE (copied VERBATIM from the
-leader's plan — never authored downstream) · GATE_SCOPED · GATE_FULL · report path). Send via
-SendMessage to the employee's name: ~4 lines pointing at the brief plus anything newer than
-its last beat — never repeat what the pack or handover already carries. Reports land in
-files; replies stay ≤10 lines; a report flags any manual flow it ran ≥2× with
-`AUTOMATION:` — the leader captures via the claude-code-map skill. Cycle per beat: engineer works → verifier runs GATE_FULL (one
-SendMessage) → reviewer verdict (a HIGHER tier than the writer) → leader ticks the numbered
-criteria → next beat.
+leader's plan — never authored downstream) · GATE_SCOPED · report path; GATE_FULL lives at
+the wave level). Send via SendMessage to the employee's name: ~4 lines pointing at the brief
+plus anything newer than its last beat — never repeat what the pack or handover already
+carries. Reports land in files; replies stay ≤10 lines; a report flags any manual flow it
+ran ≥2× with `AUTOMATION:` — the leader captures via the claude-code-map skill. Cycle per
+beat: engineer works → reviewer verdict (a HIGHER tier than the writer) → criteria ticked →
+next beat; the verifier runs GATE_FULL ONCE at wave end, gating wave acceptance.
 
-**Test-first prep-beat (gray-zone flip):** when the routing gate fails on "no failing tests
-exist", a FRESH sonnet agent with no implementation context writes the failing tests from the
-SPEC first (single-file-against-explicit-spec scope); the top tier contributes only an
-assertion list when tests span modules or encode hard-trigger invariants. The reviewer's
-criterion #1 on such beats: test adequacy vs SPEC.
+**Test-first prep-beat (hard-trigger/cross-module only):** a FRESH sonnet agent with no
+implementation context writes the failing tests from the SPEC first ONLY when they encode
+hard-trigger or cross-module invariants (the top tier contributes only the assertion list);
+the reviewer's criterion #1 on such beats: test adequacy vs SPEC. Routine beats write their
+tests FIRST in-beat — the order must be visible in the report/commits; contamination risk
+applies to deriving tests from implementation, not to spec-driven test-first.
 
-**Bugs:** two-phase always — a read-only diagnosis beat (written cause + reproducing failing
-test) → the fix beat routed on that artifact.
+**Bugs:** two-phase always — written cause + reproducing failing test BEFORE any fix.
+Reproducible single-module bugs: ONE dispatch does diagnose-then-fix, cause artifact first
+in its report. Uncertain reproduction or cross-module: separate read-only diagnosis beat,
+then the fix routed on that artifact.
+
+## Waves — the foreman
+
+A wave with ≥2 beats goes to ONE `foreman` (background; `model: sonnet`, or the top tier
+when the wave carries a hard-trigger beat). Its dispatch carries: the wave's plan section
+VERBATIM (beats + numbered ACCEPTANCE + per-beat tiers) · the roster with live agent IDs ·
+gate commands · wave report path `tmp/briefs/wave-<n>-report.md`. The leader then goes
+dormant until the report notification. Single-beat waves skip the foreman and dispatch the
+employee directly. Backstop: a foreman notification arriving WITHOUT its wave report is a
+stalled wave — SendMessage it to continue (its def forbids stopping with live children; the
+leader's one relay message is the recovery, never a re-dispatch).
+
+The foreman briefs employees (criteria verbatim, never authored), pipelines beats and
+reviews, runs fix rounds 1–3 against the SAME live engineer, and escalates round-4
+promotions, requirement ambiguity, and anything off-plan back to the leader — it never
+re-scopes silently. **T-light review batching:** beats that are ≤~50 changed lines, single
+module, no hard-trigger surface, scoped gate green get ONE reviewer pass over the wave's
+combined T-light diffs (per-beat criteria still ticked individually); standard/hard-trigger
+beats keep per-beat review.
+
+Wave report: header (wave id · duration · dispatch count) + per-beat verdict with the
+reviewer's verdict VERBATIM (a paraphrased quality claim is invalid) · gate exit codes +
+`tmp/gates/` paths · files touched · fix rounds · AUTOMATION flags · checkpoints ·
+escalations verbatim. The leader ticks wave criteria from the report, spot-reads
+hard-trigger reviewer reports, appends the wave line (duration + dispatches) to HANDOFF, and
+only then plans the next wave.
 
 ## Health check — every beat, from the reply already in hand
 
 Handover triggers: (a) ≥8 beats served; (b) drift — re-asking pack facts, wrong paths,
 bloating replies; (c) the next beat needs a different tier (promotion/demotion); (d) 2 failed
 fix rounds on one brief (re-scope first, usually promote); (e) the employee's working context
-has grown past ~50k (long-horizon degradation).
+has grown past ~50k or ~150 messages (long-horizon degradation) — employees also
+self-checkpoint at that bound, reporting `exceeds-ability` + checkpoint path.
 
 ## Handover → rehire (this IS the model switch — model and effort are fixed at spawn)
 

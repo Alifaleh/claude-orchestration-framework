@@ -45,7 +45,24 @@ plan exactly — its decisions are made; a deviation you discover to be necessar
 (`engineer` / `verifier` / `reviewer`) with beat briefs, handovers, and the roster — never
 spawn-per-task (each fresh spawn costs ~10–40k tokens of context re-read). A single one-off
 beat may use one disposable dispatch; its report carries the same `AUTOMATION:` flag
-(manual flows seen ≥2×) as team beats. Workers never re-delegate.
+(manual flows seen ≥2×) as team beats. Workers never re-delegate — the foreman is the sole
+exception (its def grants Agent for employee dispatch).
+
+**Foreman waves:** a wave with ≥2 beats is dispatched to ONE `foreman` agent (sonnet; the
+top tier when the wave carries a hard-trigger beat) with the wave's plan section VERBATIM +
+roster + gate commands — then you go dormant until the wave report. Single-beat waves
+dispatch the employee directly. Depth: you(0) → foreman(1) → employees(2); one foreman
+active per workspace. The foreman authors no criteria, pipelines beats and reviews, runs fix
+rounds 1–3, and STOPS-and-escalates round-4 promotions and requirement ambiguity back to
+you. Its wave report carries reviewer verdicts VERBATIM + gate exit codes + log paths +
+duration + dispatch count; tick wave criteria from the report and spot-read hard-trigger
+reviewer reports. **Employee continuity:** employees are LIVE agents — hired ONCE in the
+background, then every beat and fix round is a SendMessage continuation of the same agent
+(project understanding read exactly once); a fresh Agent dispatch for an already-hired name
+is a protocol violation. The roster carries live agent IDs. At ~150 messages or on context
+pressure an employee checkpoints to files, retires, and is rehired FROM checkpoint +
+HANDOVER. Your own read budget: bulk reading (>3 files or >500 lines of raw material) is
+collection — delegate it to scout/researcher and read the distilled report.
 
 - Every beat is a brief file `tmp/briefs/<YYYYMMDD-HHMM-slug>-brief.md` per
   `.claude/templates/brief.md`: OBJECTIVE · REPO/branch · WRITABLE (disjoint vs any
@@ -73,22 +90,27 @@ beat may use one disposable dispatch; its report carries the same `AUTOMATION:` 
    failing tests exist BEFORE the beat starts; (d) an in-repo precedent is cited by path →
    sonnet engineer (advisor consults ≤2 per beat; a wanted 3rd = promotion trigger).
 4. **Neither → re-shape, don't route up:** requirement ambiguity → decompose, get the tests
-   written first (a fresh sonnet test-writer with no implementation context; opus contributes
-   only assertion lists for trigger-2 or cross-module invariants), cite precedent, re-run the
-   gate. Codebase ambiguity → trigger 2. Escalating requirement-ambiguity to opus is a
-   protocol violation — fix the spec.
+   written first (a FRESH sonnet test-writer only for trigger-2 or cross-module invariants,
+   opus contributing only assertion lists; routine beats write their tests FIRST in-beat,
+   order visible in report/commits), cite precedent, re-run the gate. Codebase ambiguity →
+   trigger 2. Escalating requirement-ambiguity to opus is a protocol violation — fix the
+   spec.
 
 Doubt → the stronger tier; a tier unavailable on this install falls down the chain.
 `researcher` (sonnet) handles external/library research per the `researching` skill.
 
-**Debugging is two-phase, always:** a read-only diagnosis beat (sonnet; haiku for
-log-trawls) → written cause + a reproducing failing test; that artifact routes the fix beat
-through the table. Never route a bug on a guess about its difficulty.
+**Debugging is two-phase, always — one dispatch when reproduction is certain:** phase 1 is
+read-only diagnosis (sonnet; haiku for log-trawls) → written cause + a reproducing failing
+test; that artifact routes the fix through the table. For reproducible single-module bugs
+ONE agent does diagnose-then-fix, and its report must show the cause artifact BEFORE the fix
+section. Uncertain reproduction or cross-module bugs keep the separate diagnosis beat. Never
+route a bug on a guess about its difficulty.
 
 # Evidence diet
 
 - Every beat carries GATE_SCOPED (touched module/file — the engineer's inner loop, run
-  freely) and GATE_FULL (once per beat — the VERIFIER runs it, never the engineer).
+  freely); GATE_FULL runs once per WAVE — the VERIFIER runs it at wave acceptance, never the
+  engineer.
 - ALL gate/test/build output is piped to `tmp/gates/<brief>-<seq>.log`; context sees the exit
   code + on failure a ≤40-line verbatim excerpt + a ≤20-line tail — never full logs.
 - Reports: what is quoted is verbatim; what is not quoted is on disk at a named path.
@@ -105,9 +127,10 @@ through the table. Never route a bug on a guess about its difficulty.
 - Read the worker's report AND the actual diff; tick the numbered acceptance criteria one by
   one — an itemized rubric, never "looks good". "The subagent said it passed" is never
   acceptance.
-- UI criteria are verified through the real screen: the verifier drives Playwright, saves
-  screenshots to `tmp/screenshots/`, reports the 0-console-errors check — a clean build or
-  passing unit tests is never UI verification.
+- UI criteria are verified through the real screen whenever UI BEHAVIOR changed: the
+  verifier drives Playwright, saves screenshots to `tmp/screenshots/`, reports the
+  0-console-errors check — a clean build or passing unit tests is never UI verification; a
+  UI-adjacent diff that changes no behavior needs no drive.
 - Same beat fails review twice → `git restore` its WRITABLE files, record the revert in the
   ledger, and re-scope smaller — never retry verbatim, never implement it yourself.
   `exceeds-ability` is a rewarded report status, never a failure mark.

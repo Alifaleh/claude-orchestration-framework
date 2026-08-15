@@ -21,9 +21,11 @@ haiku 1×. Fable tokens go to decomposition, design, review, governance docs, an
 never implementation. Never dispatch or hire any subagent without an explicit `model:` alias
 (`haiku`/`sonnet`/`opus` — aliases, never pinned versions): omission resolves to the LEADER's
 model — a top-tier-cost accident — and the session-close audit flags any agent that ran on
-the leader's model as an inherit defect. Never set the `CLAUDE_CODE_SUBAGENT_MODEL` env var
-(settings, shell, or hooks): it silently overrides even explicit per-dispatch `model:`
-aliases and defeats the routing table.
+the leader's model as an inherit defect. The PreToolUse routing-floor hook
+(`.claude/scripts/routing-floor.py`) enforces this mechanically: it denies any Agent dispatch
+that has no `model` and no pinned-model agent type. Never set the `CLAUDE_CODE_SUBAGENT_MODEL`
+env var (settings, shell, or hooks): it silently overrides even explicit per-dispatch
+`model:` aliases and defeats the routing table.
 
 **Do inline:** conversation; design and plan-mode work; read-only questions answerable in 1–3
 tool calls; vault and framework doc writes; tiny edits (hard cap: ONE file, ≤10 changed lines,
@@ -98,9 +100,12 @@ guess; a mid-mission requirements gap comes back as `NEEDS-DECISION`, never as a
    protocol violation — it degrades opus too; fix the spec.
 Doubt → the stronger tier. A tier unavailable on this install → fall down the chain.
 
-**Debugging is two-phase, always:** a read-only diagnosis beat (sonnet; haiku for
-log-trawls) → written cause + a reproducing failing test; that artifact routes the fix beat
-through the table. Never route a bug on a guess about its difficulty.
+**Debugging is two-phase, always — one dispatch when reproduction is certain:** phase 1 is
+read-only diagnosis (sonnet; haiku for log-trawls) → written cause + a reproducing failing
+test; that artifact routes the fix through the table. For reproducible single-module bugs
+ONE agent does diagnose-then-fix, cause artifact BEFORE the fix section in its report.
+Uncertain reproduction or cross-module bugs keep the separate diagnosis beat. Never route a
+bug on a guess about its difficulty.
 
 **A higher model validates, always:** haiku work → sonnet review · sonnet code → review one
 tier up, every time · top-tier code → top-tier reviewer + your own criteria tick. Wave-final
@@ -108,7 +113,8 @@ integration review runs on the top tier. Acceptance criteria are authored by the
 and copied VERBATIM into briefs — never by whoever implements or manages the wave.
 
 **Evidence diet:** every beat carries GATE_SCOPED (touched module — the engineer's inner
-loop, run freely) and GATE_FULL (once per beat — the verifier runs it, never the engineer).
+loop, run freely); GATE_FULL runs once per WAVE — the verifier runs it at wave acceptance,
+never the engineer.
 ALL gate/test/build output is piped to `tmp/gates/<brief>-<seq>.log`; context sees the exit
 code + on failure a ≤40-line verbatim excerpt + a ≤20-line tail — never full logs. Reports:
 what is quoted is verbatim; what is not quoted is on disk at a named path. Reviewers re-run

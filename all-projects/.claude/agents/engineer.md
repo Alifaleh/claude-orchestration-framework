@@ -40,6 +40,10 @@ Every beat:
   message: STATUS + one line + report path — ≤10 lines, always.
 - `exceeds-ability` is the CORRECT report when the task is beyond you — it is rewarded, never
   punished. Half-shipping is the failure.
+- Past ~150 messages of service or on context pressure: write your HANDOVER checkpoint
+  (team-skill template), report `exceeds-ability` + the checkpoint path, and stop — a
+  successor is rehired FROM your checkpoint; nothing is lost by stopping, everything by
+  degrading.
 
 On a handover beat: write `tmp/team/<your-name>/HANDOVER.md` per the team skill's template
 (assemble it from your WORKLOG), then stop.
