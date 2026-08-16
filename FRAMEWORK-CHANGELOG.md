@@ -31,6 +31,40 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.9.0 — 2026-08-16
+
+Plan diet: a scope gate at plan time. Measured trigger: asked post-hoc, an orchestrator
+identified 2.5–3 cuttable days in a plan's remaining 4–5 — half the remaining spend was fat
+that quality never needed, surfaced only because the user asked after execution had started.
+Scope was gated at code time (lean-code ladder) and at execution (criteria, reviews) but
+never at plan time, where scope is decided; execution agents are correctly forbidden from
+re-scoping, so plan fat gets built.
+
+- **Plan diet (project-orchestrator.md PLAN phase; team skill pre-flight):** every plan
+  opens by naming its DELIVERABLE — the few measurable properties that define quality for
+  the delivery. Every beat carries a rough cost (beats or days) and one line naming the
+  DELIVERABLE property or mission/SPEC decision it serves; an item that can't name one is
+  FAT — cut to BACKLOG.md with its cost and re-entry trigger before the plan is presented.
+  Fat smells, cut on sight: speculative robustness (retry/batching/tuning/limit work for
+  failures nobody measured while a working baseline path exists) · duplicate affordance (a
+  second path to an action already reachable in a click or two) · requirement inflation (a
+  mechanism was needed; a feature grew around it) · bundled cleanup (dead-code deletion or
+  refactors riding a delivery plan). Verification is the one exception: a redundant-looking
+  gate is FLAGGED with a one-line risk note and cut only by the user's explicit decision —
+  checks never loosen. Never-cut floor: trust-boundary validation, data-loss handling,
+  security, accessibility, anything the user explicitly asked for. Cut ITEMS, never
+  completeness — what stays is built production-grade. The plan shown for approval carries
+  per-beat costs + the cut list, so the user adjudicates with prices visible. Desk-tested
+  against the measured case: all six post-hoc cuts classify under the smells, with the
+  redundant second live run correctly landing in the verification exception.
+
+**Upgrade steps:**
+
+1. Sync the `.claude` bundle into each workspace: `agents/project-orchestrator.md`,
+   `skills/team/SKILL.md`.
+2. Any in-flight plan: run the diet ONCE against its remaining work and present the cut
+   list (costs + BACKLOG destinations) to the user before dispatching the next wave.
+
 ## 3.8.0 — 2026-08-16
 
 Leader-spend fix + crew modes. A 3-day marathon orchestrator session measured at 56% of its

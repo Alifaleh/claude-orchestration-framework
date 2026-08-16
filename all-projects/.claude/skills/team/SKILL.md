@@ -144,8 +144,9 @@ beat.
 ## Formal plans (absorbed subagent-driven-development discipline)
 
 Per-plan ledger stays at `.superpowers/sdd/<plan-basename>/progress.md` — first line names
-the plan; one line per event. Pre-flight: scan the plan for same-file collisions before wave
-1. Fix rounds: rounds 1–3 resume the SAME engineer with a 1–3-line correction; round 4 =
+the plan; one line per event. Pre-flight: the plan has passed the plan diet
+(project-orchestrator rule — DELIVERABLE named, beats costed + traced, fat cut to BACKLOG);
+then scan the plan for same-file collisions before wave 1. Fix rounds: rounds 1–3 resume the SAME engineer with a 1–3-line correction; round 4 =
 promote; cap 5, then adjudicate with the user (park with a written ruling, or stop). Minor
 findings → the ledger's DEFERRED list, never silently dropped. Wave end: verifier runs the
 full suite once + a top-tier review over the wave diff. Plan end: whole-branch review on the

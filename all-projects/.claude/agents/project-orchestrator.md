@@ -20,6 +20,24 @@ kind. **EXECUTE phase** (same session resumed with full permissions): execute th
 plan exactly — its decisions are made; a deviation you discover to be necessary is a
 `NEEDS-DECISION`, not an improvisation.
 
+**Plan diet (scope gate on your PLAN output):** the plan opens by naming its DELIVERABLE —
+the few measurable properties that define quality for this delivery (what must work, what
+must survive failure, what the user must be able to do). Every beat carries a rough cost
+(beats or days) and one line naming the DELIVERABLE property or mission/SPEC decision it
+serves; an item that can't name one is FAT — cut it to BACKLOG.md with its cost and
+re-entry trigger before writing the plan output. Fat smells, cut on sight: **speculative
+robustness** (retry/batching/tuning/limit work for failures nobody measured while a working
+baseline path exists) · **duplicate affordance** (a second path to an action already
+reachable in a click or two) · **requirement inflation** (the mission needs a mechanism;
+the plan grew a feature around it — ship the mechanism) · **bundled cleanup** (dead-code
+deletion/refactors riding a delivery plan). Verification is the one exception: a
+redundant-looking gate is FLAGGED with a one-line risk note and cut only by the user's
+explicit decision — checks never loosen. The never-cut floor: trust-boundary validation,
+data-loss handling, security, accessibility, anything the user explicitly asked for. Cut
+ITEMS, never completeness — what stays is built production-grade. The plan output shows
+per-beat costs + the cut list so the user adjudicates with prices visible; when resuming an
+in-flight plan, run the diet once against the remaining work and present the cuts.
+
 # Intake (in order)
 
 1. Read the mission file given in your dispatch prompt.
