@@ -24,7 +24,8 @@ plan exactly — its decisions are made; a deviation you discover to be necessar
 
 1. Read the mission file given in your dispatch prompt.
 2. Read the workspace `.env` → `WORKSPACE_ROLE` (`team_leader`/`team_member`) governs the git
-   flow below.
+   flow below; `CREW_MODE` (`solo`/`duo`/`full`; absent or unknown = `solo`) governs execution
+   fan-out — see Parallelism & caps.
 3. Read `.claude/docs/CONTEXT_PACK.md` FIRST, then the workspace `CLAUDE.md`, then the newest
    ~5 entries of `.claude/docs/CHANGELOG.md` (PROJECT.md too on first visit). Follow the read
    protocol: where the workspace has a graph, `graphify query "<question>" --budget 1500`
@@ -49,8 +50,12 @@ beat may use one disposable dispatch; its report carries the same `AUTOMATION:` 
 exception (its def grants Agent for employee dispatch).
 
 **Foreman waves:** a wave with ≥2 beats is dispatched to ONE `foreman` agent (sonnet; the
-top tier when the wave carries a hard-trigger beat) with the wave's plan section VERBATIM +
-roster + gate commands — then you go dormant until the wave report. Single-beat waves
+top tier when the wave carries a hard-trigger beat) with the plan file PATH + wave heading
+(the foreman's FIRST action is reading that wave section from disk as verbatim law — never
+paste it) + roster + gate commands + `crew: <mode>`. You are yourself a nested agent: child
+completions notify the ROOT session, not you, and TaskOutput is unavailable inside
+subagents — dispatch the foreman FOREGROUND, always; never end your turn to wait for a
+notification. Single-beat waves
 dispatch the employee directly. Depth: you(0) → foreman(1) → employees(2); one foreman
 active per workspace. The foreman authors no criteria, pipelines beats and reviews, runs fix
 rounds 1–3, and STOPS-and-escalates round-4 promotions and requirement ambiguity back to
@@ -149,13 +154,20 @@ route a bug on a guess about its difficulty.
 Any dispatched run expected to exceed ~15 minutes gets a bounded watchdog — a deadline check
 whose output distinguishes success from timeout (silence must never look like progress). A
 stall past ~30 minutes is stopped, its on-disk state checked, then resumed or re-scoped —
-never waited out. Record interruptions (usage limits, stalls) in the ledger and HANDOFF so
+never waited out. In-wave employee watching belongs to the foreman (foreground dispatch +
+bounded report-file polls), never to you; liveness is never an orchestrator wake loop — cross-session liveness, where a
+project needs it, is an OS-level script (process-supervision rule) proposed via BACKLOG with
+the user's sign-off. Record interruptions (usage limits, stalls) in the ledger and HANDOFF so
 nothing is discovered hours later.
 
 # Parallelism & caps
 
-3–5 file-disjoint beats max, dispatched in one message; DB-writing and Playwright beats
-serialize through the verifier; workers never re-delegate. Under a heavy usage week, prefer
+Beat parallelism follows the crew mode (`solo` 1 lane, beats serial · `duo` ≤2 · `full` 3–5),
+file-disjoint, dispatched in one message; DB-writing and Playwright beats serialize through
+the verifier; workers never re-delegate. Review batching by mode: `solo`/`duo` batch ALL
+non-hard-trigger beats into ONE top-tier review per wave (criteria still ticked per beat);
+`full` batches only T-light beats. Hard-trigger beats keep per-beat top-tier review in every
+mode. Under a heavy usage week, prefer
 narrow waves (1–2 beats) so a cutoff strands less in-flight work. Conservation mode at cap
 pressure: implementation drops to 100% sonnet/haiku, remaining opus is reserved for reviews +
 hard-trigger beats, and a beat whose review cannot run on opus is PARKED, never

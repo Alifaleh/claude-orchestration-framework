@@ -36,6 +36,15 @@ function Add-StateNotice {
 
 if (Test-Path 'workspace.yaml') {
   # ---------- workspace checks (all local) ----------
+  # Crew mode (3.8.0): surface non-default only (this also fires on UserPromptSubmit;
+  # absent/solo = documented default, silent). Direct echo - bypasses the 4h cooldown.
+  if (Test-Path '.env') {
+    $cl = (Select-String -Path '.env' -Pattern '^CREW_MODE=' | Select-Object -First 1).Line
+    if ($cl) {
+      $crew = ($cl -split '=', 2)[1].ToLower() -replace '[^a-z]', ''
+      if ($crew -and ($crew -ne 'solo')) { Write-Output ('CREW_MODE: ' + $crew) }
+    }
+  }
   $head = $null
   $t = git log -1 --format=%ct
   if ($t) { $head = [DateTimeOffset]::FromUnixTimeSeconds([long]$t).UtcDateTime }

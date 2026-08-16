@@ -25,6 +25,12 @@ state_hp() {
 
 if [ -f workspace.yaml ]; then
   # ---------- workspace checks (all local) ----------
+  # Crew mode (3.8.0): surface non-default only (this also fires on UserPromptSubmit;
+  # absent/solo = documented default, silent). Direct echo — bypasses the 4h cooldown.
+  crew=$(grep -m1 '^CREW_MODE=' .env 2>/dev/null | cut -d= -f2- | tr 'A-Z' 'a-z' | tr -cd 'a-z')
+  if [ -n "$crew" ] && [ "$crew" != "solo" ]; then
+    echo "CREW_MODE: $crew"
+  fi
   head_t=$(git log -1 --format=%ct 2>/dev/null)
   [ -n "$head_t" ] || head_t=0
   if [ -f .claude/HANDOFF.md ] && [ "$head_t" -gt $(( $(mt .claude/HANDOFF.md) + 3600 )) ]; then

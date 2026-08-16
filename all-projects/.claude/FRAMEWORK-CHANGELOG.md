@@ -31,6 +31,62 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 3.8.0 — 2026-08-16
+
+Leader-spend fix + crew modes. A 3-day marathon orchestrator session measured at 56% of its
+project's weighted token spend (1,471 leader turns · 3.82M output tokens · ~383k average
+carried context · never cleared). Causes in evidence order: a project doc ordering the leader
+to never idle (358 notification wakes, each converted to work at top-tier pricing × 383k
+carriage), the leader acting as bookkeeper/message bus (281 Edits + 86 SendMessages in the
+leader), pre-3.7.0 architecture for the session's whole life, carriage never reset. 3.8.0
+makes leader dormancy law and adds user-controlled execution fan-out.
+
+- **Dormancy is law (project-orchestrator.md, team skill):** between wave dispatch and wave
+  report the orchestrator is DORMANT. A notification that is not the awaited wave report
+  (grandchild hires/completions, intermediate stops) ends the turn immediately — no status
+  writes, no spot-reads, no "while I'm awake" work. The stalled-foreman backstop (one
+  SendMessage) stays the only exception. Supremacy line: project docs scope WHAT to build,
+  never the leader's turn discipline — an always-on-leader clause in a project doc is a
+  defect to flag and fix, never to obey.
+- **Plan-by-path dispatch (team skill, foreman.md):** the wave dispatch carries the plan file
+  PATH + wave heading — never the pasted section. The foreman's FIRST action is reading that
+  wave section from disk as verbatim law; a missing or ambiguous heading → STOP and escalate.
+  Its report cites the plan path + heading.
+- **Liveness off the leader (project-orchestrator.md):** in-wave liveness = the foreman's
+  foreground dispatches plus bounded report-file polls for SendMessage continuations;
+  cross-session liveness = an OS-level script proposed via BACKLOG with user sign-off —
+  never a leader wake loop. Dry-run finding (supersedes 3.7.0's blocking-TaskOutput
+  guidance): TaskOutput is unavailable inside subagents, and child completions notify the
+  root session only — a nested orchestrator dispatches its foreman FOREGROUND, always.
+- **Bookkeeping at boundaries (team skill):** HANDOFF/roster/ledger updates at wave
+  boundaries + user decisions only — never per event (measured: per-event updates produced
+  281 leader Edits in one session). Session-close audit adds: leader Edit/Write count grossly
+  exceeding wave count = bookkeeping drift.
+- **Crew modes (templates/example.env + workspace-CLAUDE.md, team skill, foreman.md,
+  session-pulse.sh/.ps1):** `CREW_MODE=<solo|duo|full>` in the workspace `.env` (config, not
+  a secret); absent or unknown = `solo`. solo = ONE engineer lane, serial beats, ONE combined
+  top-tier review per wave over non-hard-trigger diffs (criteria still ticked per beat) ·
+  duo = ≤2 file-disjoint lanes, same review batching · full = 3–5 lanes, per-beat reviews +
+  T-light batching (the 3.7.0 behavior). Hard-trigger beats keep top-tier engineer + per-beat
+  review in EVERY mode — security-critical work is never crew-scoped. Verifier/scout/
+  researcher unchanged. Switched ONLY on the user's ask, via
+  `sed -i 's/^CREW_MODE=.*/CREW_MODE=<new>/' .env` (or `echo CREW_MODE=<new> >> .env` when
+  absent) — never by shell-printing `.env`. The session pulse surfaces the mode only when set
+  and non-default (the pulse also fires on UserPromptSubmit; absence = documented default).
+
+**Upgrade steps:**
+
+1. Sync the `.claude` bundle into each workspace: `agents/foreman.md`,
+   `agents/project-orchestrator.md`, `skills/team/SKILL.md`, `scripts/session-pulse.sh` +
+   `.ps1`, `templates/example.env`, `templates/workspace-CLAUDE.md`.
+2. Append `CREW_MODE=solo` to each workspace `.env` (`echo CREW_MODE=solo >> .env`) and add
+   the CREW_MODE block to its `example.env`.
+3. RESTART any long-lived orchestrator session started before 3.8.0 — a running context
+   carries the old rules at full carriage; nothing lands in a running session.
+4. Audit project CLAUDE.md files for always-on-leader clauses (never-idle mandates, hourly
+   leader liveness loops); rewrite them to dormant-until-report with foreman/OS-level
+   liveness before the next session.
+
 ## 3.7.0 — 2026-08-15
 
 Calibration layer: same output quality, less waiting and fewer tokens. A wave-scoped foreman

@@ -6,12 +6,26 @@ description: Use when an orchestrator session has 2+ beats of work in a project 
 # The team — persistent employees
 
 Topology per project: leader (this session, the system architect) + wave-scoped `foreman` +
-`eng-a` (+ `eng-b`/`eng-c` only for file-disjoint beats) + `verifier` + `reviewer`. Employees
+`eng-a` (+ `eng-b`/`eng-c` only in `duo`/`full` crew modes for file-disjoint beats — never in
+`solo`) + `verifier` + `reviewer`. Employees
 are **live background agents continued across beats** — hired once, never spawn-per-task; a
 fresh Agent dispatch for an already-hired name is a protocol violation (it re-reads the whole
 project and orphans the live context). Workers never re-delegate; the foreman is the sole
 exception. DB-writing and Playwright beats serialize through the verifier. No STANDING lead
 layer — the foreman exists per wave and dissolves with its report.
+
+## Crew mode
+
+`CREW_MODE=<solo|duo|full>` in the workspace `.env`; absent or unknown = `solo` (tell the
+user on unknown; the session pulse surfaces non-default modes). Every wave dispatch carries
+`crew: <mode>`. Fan-out: solo = 1 engineer lane serial · duo = ≤2 file-disjoint · full = 3–5
+file-disjoint. Review batching: solo/duo = ONE combined top-tier review per wave over all
+non-hard-trigger diffs (criteria still ticked per beat); full = per-beat standard + T-light
+batching. Every mode: hard-trigger beats keep top-tier engineer + per-beat review;
+verifier/scout/researcher unchanged; leader discipline (dormancy, plan-by-path, boundary
+bookkeeping) is mode-independent. Switch ONLY on the user's ask:
+`sed -i 's/^CREW_MODE=.*/CREW_MODE=<new>/' .env` (or `echo CREW_MODE=<new> >> .env` if
+absent) — never shell-print `.env` — then apply immediately and note the switch in HANDOFF.
 
 ## Hire
 
@@ -56,21 +70,25 @@ then the fix routed on that artifact.
 ## Waves — the foreman
 
 A wave with ≥2 beats goes to ONE `foreman` (background; `model: sonnet`, or the top tier
-when the wave carries a hard-trigger beat). Its dispatch carries: the wave's plan section
-VERBATIM (beats + numbered ACCEPTANCE + per-beat tiers) · the roster with live agent IDs ·
-gate commands · wave report path `tmp/briefs/wave-<n>-report.md`. The leader then goes
-dormant until the report notification. Single-beat waves skip the foreman and dispatch the
-employee directly. Backstop: a foreman notification arriving WITHOUT its wave report is a
-stalled wave — SendMessage it to continue (its def forbids stopping with live children; the
-leader's one relay message is the recovery, never a re-dispatch).
+when the wave carries a hard-trigger beat). Its dispatch carries: the plan file PATH + wave
+heading (the foreman's FIRST action is reading that wave section from disk as verbatim law —
+the leader never pastes it) · the roster with live agent IDs · gate commands ·
+`crew: <mode>` · wave report path `tmp/briefs/wave-<n>-report.md`. The leader then goes
+DORMANT until the report notification — any other notification during the wave (grandchild
+hires/completions, intermediate stops) is not an event: end the turn immediately, no
+bookkeeping, no status writes, no spot-reads. Single-beat waves skip the foreman and dispatch
+the employee directly. Backstop (the one exception): a foreman notification arriving WITHOUT
+its wave report is a stalled wave — SendMessage it to continue (its def forbids stopping with
+live children; the leader's one relay message is the recovery, never a re-dispatch).
 
 The foreman briefs employees (criteria verbatim, never authored), pipelines beats and
 reviews, runs fix rounds 1–3 against the SAME live engineer, and escalates round-4
 promotions, requirement ambiguity, and anything off-plan back to the leader — it never
-re-scopes silently. **T-light review batching:** beats that are ≤~50 changed lines, single
-module, no hard-trigger surface, scoped gate green get ONE reviewer pass over the wave's
-combined T-light diffs (per-beat criteria still ticked individually); standard/hard-trigger
-beats keep per-beat review.
+re-scopes silently. **Review batching by crew mode:** in `full`, T-light beats (≤~50 changed
+lines, single module, no hard-trigger surface, scoped gate green) get ONE reviewer pass over
+their combined diffs; in `solo`/`duo`, ALL non-hard-trigger beats batch into ONE top-tier
+review per wave over the combined diff. Per-beat criteria are still ticked individually in
+every mode; hard-trigger beats keep per-beat top-tier review in every mode.
 
 Wave report: header (wave id · duration · dispatch count) + per-beat verdict with the
 reviewer's verdict VERBATIM (a paraphrased quality claim is invalid) · gate exit codes +

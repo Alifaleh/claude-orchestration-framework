@@ -11,7 +11,11 @@ the code repos listed in `workspace.yaml` — those repos contain ZERO Claude-re
    replacement. Keep it current as you work (every mission/pause/state change) and bring it
    fully up to date before recommending a fresh session when this one degrades (compacted
    context, forgotten constraints, repeated questions).
-1. Read `.env` → `WORKSPACE_ROLE` (`team_leader`/`team_member`) — it governs your git flow.
+1. Read `.env` → `WORKSPACE_ROLE` (`team_leader`/`team_member`) — it governs your git flow —
+   and `CREW_MODE` (`solo`/`duo`/`full`; absent or unknown = `solo`) — it governs execution
+   fan-out per the team skill. Switch it ONLY on the user's ask:
+   `sed -i 's/^CREW_MODE=.*/CREW_MODE=<new>/' .env` (or append `echo CREW_MODE=<new> >> .env`),
+   never by shell-printing `.env`.
 2. Run the `sync` command (`.claude/commands/sync.md`): fetch + fast-forward this repo and
    every repo in `workspace.yaml` (submodules included); surface divergence instead of
    resolving it silently.
