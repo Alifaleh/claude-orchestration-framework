@@ -82,6 +82,28 @@ else
   state_hp
 fi
 
+# Daily burn line (framework 4.0.0): cache at ~/.claude/usage-data/burn-<YYYYMMDD>.txt.
+# Cache hit -> print it. Cache miss -> kick off a DETACHED refresh (redirected from
+# stdin/stdout/stderr so it truly disowns from this hook's pipes) and print nothing
+# this run — never block session start on a live token scan. Refresh writes to a
+# .tmp file then renames on success, so a still-running refresh never looks like a
+# present-but-empty cache to the next session. Direct echo — bypasses the 4h notices
+# cooldown below, like CREW_MODE/FRAMEWORK UPDATE above; the daily cache filename is
+# already its own once-a-day throttle.
+{
+  burn_dir="$HOME/.claude/usage-data"
+  burn_cache="$burn_dir/burn-$(date +%Y%m%d).txt"
+  if [ -f "$burn_cache" ]; then
+    cat "$burn_cache" 2>/dev/null
+  else
+    mkdir -p "$burn_dir" 2>/dev/null
+    burn_script_dir=$(dirname "$0")
+    ( PYTHONIOENCODING=utf-8 python "$burn_script_dir/token-report.py" --yesterday-summary \
+        >"$burn_cache.tmp" 2>/dev/null </dev/null \
+        && mv "$burn_cache.tmp" "$burn_cache" & )
+  fi
+} 2>/dev/null
+
 # Freshness/size notices: at most once per 4h window.
 if [ -n "$notices" ]; then
   nmark=.claude/last-pulse-nudge

@@ -31,6 +31,55 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 4.0.0 — 2026-08-17
+
+Machine work leaves the agent loop. Measured trigger (2026-08-17): a week's allowance 83%
+gone in 30 hours — three parallel orchestrator marathons at 280–335k avg carried context,
+~25 gate invocations per ~20-line beat, 48–144 md files/day/project, 9 escalations in one
+wave with a 1-hour halt on a routine write-grant. Cost identity: spend = calls × carried
+context; these changes move tests to hooks, batch ceremony to wave boundaries, and
+pre-authorize routine grants — checks change WHEN and WHO, never WHETHER.
+
+- **Test-gate hook pair (new `scripts/test-gate.py` + `scripts/stop-gate.py`; settings.json
+  PostToolUse `Edit|Write|NotebookEdit` + Stop entries):** every edit runs the project's
+  test slice per `.claude/gates.json` (template: `skills/team/templates/gates.json` —
+  ordered glob rules, `{file}` placeholder, `"slice": null` opt-out). Green = silent
+  exit 0, zero tokens. Red = the failing tail fed back, and a fresh red slice blocks
+  "done" (30-min freshness, 2-block self-disarm, per-session state — one session's red
+  never blocks another). No gates.json = hook inert.
+- **Test frequency ladder + weight tiers (`rules/engineering.md`; evidence diet in the
+  orchestrator rules):** per-edit slice (hook) < per-beat GATE_SCOPED < per-wave GATE_FULL
+  launched by the verifier in the BACKGROUND — the wave closes only on green — < milestone
+  battery/full mutation/paid evals. Tiers LIGHT/STANDARD/TRIGGER-2 mirror model routing;
+  trigger-2 keeps full weight per beat. UI done = a headless Playwright SPEC passing; an
+  agent-driven browser drive only for flows with no spec yet — and that beat writes the
+  spec.
+- **STANDING RULINGS (brief template; team skill; engineer def):** briefs pre-authorize
+  routine grants (new test files beside changed code, lang/i18n keys, tmp/ writes,
+  additions inside WRITABLE trees) — used and logged in the report, never halted on.
+- **Escalation batching (foreman def; orchestrator rules):** BLOCKING parks that beat while
+  the wave's other beats continue — the orchestrator is interrupted mid-wave only when the
+  WHOLE wave stops; every other escalation batches into the wave report.
+- **Artifact diet (engineer def; `rules/project-docs.md`):** per-beat WORKLOG dropped — the
+  beat report is the record; doc writes batch at wave boundaries with ONE dated CHANGELOG
+  entry per wave; LESSONS only for a gotcha that would change a future action.
+- **MCP diet (`rules/project-docs.md`):** disable MCP servers the workspace's work doesn't
+  use — server schemas ride every API call's context.
+- **Burn visibility (`token-report.py --yesterday-summary`; session-pulse):** one cached
+  line at session start — yesterday's total tokens + top project.
+
+Upgrade steps:
+1. Pull; sync the rule/agent/skill/template text changes into existing workspaces'
+   `.claude` bundles (text-level; per-machine settings survive).
+2. Copy `test-gate.py` + `stop-gate.py` + updated `token-report.py` + session-pulse into
+   `.claude/scripts/`; merge the PostToolUse + Stop hook entries into settings.json in
+   that machine's existing hook style.
+3. Per project: create `.claude/gates.json` from the template with the project's REAL
+   slice commands (`"slice": null` where no fast per-file run exists); verify with one
+   edit — green is silent, red shows the tail.
+4. Restart or /clear sessions to load the hooks; wave-boundary doc cadence and STANDING
+   RULINGS apply from the next wave.
+
 ## 3.9.0 — 2026-08-16
 
 Plan diet: a scope gate at plan time. Measured trigger: asked post-hoc, an orchestrator

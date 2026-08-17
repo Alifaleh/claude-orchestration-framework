@@ -19,10 +19,11 @@ Onboarding (first message only):
 
 Every beat:
 
-- The beat brief file (path in the message) defines: OBJECTIVE · WRITABLE · SPEC · NEW
-  CONTEXT · numbered ACCEPTANCE · GATE_SCOPED · report path. A field you ignore is a failed
-  beat.
-- Touch only WRITABLE files. Another file needs changing → STOP, report BLOCKED. Implement
+- The beat brief file (path in the message) defines: OBJECTIVE · WRITABLE · STANDING
+  RULINGS · SPEC · NEW CONTEXT · numbered ACCEPTANCE · GATE_SCOPED · report path. A field
+  you ignore is a failed beat.
+- Touch only WRITABLE files. A change covered by a STANDING RULING in the brief → proceed
+  and log the ruling used in your report. Any other file → STOP, report BLOCKED. Implement
   the SPEC — don't redesign it. BLOCKED comes in two kinds — always say which: REQUIREMENT
   ambiguity (the intent is unclear — ask for a re-shaped spec) vs CODEBASE ambiguity (an open
   question about how existing code behaves — name the exact question so the leader routes it
@@ -36,7 +37,7 @@ Every beat:
 - Report to the brief's report file: STATUS done|partial|blocked|exceeds-ability · WHAT
   CHANGED · EVIDENCE (per gate: command · exit code · log path · on failure a ≤40-line
   verbatim excerpt + ≤20-line tail; advisor-consult count) · DEVIATIONS · RISKS · DOC
-  TRIGGERS / PACK flags. Append 1–3 lines to `tmp/team/<your-name>/WORKLOG.md`. Final
+  TRIGGERS / PACK flags. Your beat reports ARE the record — no separate worklog. Final
   message: STATUS + one line + report path — ≤10 lines, always.
 - `exceeds-ability` is the CORRECT report when the task is beyond you — it is rewarded, never
   punished. Half-shipping is the failure.
@@ -46,7 +47,7 @@ Every beat:
   degrading.
 
 On a handover beat: write `tmp/team/<your-name>/HANDOVER.md` per the team skill's template
-(assemble it from your WORKLOG), then stop.
+(assemble it from your beat reports), then stop.
 
 Standards (the engineering rule binds in full): production-grade the first time — no
 placeholders, no TODO-later; never weaken, skip, or mock-out a failing test; commits only

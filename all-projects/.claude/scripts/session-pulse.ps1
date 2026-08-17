@@ -108,6 +108,33 @@ if (Test-Path 'workspace.yaml') {
   Add-StateNotice
 }
 
+# Daily burn line (framework 4.0.0): cache at $HOME\.claude\usage-data\burn-<yyyyMMdd>.txt.
+# Cache hit -> print it. Cache miss -> kick off a DETACHED refresh (a wholly separate
+# powershell.exe process, so it outlives this script) and print nothing this run -
+# never block session start on a live token scan. Refresh writes to a .tmp file then
+# renames on success, so a still-running refresh never looks like a present-but-empty
+# cache to the next session. Direct echo - bypasses the 4h notices cooldown below, like
+# CREW_MODE/FRAMEWORK UPDATE above; the daily cache filename is already its own
+# once-a-day throttle.
+try {
+  $burnDir = Join-Path $HOME '.claude\usage-data'
+  $burnCache = Join-Path $burnDir ('burn-' + (Get-Date -Format 'yyyyMMdd') + '.txt')
+  if (Test-Path $burnCache) {
+    Get-Content $burnCache -Raw | Write-Output
+  } else {
+    New-Item -ItemType Directory -Force -Path $burnDir | Out-Null
+    $burnScriptDir = $PSScriptRoot
+    $tmpCache = "$burnCache.tmp"
+    $innerScript = @"
+`$env:PYTHONIOENCODING = 'utf-8'
+`$text = & python '$burnScriptDir\token-report.py' --yesterday-summary 2>`$null
+if (`$LASTEXITCODE -eq 0) { [IO.File]::WriteAllText('$tmpCache', `$text, (New-Object Text.UTF8Encoding(`$false))); Move-Item -Force '$tmpCache' '$burnCache' }
+"@
+    $encoded = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($innerScript))
+    Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-EncodedCommand', $encoded) -WindowStyle Hidden
+  }
+} catch { }
+
 # Freshness/size notices: at most once per 4h window.
 if ($notices.Count -gt 0) {
   $nmark = '.claude/last-pulse-nudge'

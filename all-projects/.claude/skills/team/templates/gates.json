@@ -1,0 +1,32 @@
+{
+  "$comment": "Per-project config for the test-gate PostToolUse hook (scripts/test-gate.py) and the stop-gate Stop hook (scripts/stop-gate.py). Place a copy at <project-root>/.claude/gates.json — its presence is what marks a directory as a project root for the gate walk-up. Copy this file in, then keep only the rules that fit the project; delete the rest.",
+  "$comment_matching": "'rules' is ordered; the FIRST rule whose 'match' matches wins — later rules are never consulted once one matches. 'match' is an fnmatch-style glob (Python fnmatch.fnmatch) evaluated against the edited file's path relative to the project root, forward-slash-joined. '*' spans directory separators here (unlike shell globs), so 'src/*.py' already matches 'src/deep/nested/file.py' — you do not need (and fnmatch does not support) a '**' segment.",
+  "$comment_slice": "'slice' is a shell command string with an optional {file} placeholder, substituted with the absolute edited-file path in double quotes. It runs via the shell (cwd = project root) after every Edit/Write/NotebookEdit that matches — keep it to the SMALLEST related check (one file's tests, not the whole suite); GATE_SCOPED/GATE_FULL remain the real gates. 'slice': null is an explicit opt-out for a rule that matches but has no cheap per-file check (comment why, so the next person doesn't 'fix' the gap).",
+  "$comment_timeout": "'timeout_s' (default 60) bounds the slice run; on timeout the hook kills the process tree and exits 0 — slowness never blocks an edit.",
+  "rules": [
+    {
+      "$comment": "JS/TS via vitest — related-tests-only mode, single file.",
+      "match": "src/*.ts",
+      "slice": "npx vitest related --run {file}",
+      "timeout_s": 60
+    },
+    {
+      "$comment": "PHP harness — filters to the test case matching the edited file's basename; adjust the filter expression to the project's own harness/naming convention.",
+      "match": "app/*.php",
+      "slice": "php vendor/bin/phpunit --filter {file}",
+      "timeout_s": 60
+    },
+    {
+      "$comment": "Opt-out example: this project's integration layer needs a live container the slice hook can't spin up per-edit. GATE_SCOPED covers it instead — do not add a fake slice just to fill this field.",
+      "match": "src/integrations/*.py",
+      "slice": null,
+      "timeout_s": 60
+    },
+    {
+      "$comment": "Python via pytest — -k derives a node-id filter from the file; swap for a project-specific path mapping (e.g. src/foo.py -> tests/test_foo.py) if the project's test layout doesn't mirror source names.",
+      "match": "src/*.py",
+      "slice": "python -m pytest -x -k {file}",
+      "timeout_s": 60
+    }
+  ]
+}

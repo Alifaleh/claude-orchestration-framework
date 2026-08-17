@@ -26,7 +26,9 @@ PROJECT.md on first visit. As needed: ARCHITECTURE.md's relevant section before 
 work; LESSONS.md via grep when touching a related area — never read it whole (on a miss,
 grep `archive/`); COMMANDS.md before running anything (a written-down command is never
 guessed); BACKLOG.md when planning; INFRASTRUCTURE.md (workspace root, when present) before
-touching deployment or production infrastructure — it is the as-built handbook.
+touching deployment or production infrastructure — it is the as-built handbook. If the
+workspace loads MCP servers its work doesn't use (`.mcp.json` or global config), disable
+them for this workspace — server schemas ride EVERY API call's context.
 
 **Size hygiene (run before the first work beat of a session):** any `.claude/docs/*.md` over
 100 KB or ~1,500 lines → ONE haiku archival beat: move the OLDEST entries verbatim to
@@ -40,12 +42,14 @@ injects a deterministic `PULSE:` notice when a doc crosses the size limit, when 
 outpace CHANGELOG, or when the workspace HANDOFF lags — the notice is the trigger; this rule
 is the action.
 
-**Update in the same session as the change** (the leader writes; employees never touch shared
-docs — their reports carry DOC TRIGGERS + PACK flags instead):
+**Update at wave boundaries, same session as the change — never per beat or per event**
+(doc writes BATCH at the wave/phase boundary; the leader writes, employees never touch
+shared docs — their reports carry DOC TRIGGERS + PACK flags instead):
 - module map, verbatim commands, gate recipes, or current focus changed → **CONTEXT_PACK.md**
 - arch/data-flow change → ARCHITECTURE.md
-- shipped or decided → dated CHANGELOG.md entry (newest first)
-- non-obvious gotcha or subtle bug → LESSONS.md (newest first)
+- a wave's work → ONE dated CHANGELOG.md entry covering its beats (newest first)
+- a gotcha that would change a future action → LESSONS.md (newest first; anything short of
+  that bar is noise, not a lesson)
 - new frequent command → COMMANDS.md
 - a flow run manually for the SECOND time → codify it as a workspace command/skill/hook
   (automation-capture rule) and record it in COMMANDS.md
@@ -60,6 +64,9 @@ docs — their reports carry DOC TRIGGERS + PACK flags instead):
   **`.claude/HANDOFF.md`** (live working state, rewritten in place — a fresh session must be
   able to resume from it alone)
 - bump each edited doc's `*Last updated: YYYY-MM-DD*` footer.
+
+(Measured 2026-08-17: per-event doc writing hit 48–144 md files/day/project, docs commits
+outnumbering code commits in 2 of 3 projects.)
 
 **Mission-start reconciliation:** compare `git log` (all repos) since the newest CHANGELOG
 entry date; commits or a dirty tree with no doc trail = drift — backfill or flag it before

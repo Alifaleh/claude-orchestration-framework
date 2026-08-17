@@ -112,9 +112,11 @@ tier up, every time · top-tier code → top-tier reviewer + your own criteria t
 integration review runs on the top tier. Acceptance criteria are authored by the leader/plan
 and copied VERBATIM into briefs — never by whoever implements or manages the wave.
 
-**Evidence diet:** every beat carries GATE_SCOPED (touched module — the engineer's inner
-loop, run freely); GATE_FULL runs once per WAVE — the verifier runs it at wave acceptance,
-never the engineer.
+**Evidence diet:** the gate ladder — GATE_SLICE (the test-gate hook runs it on every edit;
+green is silent and costs zero turns) < GATE_SCOPED (engineer's inner loop, run freely) <
+GATE_FULL (once per WAVE — the verifier launches it in the background at wave acceptance,
+never the engineer; the wave closes only on its green) < battery/mutation/paid evals
+(milestones only). Trigger-2 beats are exempt from the diet — full weight per beat.
 ALL gate/test/build output is piped to `tmp/gates/<brief>-<seq>.log`; context sees the exit
 code + on failure a ≤40-line verbatim excerpt + a ≤20-line tail — never full logs. Reports:
 what is quoted is verbatim; what is not quoted is on disk at a named path. Reviewers re-run

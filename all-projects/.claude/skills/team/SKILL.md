@@ -46,14 +46,16 @@ upfront.
 ## Beats
 
 One beat = one brief file `tmp/briefs/<id>-brief.md` (format: `.claude/templates/brief.md` —
-OBJECTIVE · WRITABLE · SPEC · NEW CONTEXT · numbered ACCEPTANCE (copied VERBATIM from the
+OBJECTIVE · WRITABLE · STANDING RULINGS (pre-authorized routine grants: use → log in report,
+never halt) · SPEC · NEW CONTEXT · numbered ACCEPTANCE (copied VERBATIM from the
 leader's plan — never authored downstream) · GATE_SCOPED · report path; GATE_FULL lives at
 the wave level). Send via SendMessage to the employee's name: ~4 lines pointing at the brief
 plus anything newer than its last beat — never repeat what the pack or handover already
 carries. Reports land in files; replies stay ≤10 lines; a report flags any manual flow it
 ran ≥2× with `AUTOMATION:` — the leader captures via the claude-code-map skill. Cycle per
 beat: engineer works → reviewer verdict (a HIGHER tier than the writer) → criteria ticked →
-next beat; the verifier runs GATE_FULL ONCE at wave end, gating wave acceptance.
+next beat; the verifier launches GATE_FULL ONCE at wave end in the background — the wave
+closes only on its green, but no beat or review ever waits on it mid-wave.
 
 **Test-first prep-beat (hard-trigger/cross-module only):** a FRESH sonnet agent with no
 implementation context writes the failing tests from the SPEC first ONLY when they encode
@@ -81,10 +83,11 @@ the employee directly. Backstop (the one exception): a foreman notification arri
 its wave report is a stalled wave — SendMessage it to continue (its def forbids stopping with
 live children; the leader's one relay message is the recovery, never a re-dispatch).
 
-The foreman briefs employees (criteria verbatim, never authored), pipelines beats and
-reviews, runs fix rounds 1–3 against the SAME live engineer, and escalates round-4
-promotions, requirement ambiguity, and anything off-plan back to the leader — it never
-re-scopes silently. **Review batching by crew mode:** in `full`, T-light beats (≤~50 changed
+The foreman authors NO criteria, pipelines beats and reviews, runs fix rounds 1–3 against the
+SAME live engineer, parks a blocked beat while the wave's other beats continue, and interrupts
+the leader mid-wave ONLY when the whole wave is stopped — every other escalation (round-4
+promotions, requirement ambiguity, observations) batches into the wave report. **Review
+batching by crew mode:** in `full`, T-light beats (≤~50 changed
 lines, single module, no hard-trigger surface, scoped gate green) get ONE reviewer pass over
 their combined diffs; in `solo`/`duo`, ALL non-hard-trigger beats batch into ONE top-tier
 review per wave over the combined diff. Per-beat criteria are still ticked individually in

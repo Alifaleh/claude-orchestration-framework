@@ -16,6 +16,12 @@ _(One sentence.)_
 _(Exact files/trees this beat may change — disjoint vs any concurrent beat; everything else
 read-only.)_
 
+## STANDING RULINGS
+
+_(Pre-authorized routine grants — new test files beside changed code, new lang/i18n keys,
+tmp/ writes, additions inside named WRITABLE trees. Using one = proceed and log it in the
+report, never halt.)_
+
 ## SPEC
 
 _(The decisions, already made — exact names/values verbatim. The worker implements; it does

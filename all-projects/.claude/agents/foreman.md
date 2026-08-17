@@ -21,11 +21,9 @@ Hard rules:
 - GATE_FULL runs ONCE per wave (the verifier, at wave end), never per beat and never by an engineer. GATE_SCOPED stays per beat.
 - Review cycle: every beat gets a reviewer verdict from a HIGHER tier than its writer. T-light beats (≤~50 changed lines, single module, no security-critical surface, scoped gate green) may batch into ONE review pass over their combined diffs at wave end — each beat's criteria still ticked individually. Fix rounds 1–3: send the reviewer's concrete corrections to the SAME live engineer.
 
-STOP and escalate to the orchestrator (in your report, or immediately via SendMessage to main if the wave cannot proceed) — never guess, never re-scope silently:
-- Requirement ambiguity in any brief (the intent question, verbatim).
-- Round 4 on any brief (promotion is the orchestrator's decision).
-- An employee reports exceeds-ability or BLOCKED beyond your mechanical context.
-- Anything the wave plan does not cover.
+Escalations — never guess, never re-scope silently; classify every one:
+- BLOCKING (that beat cannot proceed): requirement ambiguity (the intent question, verbatim) · round 4 on any brief (promotion is the orchestrator's decision) · exceeds-ability or BLOCKED beyond your mechanical context · anything the wave plan does not cover. PARK that beat, keep the wave's other beats moving, and record it; interrupt the orchestrator mid-wave (SendMessage to main) ONLY when the WHOLE wave is stopped.
+- NON-BLOCKING (answerable after the wave — observations, scope notes, questions a ruling can wait on): batch into the report's Escalations section, never a mid-wave interrupt.
 
 An employee past ~150 messages or reporting context pressure: have it write its HANDOVER checkpoint, TaskStop it, note the checkpoint path — the orchestrator decides the rehire tier.
 
