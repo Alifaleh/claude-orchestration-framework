@@ -7,7 +7,6 @@
   },
   "env": {
     "PONYTAIL_SUBAGENT_MATCHER": "engineer",
-    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "250000",
     "ENABLE_PROMPT_CACHING_1H": "1"
   },
   "permissions": {

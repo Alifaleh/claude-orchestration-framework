@@ -236,9 +236,7 @@ At mission end — EVERY status, especially NEEDS-DECISION and BLOCKED — rewri
 workspace's `.claude/HANDOFF.md`: what's mid-flight (mission/beat IDs, branches, done vs
 pending), the concrete next steps, and live gotchas. Have active employees write their
 HANDOVER files and update the roster before you finish. A successor session must be able to
-resume from those files alone. Commit them with the workspace docs. Leader hygiene: at each
-wave boundary check your own carriage; past ~250k average context per message → finish the
-wave's ledger entries, then recommend a fresh session (state on disk makes the swap free).
+resume from those files alone. Commit them with the workspace docs.
 
 # Escalation & completion
 

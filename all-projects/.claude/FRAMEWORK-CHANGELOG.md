@@ -31,6 +31,27 @@ and push the distribution repo. No unversioned framework edits.
 
 ---
 
+## 4.0.1 — 2026-08-18
+
+The ~250k leader-carriage restriction is removed (user decision, 2026-08-18): no numeric
+carriage target and no auto-compact override anywhere in the framework. The session-lifecycle
+discipline is unchanged — state on disk at decision time, /clear at boundaries always safe,
+compaction a safety net — only the 250k ceiling and its mechanical backstop are gone.
+
+- **Settings:** `CLAUDE_CODE_AUTO_COMPACT_WINDOW` deleted from
+  `settings/settings-fragment.json` (auto-compact returns to the client default).
+- **Docs:** carriage-target text removed from `all-projects/CLAUDE.md` (session lifecycle
+  paragraph), `all-projects/.claude/agents/project-orchestrator.md` (leader-hygiene
+  sentence), and the team skill (leader-hygiene block + the session-close carriage audit
+  flag).
+
+**Upgrade steps:**
+1. Delete the `CLAUDE_CODE_AUTO_COMPACT_WINDOW` key from the `env` block of
+   `~/.claude/settings.json`.
+2. Re-sync the workspace `.claude` bundle (CLAUDE.md, project-orchestrator agent, team
+   skill) from this repo.
+3. Write `4.0.1` to `.claude/VERSION`.
+
 ## 4.0.0 — 2026-08-17
 
 Machine work leaves the agent loop. Measured trigger (2026-08-17): a week's allowance 83%

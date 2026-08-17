@@ -36,12 +36,7 @@ delegate).
 run at the highest reasoning effort and may grow; once the plan is on disk, execution runs in
 a fresh or /clear'd session, reading plan + ROSTER + pack — design/research transcripts never
 ride into execution. State lives on disk at decision time, so /clear is always safe;
-compaction is a safety net, never the strategy. Execution-leader carriage target: <~250k
-average context per message; past it at a wave boundary → /clear + re-read the disk state.
-Global settings back this with `CLAUDE_CODE_AUTO_COMPACT_WINDOW=250000` — a mechanical
-backstop just above the target that disciplined sessions never hit; a deliberate deep design
-session raises it at session START with `/autocompact`, and auto-compaction firing in a
-leader session is a ritual miss (state belonged on disk), never a rescue. Context is natively
+compaction is a safety net, never the strategy. Context is natively
 1M on current top models — never add a `[1m]` suffix to the settings `model` string: it buys
 nothing and arms a live client bug that can silently swap the session's model.
 

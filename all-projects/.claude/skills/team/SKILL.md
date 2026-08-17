@@ -133,14 +133,10 @@ usage week, prefer narrow waves (1–2 beats) so a cutoff strands less in-flight
 running on a lesser model): implementation → 100% sonnet/haiku; remaining opus reserved for
 reviews + hard-trigger beats; a beat whose review cannot run on opus is PARKED, never
 down-reviewed.
-**Leader hygiene:** at each phase/wave boundary check carriage; past ~250k average context
-per message → finish the wave's ledger entries, then start fresh re-reading plan + ROSTER +
-pack (state-on-disk makes this free).
 **Session close:** every active employee writes its HANDOVER → TaskStop all → roster updated
 → if your tooling tracks token usage, record: session total · tokens-per-accepted-brief (the
 framework's acceptance metric) · audit flags — any agent that inherited the leader's model
-(inherit defect) · any sonnet-written beat whose review ran below the review tier · leader
-average carriage vs the ~250k budget.
+(inherit defect) · any sonnet-written beat whose review ran below the review tier.
 **Session open:** read ROSTER + handovers; rehire lazily — each employee at its first needed
 beat.
 
